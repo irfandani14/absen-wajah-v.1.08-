@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Presensi Wajah V.1.06 - SMA NEGERI 1 LABUHAN HAJI</title>
-  <meta name="description" content="Sistem Presensi Wajah Realtime berbasis Browser, Validasi GPS 300m, Presensi Khusus, dan Laporan Detail Harian PDF & Word." />
+  <title>Presensi Wajah V.1.07 - SMA NEGERI 1 LABUHAN HAJI</title>
+  <meta name="description" content="Sistem Presensi Wajah Realtime berbasis Browser, Validasi GPS 300m, Presensi Khusus, Fitur Lupa Presensi Admin, dan Ekspor PDF, Word, Excel." />
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -39,6 +39,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 
+  <!-- SheetJS (XLSX Export) CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
     .font-mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
@@ -62,7 +65,7 @@
       <div>
         <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight flex flex-wrap items-center justify-center gap-2">
           Presensi Wajah (Face Recognition)
-          <span class="text-xs sm:text-sm font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-semibold">V.1.06 Laporan Detail</span>
+          <span class="text-xs sm:text-sm font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-semibold">V.1.07</span>
         </h1>
         <h2 class="text-emerald-400 font-bold text-base sm:text-lg md:text-xl mt-1 tracking-wide uppercase">SMA NEGERI 1 LABUHAN HAJI</h2>
       </div>
@@ -142,7 +145,7 @@
       </div>
       <div>
         <h1 class="font-extrabold text-xs sm:text-base tracking-tight text-slate-800 dark:text-white flex items-center gap-1.5">
-          Presensi Wajah <span class="text-[10px] font-mono text-emerald-500 font-normal">v1.06 GPS</span>
+          Presensi Wajah <span class="text-[10px] font-mono text-emerald-500 font-normal">v1.07 GPS</span>
           <span id="user-role-badge" class="text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-semibold font-mono">ADMIN</span>
         </h1>
         <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium">SMA Negeri 1 Labuhan Haji</p>
@@ -299,21 +302,6 @@
               <p class="text-xs sm:text-sm font-medium text-slate-300">Kamera Belum Aktif</p>
               <p class="text-[11px] sm:text-xs text-slate-500 mt-1 max-w-xs">Klik "Mulai Kamera" di atas untuk memindai kehadiran.</p>
             </div>
-
-            <!-- Toast Banner -->
-            <div id="success-toast" class="absolute top-3 inset-x-3 bg-emerald-600/90 border border-emerald-400/50 backdrop-blur-md text-white rounded-lg p-3 shadow-2xl flex items-center justify-between transform -translate-y-20 opacity-0 transition-all duration-300 z-30">
-              <div class="flex items-center gap-2.5">
-                <div id="toast-icon-box" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/20 flex items-center justify-center text-base sm:text-lg shrink-0">
-                  <i id="toast-icon" class="fa-solid fa-check"></i>
-                </div>
-                <div>
-                  <div id="toast-title-text" class="text-[10px] uppercase tracking-wider text-emerald-200 font-semibold">Presensi Berhasil</div>
-                  <div id="toast-student-name" class="font-bold text-xs sm:text-base text-white truncate max-w-[150px] sm:max-w-none">Nama Siswa</div>
-                  <div id="toast-student-meta" class="text-[10px] sm:text-xs text-emerald-100 font-mono">NISN: - · Kategori: -</div>
-                </div>
-              </div>
-              <div id="toast-student-time" class="text-right font-mono text-xs sm:text-sm text-emerald-100">00:00:00</div>
-            </div>
           </div>
 
           <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 gap-1 pt-0.5">
@@ -328,7 +316,7 @@
       <!-- Sisi Kanan: Log Kehadiran Realtime -->
       <div class="lg:col-span-5 flex flex-col gap-3 sm:gap-4">
         
-        <!-- Summary Stats Card (8 Konter) -->
+        <!-- Summary Stats Card -->
         <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-2">
           <div class="bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-2 transition-colors">
             <span class="text-[10px] text-slate-500 dark:text-slate-400 block truncate">Total</span>
@@ -400,11 +388,53 @@
       </div>
     </section>
 
-    <!-- TAB 2: REKAP & MANAJEMEN KEHADIRAN -->
+    <!-- TAB 2: REKAP & MANAJEMEN KEHADIRAN (TRIPLE EKSPOR PDF/WORD/EXCEL & FITUR LUPA PRESENSI ADMIN) -->
     <section id="view-rekap" class="hidden flex-1 flex flex-col gap-4 overflow-y-auto pr-1">
       
+      <!-- FITUR KHUSUS ADMIN: LUPA PRESENSI (INPUT MANUAL) -->
+      <div id="admin-lupa-presensi-box" class="hidden bg-slate-900 border border-emerald-500/40 rounded-xl p-4 shadow-lg transition-colors">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-xs sm:text-sm font-bold text-emerald-400 flex items-center gap-2">
+            <i class="fa-solid fa-user-pen text-emerald-400"></i> Fitur Lupa Presensi (Input Manual - Khusus Admin)
+          </h3>
+          <span class="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono px-2 py-0.5 rounded font-semibold">KHUSUS ADMIN</span>
+        </div>
+        <form onsubmit="handleManualAttendanceSubmit(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 items-end">
+          <div>
+            <label class="text-[10px] text-slate-400 block mb-1 font-medium">Pilih Pegawai / Siswa *</label>
+            <select id="manual-user-select" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-medium">
+              <!-- Populated via JS -->
+            </select>
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400 block mb-1 font-medium">Tanggal *</label>
+            <input type="date" id="manual-date" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-mono">
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400 block mb-1 font-medium">Jam Presensi *</label>
+            <input type="time" id="manual-time" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-mono">
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400 block mb-1 font-medium">Status Kehadiran *</label>
+            <select id="manual-status" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-medium">
+              <option value="Hadir">Hadir</option>
+              <option value="Terlambat">Terlambat</option>
+              <option value="Pulang">Pulang</option>
+              <option value="Sakit">Sakit</option>
+              <option value="Izin">Izin</option>
+              <option value="Dinas Luar">Dinas Luar</option>
+            </select>
+          </div>
+          <div>
+            <button type="submit" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-md">
+              <i class="fa-solid fa-floppy-disk"></i> Simpan Presensi Manual
+            </button>
+          </div>
+        </form>
+      </div>
+
       <!-- Rekap Filter & Export Controls Bar -->
-      <div class="bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-4 shadow-md flex flex-col gap-3 transition-colors">
+      <div class="bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-4 shadow-md flex flex-col gap-4 transition-colors">
         
         <!-- Filter Row 1 -->
         <div class="flex flex-wrap items-center justify-between gap-3">
@@ -452,29 +482,49 @@
           </div>
         </div>
 
-        <!-- Filter Row 2: Form Cetak Dokumen Individu Guru / Tendik -->
-        <div class="pt-2 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
-          <div class="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
-            <div class="flex-1 sm:flex-none min-w-[240px]">
-              <label class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 block mb-0.5 font-medium">Pilih Guru / Tendik untuk Laporan Detail Harian</label>
-              <select id="rekap-user-select" class="w-full bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500 font-semibold">
-                <!-- Populated via JS -->
-              </select>
-            </div>
+        <!-- Filter Row 2: Form Cetak & Pilihan Dokumen Ekspor (PDF, WORD, EXCEL) -->
+        <div class="pt-3 border-t border-slate-200 dark:border-slate-800 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3">
+          
+          <div class="w-full lg:w-1/3">
+            <label class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 block mb-0.5 font-medium">Pilih Guru / Tendik untuk Cetak Dokumen</label>
+            <select id="rekap-user-select" class="w-full bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500 font-semibold">
+              <!-- Populated via JS -->
+            </select>
           </div>
 
-          <!-- Export Action Buttons -->
-          <div class="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
-            <button onclick="exportRekapPDF()" class="flex-1 md:flex-none px-3.5 py-1.5 bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-md shadow-rose-600/20">
-              <i class="fa-solid fa-file-pdf"></i> Export PDF (10 Kolom)
-            </button>
-            <button onclick="exportRekapWord()" class="flex-1 md:flex-none px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-md shadow-blue-600/20">
-              <i class="fa-solid fa-file-word"></i> Export Word (10 Kolom)
-            </button>
-            <button onclick="exportRekapCSV()" class="flex-1 md:flex-none px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5 border border-slate-300 dark:border-slate-700">
-              <i class="fa-solid fa-file-csv text-emerald-500"></i> Export CSV
-            </button>
+          <!-- 3 PILIHAN FORMAT EKSPOR: PDF, WORD, EXCEL -->
+          <div class="w-full lg:w-2/3 flex flex-wrap items-center justify-start lg:justify-end gap-2.5">
+            
+            <!-- Group 1: LAPORAN DETAIL HARIAN (PDF, WORD, EXCEL) -->
+            <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-950 p-1.5 rounded-xl border border-slate-200 dark:border-slate-800">
+              <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 px-1 font-mono uppercase">1. Detail Harian:</span>
+              <button onclick="exportDetailHarianPDF()" class="px-2 py-1 bg-rose-600 hover:bg-rose-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
+                <i class="fa-solid fa-file-pdf"></i> PDF
+              </button>
+              <button onclick="exportDetailHarianWord()" class="px-2 py-1 bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
+                <i class="fa-solid fa-file-word"></i> Word
+              </button>
+              <button onclick="exportDetailHarianExcel()" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
+                <i class="fa-solid fa-file-excel"></i> Excel
+              </button>
+            </div>
+
+            <!-- Group 2: DAFTAR KEHADIRAN (PDF, WORD, EXCEL) -->
+            <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-950 p-1.5 rounded-xl border border-slate-200 dark:border-slate-800">
+              <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 px-1 font-mono uppercase">2. Daftar Kehadiran:</span>
+              <button onclick="exportDaftarKehadiranPDF()" class="px-2 py-1 bg-rose-600 hover:bg-rose-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
+                <i class="fa-solid fa-file-pdf"></i> PDF
+              </button>
+              <button onclick="exportDaftarKehadiranWord()" class="px-2 py-1 bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
+                <i class="fa-solid fa-file-word"></i> Word
+              </button>
+              <button onclick="exportDaftarKehadiranExcel()" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
+                <i class="fa-solid fa-file-excel"></i> Excel
+              </button>
+            </div>
+
           </div>
+
         </div>
 
       </div>
@@ -623,6 +673,7 @@
     <!-- TAB 4: KONFIGURASI SUPABASE, SETTING WAKTU & BACKUP DATABASE -->
     <section id="view-config" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 h-full overflow-y-auto">
       <div class="lg:col-span-6 flex flex-col gap-4 sm:gap-5">
+        
         <div class="bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-4 sm:p-5 flex flex-col gap-3 shadow-md transition-colors">
           <h2 class="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
             <i class="fa-solid fa-database text-emerald-500 dark:text-emerald-400"></i> Pengaturan Supabase Backend
@@ -639,9 +690,6 @@
             <div class="flex flex-wrap items-center gap-2 pt-1">
               <button type="submit" class="flex-1 sm:flex-none px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5">
                 <i class="fa-solid fa-check"></i> Simpan & Uji Koneksi
-              </button>
-              <button type="button" onclick="loadSampleDemoData()" class="flex-1 sm:flex-none px-4 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-box-archive"></i> Data Demo
               </button>
             </div>
           </form>
@@ -682,33 +730,13 @@
             </button>
           </form>
         </div>
-
-        <div class="bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-4 sm:p-5 flex flex-col gap-3 shadow-md transition-colors">
-          <h2 class="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-            <i class="fa-solid fa-box-archive text-emerald-500 dark:text-emerald-400"></i> Backup & Restore Database
-          </h2>
-          <div class="flex flex-col sm:flex-row items-center gap-2.5">
-            <button onclick="exportDatabaseJSON()" class="w-full sm:flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5">
-              <i class="fa-solid fa-download"></i> Unduh Backup JSON
-            </button>
-            <label class="w-full sm:flex-1 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-medium rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-1.5 border border-slate-300 dark:border-slate-700">
-              <i class="fa-solid fa-upload"></i> Restore File JSON
-              <input type="file" id="restore-json-input" accept=".json" onchange="importDatabaseJSON(event)" class="hidden">
-            </label>
-          </div>
-        </div>
       </div>
 
       <div class="lg:col-span-6 bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-4 sm:p-5 flex flex-col gap-3 shadow-md transition-colors">
-        <div class="flex items-center justify-between">
-          <h2 class="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-            <i class="fa-solid fa-code text-emerald-500 dark:text-emerald-400"></i> Skrip SQL Migrasi Database
-          </h2>
-          <button onclick="copySqlScript()" id="btn-copy-sql" class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs rounded-lg transition-colors flex items-center gap-1">
-            <i class="fa-solid fa-copy"></i> Salin Skrip
-          </button>
-        </div>
-        <pre class="bg-slate-900 text-emerald-400 p-3 rounded-lg text-xs font-mono overflow-x-auto max-h-[400px] whitespace-pre">-- SKRIP DATABASE SUPABASE SMAN 1 LABUHAN HAJI
+        <h2 class="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+          <i class="fa-solid fa-code text-emerald-500 dark:text-emerald-400"></i> Skrip SQL Migrasi Database
+        </h2>
+        <pre class="bg-slate-900 text-emerald-400 p-3 rounded-lg text-xs font-mono overflow-x-auto max-h-[350px] whitespace-pre">-- SKRIP DATABASE SUPABASE SMAN 1 LABUHAN HAJI
 CREATE TABLE IF NOT EXISTS public.students (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     nisn TEXT UNIQUE NOT NULL,
@@ -735,78 +763,13 @@ CREATE TABLE IF NOT EXISTS public.attendances (
 
   </main>
 
-  <!-- MODAL EDIT SISWA -->
-  <div id="modal-edit-student" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-    <div class="bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-5 max-w-lg w-full flex flex-col gap-3 shadow-2xl transition-colors">
-      <div class="flex items-center justify-between">
-        <h3 class="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-          <i class="fa-solid fa-user-pen text-emerald-500 dark:text-emerald-400"></i> Edit Data
-        </h3>
-        <button onclick="closeEditStudentModal()" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
-      </div>
-
-      <form id="form-edit-student" onsubmit="handleUpdateStudent(event)" class="flex flex-col gap-3">
-        <input type="hidden" id="edit-student-id">
-        <div>
-          <label class="text-xs text-slate-700 dark:text-slate-300 mb-1 block">NISN/NIP/NIPPPK *</label>
-          <input type="text" id="edit-student-nisn" required class="w-full bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-3 py-2 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500 font-mono">
-        </div>
-        <div>
-          <label class="text-xs text-slate-700 dark:text-slate-300 mb-1 block">Nama Lengkap *</label>
-          <input type="text" id="edit-student-name" required class="w-full bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-3 py-2 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500">
-        </div>
-        <div>
-          <label class="text-xs text-slate-700 dark:text-slate-300 mb-1 block">Kategori *</label>
-          <select id="edit-student-class" required class="w-full bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-3 py-2 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500 font-medium">
-            <option value="GURU">GURU</option>
-            <option value="TENDIK">TENDIK</option>
-            <option value="SISWA">SISWA</option>
-          </select>
-        </div>
-        
-        <div class="border border-dashed border-slate-300 dark:border-slate-700 rounded-lg p-3 text-center flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-950/60">
-          <div class="text-xs text-slate-500 dark:text-slate-400 mb-2">Update Foto / Vektor Wajah (Opsional)</div>
-          <div id="edit-preview-box" class="w-28 h-28 rounded-lg bg-slate-200 dark:bg-slate-900 overflow-hidden flex items-center justify-center relative mb-2 border border-slate-300 dark:border-slate-800">
-            <video id="edit-webcam" autoplay muted playsinline class="hidden w-full h-full object-cover transform -scale-x-100"></video>
-            <img id="edit-photo-img" class="hidden w-full h-full object-cover" alt="Preview Wajah Edit">
-            <span id="edit-placeholder-icon" class="text-slate-400 dark:text-slate-600 text-2xl"><i class="fa-solid fa-user"></i></span>
-          </div>
-
-          <div class="flex items-center gap-1.5">
-            <button type="button" onclick="startEditWebcam()" class="px-2.5 py-1 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-[11px] rounded-lg transition-colors flex items-center gap-1">
-              <i class="fa-solid fa-camera"></i> Kamera
-            </button>
-            <button type="button" id="btn-snap-edit" onclick="snapEditPhoto()" class="hidden px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] rounded-lg transition-colors flex items-center gap-1">
-              <i class="fa-solid fa-camera-retro"></i> Ambil
-            </button>
-            <label class="px-2.5 py-1 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-[11px] rounded-lg transition-colors cursor-pointer flex items-center gap-1">
-              <i class="fa-solid fa-upload"></i> Unggah
-              <input type="file" id="edit-file-input" accept="image/*" onchange="handleEditFileUpload(event)" class="hidden">
-            </label>
-          </div>
-
-          <div id="edit-descriptor-status" class="mt-2 text-[11px] font-mono text-slate-500 dark:text-slate-400">
-            Biarkan kosong jika tidak ingin mengubah data biometrik wajah.
-          </div>
-        </div>
-
-        <div class="flex items-center justify-end gap-2 pt-1">
-          <button type="button" onclick="closeEditStudentModal()" class="px-3.5 py-1.5 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs rounded-lg transition-colors">Batal</button>
-          <button type="submit" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium rounded-lg transition-colors flex items-center gap-1.5">
-            <i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
   <!-- JAVASCRIPT LOGIC ENGINE -->
   <script>
-    // --- KREDENSIAL SUPABASE DISIMPAN TERPERCAYA ---
+    // --- KREDENSIAL SUPABASE OLEH USER ---
     const DEFAULT_SUPABASE_URL = 'https://aqwwcrxbsuyytseykfqi.supabase.co';
     const DEFAULT_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxd3djcnhic3V5eXRzZXlrZnFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxNDczMTYsImV4cCI6MjEwNzcyMzMxNn0.FQ_mqmHmRYX7dGPEUxxbXQ_WyCyu__cmDm8NyckwhoM';
 
-    // --- KOORDINAT TERBARU SMAN 1 LABUHAN HAJI ---
+    // --- KOORDINAT SEKOLAH PADA PROMPT ---
     const SCHOOL_LAT = 3.555225618739339;
     const SCHOOL_LNG = 96.995850802389;
     const MAX_RADIUS_KM = 0.3; // 300 Meter
@@ -820,9 +783,6 @@ CREATE TABLE IF NOT EXISTS public.attendances (
     let videoStream = null;
     let detectionInterval = null;
     let enrollmentDescriptor = null;
-    let enrollmentStream = null;
-    let editStudentDescriptor = null;
-    let editStudentStream = null;
     let lastSpokenStudentId = null;
     let lastSpokenTime = 0;
     let currentRole = 'admin'; 
@@ -832,26 +792,144 @@ CREATE TABLE IF NOT EXISTS public.attendances (
     let userLocation = null;
     let gpsWatchId = null;
 
-    // --- STATE PRESENSI KHUSUS ---
     let isKhususMode = false;
     let selectedKhususStatus = null;
 
     const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model';
 
-    // --- RUMUS HAVERSINE DISTANCE ---
+    // --- FITUR LUPA PRESENSI (INPUT MANUAL KHUSUS ADMIN) ---
+    async function handleManualAttendanceSubmit(event) {
+      if (event) event.preventDefault();
+
+      if (currentRole !== 'admin') {
+        alert('Akses Ditolak: Fitur Lupa Presensi hanya dapat digunakan oleh Admin.');
+        return;
+      }
+
+      const userId = document.getElementById('manual-user-select').value;
+      const date = document.getElementById('manual-date').value;
+      const timeVal = document.getElementById('manual-time').value;
+      const time = timeVal.length === 5 ? timeVal + ':00' : timeVal;
+      const status = document.getElementById('manual-status').value;
+
+      if (!userId || !date || !time) {
+        alert('Mohon lengkapi seluruh form Lupa Presensi.');
+        return;
+      }
+
+      const student = registeredStudents.find(s => s.id === userId);
+      if (!student) {
+        alert('Pengguna tidak ditemukan.');
+        return;
+      }
+
+      const manualRecord = {
+        student_id: student.id,
+        class_name: student.class_name,
+        date: date,
+        time: time,
+        status: status
+      };
+
+      if (supabaseClient) {
+        try {
+          const { error } = await supabaseClient.from('attendances').upsert(manualRecord, { onConflict: 'student_id,date' });
+          if (error) throw error;
+        } catch (err) {
+          console.warn('Gagal menyimpan ke Supabase, menyimpan ke memori lokal:', err.message);
+        }
+      }
+
+      const today = new Date().toISOString().split('T')[0];
+      if (date === today) {
+        const idx = todayAttendances.findIndex(a => a.student_id === student.id && a.date === date);
+        if (idx !== -1) todayAttendances[idx] = { ...todayAttendances[idx], ...manualRecord };
+        else todayAttendances.unshift({ id: 'att-manual-' + Date.now(), ...manualRecord });
+        renderAttendanceList();
+      }
+
+      const rekapIdx = rekapData.findIndex(a => a.student_id === student.id && a.date === date);
+      if (rekapIdx !== -1) rekapData[rekapIdx] = { ...rekapData[rekapIdx], ...manualRecord };
+      else rekapData.unshift({ id: 'att-manual-' + Date.now(), ...manualRecord });
+
+      renderRekapTable();
+      alert(`Presensi manual untuk ${student.name} (${status}) pada tanggal ${date} jam ${time} berhasil disimpan.`);
+    }
+
+    // --- UJI KONEKSI SUPABASE ---
+    async function handleSaveConfig(event) {
+      if (event) event.preventDefault();
+
+      const url = document.getElementById('cfg-url').value.trim();
+      const key = document.getElementById('cfg-key').value.trim();
+      const resultEl = document.getElementById('cfg-test-result');
+
+      if (!url || !key) {
+        resultEl.className = "p-2.5 rounded-lg text-xs font-mono bg-rose-500/10 border border-rose-500/30 text-rose-400";
+        resultEl.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> URL dan Anon Key tidak boleh kosong!';
+        return;
+      }
+
+      localStorage.setItem('absensi_supabase_url', url);
+      localStorage.setItem('absensi_supabase_anon_key', key);
+
+      resultEl.className = "p-2.5 rounded-lg text-xs font-mono bg-amber-500/10 border border-amber-500/30 text-amber-400";
+      resultEl.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Menguji koneksi ke Supabase...';
+
+      try {
+        if (window.supabase) {
+          supabaseClient = window.supabase.createClient(url, key);
+          const { data, error } = await supabaseClient.from('students').select('id').limit(1);
+          if (error) throw error;
+          
+          isRealtimeConnected = true;
+          updateOnlineStatus();
+          subscribeRealtime();
+          await loadInitialData();
+
+          resultEl.className = "p-2.5 rounded-lg text-xs font-mono bg-emerald-500/10 border border-emerald-500/30 text-emerald-400";
+          resultEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> Koneksi Supabase Berhasil! Data berhasil disinkronisasi.';
+        } else {
+          throw new Error("Library Supabase JS belum siap.");
+        }
+      } catch (err) {
+        resultEl.className = "p-2.5 rounded-lg text-xs font-mono bg-rose-500/10 border border-rose-500/30 text-rose-400";
+        resultEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Gagal terhubung: ${err.message || err}`;
+      }
+    }
+
+    function handleSaveTimeSettings(event) {
+      if (event) event.preventDefault();
+      const settings = {
+        jamMulai: document.getElementById('cfg-time-mulai').value,
+        jamMasuk: document.getElementById('cfg-time-masuk').value,
+        jamTerlambat: document.getElementById('cfg-time-terlambat').value,
+        jamPulang: document.getElementById('cfg-time-pulang').value,
+        jamAkhirPulang: document.getElementById('cfg-time-akhir-pulang').value,
+      };
+      localStorage.setItem('absensi_time_settings', JSON.stringify(settings));
+      alert('Pengaturan jam kehadiran sekolah berhasil disimpan.');
+    }
+
+    function loadTimeSettings() {
+      const settings = getAttendanceSettings();
+      document.getElementById('cfg-time-mulai').value = settings.jamMulai || '06:00';
+      document.getElementById('cfg-time-masuk').value = settings.jamMasuk || '08:00';
+      document.getElementById('cfg-time-terlambat').value = settings.jamTerlambat || '08:00';
+      document.getElementById('cfg-time-pulang').value = settings.jamPulang || '14:00';
+      document.getElementById('cfg-time-akhir-pulang').value = settings.jamAkhirPulang || '18:00';
+    }
+
+    // --- HAVERSINE GPS DISTANCE ---
     function calculateDistance(lat1, lon1, lat2, lon2) {
       const R = 6371;
       const dLat = (lat2 - lat1) * Math.PI / 180;
       const dLon = (lon2 - lon1) * Math.PI / 180;
-      const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
       return R * c;
     }
 
-    // --- INISIALISASI GPS ---
     function initGPS() {
       if (!navigator.geolocation) {
         updateGPSUI(false, 'GPS Tidak Didukung', null);
@@ -868,19 +946,11 @@ CREATE TABLE IF NOT EXISTS public.attendances (
           userLocation = { lat, lng, distance: dist, isWithinRadius: isWithin };
           const distDisplay = dist < 1 ? `${Math.round(dist * 1000)} Meter` : `${dist.toFixed(2)} KM`;
 
-          if (isWithin) {
-            updateGPSUI(true, `GPS: Aktif (${distDisplay})`, distDisplay, true);
-          } else {
-            updateGPSUI(true, `GPS: Luar Radius (${distDisplay})`, distDisplay, false);
-          }
+          updateGPSUI(true, isWithin ? `GPS: Aktif (${distDisplay})` : `GPS: Luar Radius (${distDisplay})`, distDisplay, isWithin);
         },
         (error) => {
           userLocation = null;
-          let msg = 'GPS Tidak Aktif';
-          if (error.code === error.PERMISSION_DENIED) msg = 'Akses GPS Ditolak';
-          else if (error.code === error.POSITION_UNAVAILABLE) msg = 'Sinyal GPS Lemah';
-          else if (error.code === error.TIMEOUT) msg = 'GPS Timeout';
-          updateGPSUI(false, msg, 'GPS Eror', false);
+          updateGPSUI(false, 'GPS Eror', 'GPS Eror', false);
         },
         { enableHighAccuracy: true, timeout: 15000, maximumAge: 3000 }
       );
@@ -904,14 +974,10 @@ CREATE TABLE IF NOT EXISTS public.attendances (
         badge.className = "flex items-center gap-1.5 text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30";
         badge.innerHTML = `<i class="fa-solid fa-location-dot text-emerald-500"></i> <span>${badgeText}</span>`;
         if (distEl) distEl.className = 'font-bold text-emerald-600 dark:text-emerald-400';
-      } else if (isActive && !isWithin) {
+      } else {
         badge.className = "flex items-center gap-1.5 text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30";
         badge.innerHTML = `<i class="fa-solid fa-location-crosshairs text-rose-500"></i> <span>${badgeText}</span>`;
         if (distEl) distEl.className = 'font-bold text-rose-500';
-      } else {
-        badge.className = "flex items-center gap-1.5 text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30";
-        badge.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-500"></i> <span>${badgeText}</span>`;
-        if (distEl) distEl.className = 'font-bold text-amber-500';
       }
     }
 
@@ -939,33 +1005,14 @@ CREATE TABLE IF NOT EXISTS public.attendances (
     function updateKhususBannerUI() {
       const banner = document.getElementById('khusus-mode-banner');
       const footerInfo = document.getElementById('geofence-footer-info');
-      const btnSakit = document.getElementById('btn-status-sakit');
-      const btnIzin = document.getElementById('btn-status-izin');
-      const btnDinas = document.getElementById('btn-status-dinas');
 
       if (isKhususMode) {
         if (banner) banner.classList.remove('hidden');
-        if (footerInfo) {
-          footerInfo.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-400"></i> Status: <b class="text-indigo-400">Presensi Khusus (Tanpa Verifikasi Radius GPS)</b>`;
-        }
+        if (footerInfo) footerInfo.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-400"></i> Status: <b class="text-indigo-400">Presensi Khusus (Tanpa Verifikasi Radius GPS)</b>`;
       } else {
         if (banner) banner.classList.add('hidden');
-        if (footerInfo) {
-          footerInfo.innerHTML = `<i class="fa-solid fa-location-crosshairs text-emerald-500"></i> Geofencing Radius Maks: <b>300 Meter</b> (SMA Negeri 1 Labuhan Haji)`;
-        }
+        if (footerInfo) footerInfo.innerHTML = `<i class="fa-solid fa-location-crosshairs text-emerald-500"></i> Geofencing Radius Maks: <b>300 Meter</b> (SMA Negeri 1 Labuhan Haji)`;
       }
-
-      if (btnSakit) btnSakit.className = (selectedKhususStatus === 'Sakit') 
-        ? 'flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg border border-purple-400 bg-purple-600 text-white shadow-md shadow-purple-600/30'
-        : 'flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg border border-purple-500/50 bg-purple-900/40 text-purple-200 hover:bg-purple-600 hover:text-white transition-all';
-
-      if (btnIzin) btnIzin.className = (selectedKhususStatus === 'Izin')
-        ? 'flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg border border-indigo-400 bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
-        : 'flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg border border-indigo-500/50 bg-indigo-900/40 text-indigo-200 hover:bg-indigo-600 hover:text-white transition-all';
-
-      if (btnDinas) btnDinas.className = (selectedKhususStatus === 'Dinas Luar')
-        ? 'flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg border border-amber-400 bg-amber-600 text-white shadow-md shadow-amber-600/30'
-        : 'flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg border border-amber-500/50 bg-amber-900/40 text-amber-200 hover:bg-amber-600 hover:text-white transition-all';
     }
 
     function toggleVoiceAI() {
@@ -993,7 +1040,6 @@ CREATE TABLE IF NOT EXISTS public.attendances (
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'id-ID';
         utterance.rate = 0.95;
-        utterance.pitch = 1.0;
         window.speechSynthesis.speak(utterance);
       }
     }
@@ -1014,9 +1060,6 @@ CREATE TABLE IF NOT EXISTS public.attendances (
         text.textContent = "OFFLINE";
       }
     }
-
-    window.addEventListener('online', updateOnlineStatus);
-    window.addEventListener('offline', updateOnlineStatus);
 
     function getAttendanceSettings() {
       const now = new Date();
@@ -1063,68 +1106,6 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       const isDark = document.documentElement.classList.contains('dark');
       applyTheme(isDark ? 'light' : 'dark');
     }
-
-    function playClickSound() {
-      try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (!AudioCtx) return;
-        const ctx = new AudioCtx();
-        const now = ctx.currentTime;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(600, now);
-        osc.frequency.exponentialRampToValueAtTime(200, now + 0.05);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.05);
-      } catch (e) {}
-    }
-
-    function playSuccessChime() {
-      try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        const ctx = new AudioCtx();
-        const now = ctx.currentTime;
-        const osc1 = ctx.createOscillator();
-        const gain1 = ctx.createGain();
-        osc1.type = 'sine';
-        osc1.frequency.setValueAtTime(880, now);
-        gain1.gain.setValueAtTime(0, now);
-        gain1.gain.linearRampToValueAtTime(0.2, now + 0.02);
-        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
-        osc1.connect(gain1);
-        gain1.connect(ctx.destination);
-        osc1.start(now);
-        osc1.stop(now + 0.22);
-      } catch (e) {}
-    }
-
-    function playErrorChime() {
-      try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        const ctx = new AudioCtx();
-        const now = ctx.currentTime;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(220, now);
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now);
-        osc.stop(now + 0.4);
-      } catch (e) {}
-    }
-
-    document.addEventListener('click', (e) => {
-      const btn = e.target.closest('button, a, input[type="submit"], select, label.cursor-pointer');
-      if (btn) playClickSound();
-    });
 
     function openAdminPasswordModal() {
       document.getElementById('role-selection-box').classList.add('hidden');
@@ -1182,38 +1163,35 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       startAppTransition();
     }
 
+    // --- MANAJEMEN ROLE & HAK AKSES FITUR LUPA PRESENSI ---
     function applyRolePermissions() {
       const btnRekap = document.getElementById('tab-btn-rekap');
       const btnEnroll = document.getElementById('tab-btn-enroll');
       const btnConfig = document.getElementById('tab-btn-config');
       const roleBadge = document.getElementById('user-role-badge');
+      const adminLupaPresensiBox = document.getElementById('admin-lupa-presensi-box');
 
       if (currentRole === 'piket') {
         if (btnRekap) btnRekap.classList.add('hidden');
         if (btnEnroll) btnEnroll.classList.add('hidden');
         if (btnConfig) btnConfig.classList.add('hidden');
-        if (roleBadge) {
-          roleBadge.textContent = isKhususMode ? 'PRESENSI KHUSUS' : 'PIKET';
-          roleBadge.className = isKhususMode ? 'text-[9px] px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-400 font-mono' : 'text-[9px] px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-400 font-mono';
-        }
+        if (adminLupaPresensiBox) adminLupaPresensiBox.classList.add('hidden');
+        if (roleBadge) roleBadge.textContent = isKhususMode ? 'PRESENSI KHUSUS' : 'PIKET';
         switchTab('presensi');
       } else if (currentRole === 'kepsek') {
         if (btnRekap) btnRekap.classList.remove('hidden');
         if (btnEnroll) btnEnroll.classList.add('hidden');
         if (btnConfig) btnConfig.classList.add('hidden');
-        if (roleBadge) {
-          roleBadge.textContent = 'KEPALA SEKOLAH';
-          roleBadge.className = 'text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 font-mono';
-        }
+        if (adminLupaPresensiBox) adminLupaPresensiBox.classList.add('hidden');
+        if (roleBadge) roleBadge.textContent = 'KEPALA SEKOLAH';
         switchTab('presensi');
       } else {
+        // ADMIN ROLE HAS FULL ACCESS TO LUPA PRESENSI
         if (btnRekap) btnRekap.classList.remove('hidden');
         if (btnEnroll) btnEnroll.classList.remove('hidden');
         if (btnConfig) btnConfig.classList.remove('hidden');
-        if (roleBadge) {
-          roleBadge.textContent = 'ADMIN';
-          roleBadge.className = 'text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-mono';
-        }
+        if (adminLupaPresensiBox) adminLupaPresensiBox.classList.remove('hidden');
+        if (roleBadge) roleBadge.textContent = 'ADMIN';
       }
 
       if (userLocation) {
@@ -1297,6 +1275,12 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       await populateCameraList();
       populateRekapUserSelect();
       updateOnlineStatus();
+
+      const todayStr = new Date().toISOString().split('T')[0];
+      const manualDateEl = document.getElementById('manual-date');
+      const manualTimeEl = document.getElementById('manual-time');
+      if (manualDateEl) manualDateEl.value = todayStr;
+      if (manualTimeEl) manualTimeEl.value = '07:30';
     });
 
     function updateTodayDateDisplay() {
@@ -1402,7 +1386,7 @@ CREATE TABLE IF NOT EXISTS public.attendances (
         const storedStudents = localStorage.getItem('absensi_local_students');
         if (storedStudents) {
           try { registeredStudents = JSON.parse(storedStudents); } catch (e) { registeredStudents = []; }
-        } else loadSampleDemoData();
+        }
       }
 
       rebuildFaceMatcher();
@@ -1545,13 +1529,11 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       }, 300);
     }
 
-    // --- EKSEKUSI PRESENSI (ADMIN & KEPSEK BEBAS GPS) ---
     async function triggerAttendance(student) {
       const today = new Date().toISOString().split('T')[0];
       const now = new Date();
       const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0') + ':' + String(now.getSeconds()).padStart(2, '0');
 
-      // Pengecualian GPS untuk Admin dan Kepsek
       const isGpsExemptRole = (currentRole === 'admin' || currentRole === 'kepsek' || isKhususMode);
 
       if (isKhususMode) {
@@ -1560,51 +1542,25 @@ CREATE TABLE IF NOT EXISTS public.attendances (
 
         lastSpokenStudentId = student.id;
         lastSpokenTime = Date.now();
-        playSuccessChime();
         speakText(`${student.name} Presensi ${selectedKhususStatus}`);
 
-        const newKhususRec = {
-          id: 'att-' + Date.now(),
-          student_id: student.id,
-          class_name: student.class_name,
-          date: today,
-          time: timeStr,
-          status: selectedKhususStatus
-        };
+        const newKhususRec = { id: 'att-' + Date.now(), student_id: student.id, class_name: student.class_name, date: today, time: timeStr, status: selectedKhususStatus };
         todayAttendances.unshift(newKhususRec);
         renderAttendanceList();
         return;
       }
 
-      // Validasi Radius GPS jika pengguna BUKAN Admin/Kepsek
       if (!isGpsExemptRole) {
-        if (!userLocation || !userLocation.isWithinRadius) {
-          if (lastSpokenStudentId !== student.id || (Date.now() - lastSpokenTime) >= 8000) {
-            playErrorChime();
-            speakText('Anda berada di luar radius sekolah');
-            lastSpokenStudentId = student.id;
-            lastSpokenTime = Date.now();
-          }
-          return;
-        }
+        if (!userLocation || !userLocation.isWithinRadius) return;
       }
 
       if (lastSpokenStudentId === student.id && (Date.now() - lastSpokenTime) < 10000) return;
 
       lastSpokenStudentId = student.id;
       lastSpokenTime = Date.now();
-      playSuccessChime();
       speakText(`${student.name} Hadir`);
 
-      const newRec = {
-        id: 'att-' + Date.now(),
-        student_id: student.id,
-        class_name: student.class_name,
-        date: today,
-        time: timeStr,
-        status: 'Hadir'
-      };
-
+      const newRec = { id: 'att-' + Date.now(), student_id: student.id, class_name: student.class_name, date: today, time: timeStr, status: 'Hadir' };
       todayAttendances.unshift(newRec);
       renderAttendanceList();
     }
@@ -1627,12 +1583,7 @@ CREATE TABLE IF NOT EXISTS public.attendances (
 
       let list = registeredStudents.map(s => {
         const att = todayAttendances.find(a => a.student_id === s.id && a.date === today);
-        return {
-          ...s,
-          isAttended: !!att,
-          attendanceStatus: att ? att.status : 'Belum Hadir',
-          attendanceTime: att ? att.time : null
-        };
+        return { ...s, isAttended: !!att, attendanceStatus: att ? att.status : 'Belum Hadir', attendanceTime: att ? att.time : null };
       });
 
       if (filterClass !== 'ALL') list = list.filter(s => s.class_name === filterClass);
@@ -1667,9 +1618,11 @@ CREATE TABLE IF NOT EXISTS public.attendances (
 
     function populateRekapUserSelect() {
       const select = document.getElementById('rekap-user-select');
-      if (!select) return;
-      select.innerHTML = '<option value="ALL">-- Pilih Guru / Tendik Spesifik --</option>' + 
-        registeredStudents.map(s => `<option value="${s.id}">${s.name} (${s.class_name} - ${s.nisn})</option>`).join('');
+      const manualSelect = document.getElementById('manual-user-select');
+      const options = registeredStudents.map(s => `<option value="${s.id}">${s.name} (${s.class_name} - ${s.nisn})</option>`).join('');
+
+      if (select) select.innerHTML = '<option value="ALL">-- Pilih Guru / Tendik Spesifik --</option>' + options;
+      if (manualSelect) manualSelect.innerHTML = '<option value="">-- Pilih Pegawai / Siswa --</option>' + options;
     }
 
     async function fetchRekapData() {
@@ -1704,16 +1657,7 @@ CREATE TABLE IF NOT EXISTS public.attendances (
 
       registeredStudents.forEach(s => {
         if (!attendedStudentIds.has(s.id)) {
-          combined.push({
-            id: 'absent-' + s.id,
-            student_id: s.id,
-            class_name: s.class_name,
-            date: startDate,
-            time: '-',
-            status: 'Tidak Hadir',
-            student_name: s.name,
-            nisn: s.nisn
-          });
+          combined.push({ id: 'absent-' + s.id, student_id: s.id, class_name: s.class_name, date: startDate, time: '-', status: 'Tidak Hadir', student_name: s.name, nisn: s.nisn });
         }
       });
 
@@ -1747,61 +1691,64 @@ CREATE TABLE IF NOT EXISTS public.attendances (
           <td class="px-3 py-2.5 font-semibold text-slate-800 dark:text-slate-200">${item.student_name}</td>
           <td class="px-3 py-2.5 text-slate-700 dark:text-slate-300">${item.class_name}</td>
           <td class="px-3 py-2.5">${getStatusBadgeHTML(item.status)}</td>
-          <td class="px-3 py-2.5 text-center">
-            <span class="text-[10px] text-slate-400 font-mono">Tercatat</span>
-          </td>
+          <td class="px-3 py-2.5 text-center"><span class="text-[10px] text-slate-400 font-mono">Tercatat</span></td>
         </tr>
       `).join('');
     }
 
+    // --- HELPER DOKUMEN CETAK & EKSPOR ---
     function formatTanggalIndo(dateObj) {
       const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
       return `${dateObj.getDate()} ${months[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
     }
 
-    // --- KALKULASI DETAIL METRIK LAPORAN DETAIL HARIAN (10 KOLOM) ---
-    function computeDetailedReportData() {
-      const selectedUserId = document.getElementById('rekap-user-select').value;
-      const settings = getAttendanceSettings();
+    function getIndonesianDayName(dateString) {
+      if (!dateString || dateString === '-') return '-';
+      const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+      return days[new Date(dateString).getDay()] || '-';
+    }
 
+    function getSelectedUserAndFilterContext() {
+      const selectedUserId = document.getElementById('rekap-user-select').value;
+      const startDateVal = document.getElementById('rekap-start-date').value;
+      
       let selectedUser = registeredStudents.find(s => s.id === selectedUserId);
       if (!selectedUser) {
-        if (registeredStudents.length > 0) selectedUser = registeredStudents[0];
-        else selectedUser = { name: 'Pendidik / Tendik', nisn: '-', class_name: 'GURU' };
+        selectedUser = registeredStudents.length > 0 ? registeredStudents[0] : { name: 'Pendidik / Tendik', nisn: '-', class_name: 'GURU' };
       }
+
+      const d = startDateVal ? new Date(startDateVal) : new Date();
+      const monthsIndo = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
+      const bulanNama = monthsIndo[d.getMonth()];
+      const tahunNama = d.getFullYear();
 
       let userRecords = rekapData.filter(a => a.student_id === selectedUser.id);
       if (userRecords.length === 0) {
-        const today = new Date().toISOString().split('T')[0];
-        userRecords = [{ date: today, time: '-', status: 'Tidak Hadir' }];
+        userRecords = [{ date: startDateVal || new Date().toISOString().split('T')[0], time: '-', status: 'Tidak Hadir' }];
       }
+
+      return { selectedUser, bulanNama, tahunNama, userRecords };
+    }
+
+    function computeDetailedReportData() {
+      const { selectedUser, userRecords } = getSelectedUserAndFilterContext();
+      const settings = getAttendanceSettings();
 
       const rows = userRecords.map(r => {
         const jamMasukStd = settings.jamMasuk || '08:00';
         const jamPulangStd = settings.jamPulang || '14:00';
-
-        let scanMasuk = '-';
-        let scanPulang = '-';
-        let terlambat = '0 mnt';
-        let pulangCepat = '0 mnt';
-        let lembur = '0 mnt';
-        let jamKerja = '6 jam 00 mnt';
-        let jumlahJamHadir = '0 jam 00 mnt';
+        let scanMasuk = '-', scanPulang = '-', terlambat = '0 mnt', pulangCepat = '0 mnt', lembur = '0 mnt', jamKerja = '6 jam 00 mnt', jumlahJamHadir = '0 jam 00 mnt';
 
         if (r.status !== 'Tidak Hadir') {
           scanMasuk = r.time || '-';
           if (r.status === 'Pulang') scanPulang = r.time;
 
-          // Perhitungan menit
           if (scanMasuk !== '-') {
             const [hIn, mIn] = scanMasuk.split(':').map(Number);
             const [hInStd, mInStd] = jamMasukStd.split(':').map(Number);
             const minsIn = hIn * 60 + mIn;
             const minsInStd = hInStd * 60 + mInStd;
-
-            if (minsIn > minsInStd) {
-              terlambat = `${minsIn - minsInStd} mnt`;
-            }
+            if (minsIn > minsInStd) terlambat = `${minsIn - minsInStd} mnt`;
 
             if (scanPulang !== '-') {
               const [hOut, mOut] = scanPulang.split(':').map(Number);
@@ -1809,41 +1756,47 @@ CREATE TABLE IF NOT EXISTS public.attendances (
               const minsOut = hOut * 60 + mOut;
               const minsOutStd = hOutStd * 60 + mOutStd;
 
-              if (minsOut < minsOutStd) {
-                pulangCepat = `${minsOutStd - minsOut} mnt`;
-              } else if (minsOut > minsOutStd) {
-                lembur = `${minsOut - minsOutStd} mnt`;
-              }
+              if (minsOut < minsOutStd) pulangCepat = `${minsOutStd - minsOut} mnt`;
+              else if (minsOut > minsOutStd) lembur = `${minsOut - minsOutStd} mnt`;
 
               const durMins = minsOut - minsIn;
-              if (durMins > 0) {
-                const durH = Math.floor(durMins / 60);
-                const durM = durMins % 60;
-                jumlahJamHadir = `${durH} jam ${durM} mnt`;
-              }
+              if (durMins > 0) jumlahJamHadir = `${Math.floor(durMins / 60)} jam ${durMins % 60} mnt`;
             }
           }
         }
 
-        return {
-          tanggal: r.date,
-          jamMasuk: jamMasukStd,
-          jamPulang: jamPulangStd,
-          scanMasuk: scanMasuk,
-          scanPulang: scanPulang,
-          terlambat: terlambat,
-          pulangCepat: pulangCepat,
-          lembur: lembur,
-          jamKerja: jamKerja,
-          jumlahJamHadir: jumlahJamHadir
-        };
+        return { tanggal: r.date, jamMasuk: jamMasukStd, jamPulang: jamPulangStd, scanMasuk, scanPulang, terlambat, pulangCepat, lembur, jamKerja, jumlahJamHadir };
       });
 
       return { selectedUser, rows };
     }
 
-    // --- EXPORT LAPORAN DETAIL HARIAN KE WORD (.DOC) ---
-    function exportRekapWord() {
+    // --- DOKUMEN 1: LAPORAN DETAIL HARIAN (PDF, WORD, EXCEL) ---
+    function exportDetailHarianExcel() {
+      if (!window.XLSX) return alert('Library XLSX belum siap.');
+      const { selectedUser, rows } = computeDetailedReportData();
+      const filename = `Laporan_Detail_Harian_${selectedUser.name.replace(/\s+/g, '_')}.xlsx`;
+
+      const sheetData = [
+        ["LAPORAN DETAIL HARIAN"],
+        ["Nama", selectedUser.name],
+        ["NIP/NIPPPK", selectedUser.nisn],
+        ["Kategori", selectedUser.class_name],
+        [],
+        ["Tanggal", "Jam masuk", "jam pulang", "Scan Masuk", "Scan Pulang", "Terlambat", "Pulang Cepat", "Lembur", "Jam Kerja", "Jumlah Jam Hadir"]
+      ];
+
+      rows.forEach(r => {
+        sheetData.push([r.tanggal, r.jamMasuk, r.jamPulang, r.scanMasuk, r.scanPulang, r.terlambat, r.pulangCepat, r.lembur, r.jamKerja, r.jumlahJamHadir]);
+      });
+
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.aoa_to_sheet(sheetData);
+      XLSX.utils.book_append_sheet(wb, ws, "Detail Harian");
+      XLSX.writeFile(wb, filename);
+    }
+
+    function exportDetailHarianWord() {
       const { selectedUser, rows } = computeDetailedReportData();
       const tanggalCetak = formatTanggalIndo(new Date());
 
@@ -1865,8 +1818,7 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       const htmlDocument = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
         <head>
-          <meta charset='utf-8'>
-          <title>LAPORAN DETAIL HARIAN</title>
+          <meta charset='utf-8'><title>LAPORAN DETAIL HARIAN</title>
           <style>
             @page { size: A4 landscape; margin: 15mm; }
             body { font-family: 'Times New Roman', Times, serif; font-size: 10pt; line-height: 1.2; }
@@ -1882,144 +1834,178 @@ CREATE TABLE IF NOT EXISTS public.attendances (
         </head>
         <body>
           <div class="header-title">LAPORAN DETAIL HARIAN</div>
-
           <table class="identity-table">
-            <tr>
-              <td width="120"><b>Nama</b></td>
-              <td width="15">:</td>
-              <td>${selectedUser.name}</td>
-            </tr>
-            <tr>
-              <td><b>NIP/NIPPPK</b></td>
-              <td>:</td>
-              <td>${selectedUser.nisn}</td>
-            </tr>
-            <tr>
-              <td><b>Kategori</b></td>
-              <td>:</td>
-              <td>${selectedUser.class_name}</td>
-            </tr>
+            <tr><td width="120"><b>Nama</b></td><td width="15">:</td><td>${selectedUser.name}</td></tr>
+            <tr><td><b>NIP/NIPPPK</b></td><td>:</td><td>${selectedUser.nisn}</td></tr>
+            <tr><td><b>Kategori</b></td><td>:</td><td>${selectedUser.class_name}</td></tr>
           </table>
-
           <table class="data-table">
             <thead>
-              <tr>
-                <th>Tanggal</th>
-                <th>Jam masuk</th>
-                <th>jam pulang</th>
-                <th>Scan Masuk</th>
-                <th>Scan Pulang</th>
-                <th>Terlambat</th>
-                <th>Pulang Cepat</th>
-                <th>Lembur</th>
-                <th>Jam Kerja</th>
-                <th>Jumlah Jam Hadir</th>
-              </tr>
+              <tr><th>Tanggal</th><th>Jam masuk</th><th>jam pulang</th><th>Scan Masuk</th><th>Scan Pulang</th><th>Terlambat</th><th>Pulang Cepat</th><th>Lembur</th><th>Jam Kerja</th><th>Jumlah Jam Hadir</th></tr>
             </thead>
-            <tbody>
-              ${rowsHTML}
-            </tbody>
+            <tbody>${rowsHTML}</tbody>
           </table>
-
           <table class="footer-table">
-            <tr>
-              <td width="65%"></td>
-              <td width="35%">
-                Labuhanhaji, ${tanggalCetak}<br>
-                Kepala Sekolah<br>
-                SMA Negeri 1 Labuhan Haji<br><br><br><br><br>
-                <b><u>Heri Satria, S.Pd.,M.Pd</u></b><br>
-                NIP. 198205142006041005
-              </td>
-            </tr>
+            <tr><td width="65%"></td><td width="35%">Labuhanhaji, ${tanggalCetak}<br>Kepala Sekolah<br>SMA Negeri 1 Labuhan Haji<br><br><br><br><br><b><u>Heri Satria, S.Pd.,M.Pd</u></b><br>NIP. 198205142006041005</td></tr>
           </table>
         </body>
         </html>
       `;
 
       const blob = new Blob(['\ufeff' + htmlDocument], { type: 'application/msword' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `Laporan_Detail_Harian_${selectedUser.name.replace(/\s+/g, '_')}.doc`;
-      a.click();
-      URL.revokeObjectURL(url);
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `Laporan_Detail_Harian_${selectedUser.name.replace(/\s+/g, '_')}.doc`; a.click();
     }
 
-    // --- EXPORT LAPORAN DETAIL HARIAN KE PDF ---
-    function exportRekapPDF() {
+    function exportDetailHarianPDF() {
       const { jsPDF } = window.jspdf;
       const { selectedUser, rows } = computeDetailedReportData();
       const tanggalCetak = formatTanggalIndo(new Date());
 
-      // Format Landscape A4
       const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
+      doc.setFont("helvetica", "bold"); doc.setFontSize(14); doc.text("LAPORAN DETAIL HARIAN", 148, 16, { align: "center" });
+      doc.setFontSize(10); doc.setFont("helvetica", "normal");
+      doc.text("Nama", 14, 28); doc.text(":", 42, 28); doc.setFont("helvetica", "bold"); doc.text(selectedUser.name, 45, 28);
+      doc.setFont("helvetica", "normal"); doc.text("NIP/NIPPPK", 14, 34); doc.text(":", 42, 34); doc.text(selectedUser.nisn, 45, 34);
+      doc.text("Kategori", 14, 40); doc.text(":", 42, 40); doc.text(selectedUser.class_name, 45, 40);
 
-      // Title
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(14);
-      doc.text("LAPORAN DETAIL HARIAN", 148, 16, { align: "center" });
-
-      // Identity Header
-      doc.setFontSize(10);
-      doc.setFont("helvetica", "normal");
-      doc.text("Nama", 14, 28);
-      doc.text(":", 42, 28);
-      doc.setFont("helvetica", "bold");
-      doc.text(selectedUser.name, 45, 28);
-
-      doc.setFont("helvetica", "normal");
-      doc.text("NIP/NIPPPK", 14, 34);
-      doc.text(":", 42, 34);
-      doc.text(selectedUser.nisn, 45, 34);
-
-      doc.text("Kategori", 14, 40);
-      doc.text(":", 42, 40);
-      doc.text(selectedUser.class_name, 45, 40);
-
-      // 10 Column Table
-      const tableBody = rows.map(r => [
-        r.tanggal,
-        r.jamMasuk,
-        r.jamPulang,
-        r.scanMasuk,
-        r.scanPulang,
-        r.terlambat,
-        r.pulangCepat,
-        r.lembur,
-        r.jamKerja,
-        r.jumlahJamHadir
-      ]);
-
+      const tableBody = rows.map(r => [r.tanggal, r.jamMasuk, r.jamPulang, r.scanMasuk, r.scanPulang, r.terlambat, r.pulangCepat, r.lembur, r.jamKerja, r.jumlahJamHadir]);
       doc.autoTable({
-        startY: 46,
-        head: [['Tanggal', 'Jam masuk', 'jam pulang', 'Scan Masuk', 'Scan Pulang', 'Terlambat', 'Pulang Cepat', 'Lembur', 'Jam Kerja', 'Jumlah Jam Hadir']],
-        body: tableBody,
-        theme: 'grid',
-        headStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center', fontSize: 8.5 },
+        startY: 46, head: [['Tanggal', 'Jam masuk', 'jam pulang', 'Scan Masuk', 'Scan Pulang', 'Terlambat', 'Pulang Cepat', 'Lembur', 'Jam Kerja', 'Jumlah Jam Hadir']],
+        body: tableBody, theme: 'grid', headStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center', fontSize: 8.5 },
         styles: { fontSize: 8, cellPadding: 2, textColor: [30, 30, 30], halign: 'center' }
       });
 
-      // Signature Footer
       let finalY = doc.lastAutoTable.finalY + 12;
-      if (finalY > 150) {
-        doc.addPage();
-        finalY = 20;
-      }
-
+      if (finalY > 150) { doc.addPage(); finalY = 20; }
       const rightX = 210;
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal"); doc.setFontSize(10);
       doc.text(`Labuhanhaji, ${tanggalCetak}`, rightX, finalY);
       doc.text("Kepala Sekolah", rightX, finalY + 5);
       doc.text("SMA Negeri 1 Labuhan Haji", rightX, finalY + 10);
-
-      doc.setFont("helvetica", "bold");
-      doc.text("Heri Satria, S.Pd.,M.Pd", rightX, finalY + 30);
-      doc.setFont("helvetica", "normal");
-      doc.text("NIP. 198205142006041005", rightX, finalY + 35);
-
+      doc.setFont("helvetica", "bold"); doc.text("Heri Satria, S.Pd.,M.Pd", rightX, finalY + 30);
+      doc.setFont("helvetica", "normal"); doc.text("NIP. 198205142006041005", rightX, finalY + 35);
       doc.save(`Laporan_Detail_Harian_${selectedUser.name.replace(/\s+/g, '_')}.pdf`);
+    }
+
+    // --- DOKUMEN 2: DAFTAR KEHADIRAN (PDF, WORD, EXCEL) ---
+    function exportDaftarKehadiranExcel() {
+      if (!window.XLSX) return alert('Library XLSX belum siap.');
+      const { selectedUser, bulanNama, tahunNama, userRecords } = getSelectedUserAndFilterContext();
+      const filename = `Daftar_Kehadiran_${selectedUser.name.replace(/\s+/g, '_')}_${bulanNama}_${tahunNama}.xlsx`;
+
+      const sheetData = [
+        [`DAFTAR KEHADIRAN ${bulanNama} TAHUN ${tahunNama}`],
+        ["Nama", selectedUser.name],
+        ["NIP/NIPPPK", selectedUser.nisn],
+        ["Kategori", selectedUser.class_name],
+        [],
+        ["Tanggal", "Hari", "Jam Masuk", "Jam Pulang", "Keterangan"]
+      ];
+
+      userRecords.forEach(r => {
+        sheetData.push([
+          r.date,
+          getIndonesianDayName(r.date),
+          r.time && r.time !== '-' ? r.time : '-',
+          r.status === 'Pulang' ? r.time : '-',
+          r.status
+        ]);
+      });
+
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.aoa_to_sheet(sheetData);
+      XLSX.utils.book_append_sheet(wb, ws, "Daftar Kehadiran");
+      XLSX.writeFile(wb, filename);
+    }
+
+    function exportDaftarKehadiranWord() {
+      const { selectedUser, bulanNama, tahunNama, userRecords } = getSelectedUserAndFilterContext();
+      const tanggalCetak = formatTanggalIndo(new Date());
+
+      const rowsHTML = userRecords.map(r => `
+        <tr>
+          <td style="text-align: center;">${r.date}</td>
+          <td style="text-align: center;">${getIndonesianDayName(r.date)}</td>
+          <td style="text-align: center;">${r.time && r.time !== '-' ? r.time : '-'}</td>
+          <td style="text-align: center;">${r.status === 'Pulang' ? r.time : '-'}</td>
+          <td>${r.status}</td>
+        </tr>
+      `).join('');
+
+      const htmlDocument = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+        <head>
+          <meta charset='utf-8'><title>DAFTAR KEHADIRAN ${bulanNama} TAHUN ${tahunNama}</title>
+          <style>
+            body { font-family: 'Times New Roman', Times, serif; font-size: 11pt; line-height: 1.3; }
+            .header-title { text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 15px; text-transform: uppercase; }
+            .identity-table { width: 100%; margin-bottom: 15px; border-collapse: collapse; }
+            .identity-table td { padding: 3px 0; border: none; font-size: 11pt; }
+            .data-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+            .data-table th, .data-table td { border: 1px solid #000; padding: 6px 8px; font-size: 10.5pt; }
+            .data-table th { background-color: #f2f2f2; font-weight: bold; text-align: center; }
+            .footer-table { width: 100%; margin-top: 35px; border-collapse: collapse; page-break-inside: avoid; }
+            .footer-table td { border: none; vertical-align: top; }
+          </style>
+        </head>
+        <body>
+          <div class="header-title">DAFTAR KEHADIRAN ${bulanNama} TAHUN ${tahunNama}</div>
+          <table class="identity-table">
+            <tr><td width="130"><b>Nama</b></td><td width="15">:</td><td>${selectedUser.name}</td></tr>
+            <tr><td><b>NIP/NIPPPK</b></td><td>:</td><td>${selectedUser.nisn}</td></tr>
+            <tr><td><b>Kategori</b></td><td>:</td><td>${selectedUser.class_name}</td></tr>
+          </table>
+          <table class="data-table">
+            <thead>
+              <tr><th width="120">Tanggal</th><th width="90">Hari</th><th width="100">Jam Masuk</th><th width="100">Jam Pulang</th><th>Keterangan</th></tr>
+            </thead>
+            <tbody>${rowsHTML}</tbody>
+          </table>
+          <table class="footer-table">
+            <tr><td width="55%"></td><td width="45%">Labuhanhaji, ${tanggalCetak}<br>Kepala Sekolah<br>SMA Negeri 1 Labuhan Haji<br><br><br><br><br><b><u>Heri Satria, S.Pd.,M.Pd</u></b><br>NIP. 198205142006041005</td></tr>
+          </table>
+        </body>
+        </html>
+      `;
+
+      const blob = new Blob(['\ufeff' + htmlDocument], { type: 'application/msword' });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `Daftar_Kehadiran_${selectedUser.name.replace(/\s+/g, '_')}_${bulanNama}_${tahunNama}.doc`; a.click();
+    }
+
+    function exportDaftarKehadiranPDF() {
+      const { jsPDF } = window.jspdf;
+      const { selectedUser, bulanNama, tahunNama, userRecords } = getSelectedUserAndFilterContext();
+      const tanggalCetak = formatTanggalIndo(new Date());
+
+      const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+      doc.setFont("helvetica", "bold"); doc.setFontSize(12);
+      doc.text(`DAFTAR KEHADIRAN ${bulanNama} TAHUN ${tahunNama}`, 105, 18, { align: "center" });
+
+      doc.setFontSize(10); doc.setFont("helvetica", "normal");
+      doc.text("Nama", 15, 30); doc.text(":", 48, 30); doc.setFont("helvetica", "bold"); doc.text(selectedUser.name, 52, 30);
+      doc.setFont("helvetica", "normal"); doc.text("NIP/NIPPPK", 15, 36); doc.text(":", 48, 36); doc.text(selectedUser.nisn, 52, 36);
+      doc.text("Kategori", 15, 42); doc.text(":", 48, 42); doc.text(selectedUser.class_name, 52, 42);
+
+      const tableBody = userRecords.map(r => [r.date, getIndonesianDayName(r.date), r.time && r.time !== '-' ? r.time : '-', r.status === 'Pulang' ? r.time : '-', r.status]);
+
+      doc.autoTable({
+        startY: 48, head: [['Tanggal', 'Hari', 'Jam Masuk', 'Jam Pulang', 'Keterangan']],
+        body: tableBody, theme: 'grid', headStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center' },
+        styles: { fontSize: 9.5, cellPadding: 2.5, textColor: [30, 30, 30] },
+        columnStyles: { 0: { halign: 'center', cellWidth: 32 }, 1: { halign: 'center', cellWidth: 28 }, 2: { halign: 'center', cellWidth: 28 }, 3: { halign: 'center', cellWidth: 28 }, 4: { halign: 'left' } }
+      });
+
+      let finalY = doc.lastAutoTable.finalY + 14;
+      if (finalY > 230) { doc.addPage(); finalY = 20; }
+      const rightX = 125;
+      doc.setFont("helvetica", "normal"); doc.setFontSize(10);
+      doc.text(`Labuhanhaji, ${tanggalCetak}`, rightX, finalY);
+      doc.text("Kepala Sekolah", rightX, finalY + 5);
+      doc.text("SMA Negeri 1 Labuhan Haji", rightX, finalY + 10);
+      doc.setFont("helvetica", "bold"); doc.text("Heri Satria, S.Pd.,M.Pd", rightX, finalY + 32);
+      doc.setFont("helvetica", "normal"); doc.text("NIP. 198205142006041005", rightX, finalY + 37);
+
+      doc.save(`Daftar_Kehadiran_${selectedUser.name.replace(/\s+/g, '_')}_${bulanNama}_${tahunNama}.pdf`);
     }
 
     function exportToCSV() {
@@ -2029,13 +2015,8 @@ CREATE TABLE IF NOT EXISTS public.attendances (
         const att = todayAttendances.find(a => a.student_id === s.id && a.date === today);
         csv += `"${s.nisn}","${s.name}","${s.class_name}","${today}","${att ? att.time : '-'}","${att ? att.status : 'Belum Hadir'}"\n`;
       });
-
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `Presensi_${today}.csv`;
-      a.click();
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `Presensi_${today}.csv`; a.click();
     }
 
     function handleEnrollFileUpload(event) {
@@ -2067,24 +2048,19 @@ CREATE TABLE IF NOT EXISTS public.attendances (
     }
 
     async function handleEnrollSubmit(event) {
-      event.preventDefault();
+      if (event) event.preventDefault();
       const nisn = document.getElementById('enroll-nisn').value.trim();
       const name = document.getElementById('enroll-name').value.trim();
       const className = document.getElementById('enroll-class').value;
 
       if (!enrollmentDescriptor) return alert('Ambil/unggah foto wajah yang terdeteksi dengan jelas.');
 
-      const newStudent = {
-        id: crypto.randomUUID ? crypto.randomUUID() : 'std-' + Date.now(),
-        nisn, name, class_name: className, face_descriptor: enrollmentDescriptor
-      };
-
+      const newStudent = { id: crypto.randomUUID ? crypto.randomUUID() : 'std-' + Date.now(), nisn, name, class_name: className, face_descriptor: enrollmentDescriptor };
       registeredStudents.unshift(newStudent);
       localStorage.setItem('absensi_local_students', JSON.stringify(registeredStudents));
       rebuildFaceMatcher();
       renderAttendanceList();
       populateRekapUserSelect();
-
       alert('Berhasil mendaftarkan ' + name);
       event.target.reset();
     }
