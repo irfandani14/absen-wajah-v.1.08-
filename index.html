@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Presensi Wajah V.1.11 - SMA NEGERI 1 LABUHAN HAJI</title>
-  <meta name="description" content="Sistem Presensi Wajah Realtime berbasis Browser, Validasi GPS 300m, Presensi Khusus, Dual Tracking Jam Masuk & Pulang, Rekapitulasi Bulanan PDF, Word, Excel." />
+  <title>Presensi Wajah V.1.12 - SMA NEGERI 1 LABUHAN HAJI</title>
+  <meta name="description" content="Sistem Presensi Wajah Realtime berbasis Browser, Validasi GPS 300m, Status Presensi Otomatis Jam Kerja, Dual Tracking Jam Masuk & Pulang, Rekapitulasi Bulanan PDF, Word, Excel." />
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -65,7 +65,7 @@
       <div>
         <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight flex flex-wrap items-center justify-center gap-2">
           Presensi Wajah (Face Recognition)
-          <span class="text-xs sm:text-sm font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-semibold">V.1.11</span>
+          <span class="text-xs sm:text-sm font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-semibold">V.1.12</span>
         </h1>
         <h2 class="text-emerald-400 font-bold text-base sm:text-lg md:text-xl mt-1 tracking-wide uppercase">SMA NEGERI 1 LABUHAN HAJI</h2>
       </div>
@@ -145,7 +145,7 @@
       </div>
       <div>
         <h1 class="font-extrabold text-xs sm:text-base tracking-tight text-slate-800 dark:text-white flex items-center gap-1.5">
-          Presensi Wajah <span class="text-[10px] font-mono text-emerald-500 font-normal">v1.11</span>
+          Presensi Wajah <span class="text-[10px] font-mono text-emerald-500 font-normal">v1.12</span>
           <span id="user-role-badge" class="text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-semibold font-mono">ADMIN</span>
         </h1>
         <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium">SMA Negeri 1 Labuhan Haji</p>
@@ -228,8 +228,9 @@
           </div>
 
           <div class="flex flex-col items-start sm:items-end gap-1">
-            <div id="live-status-badge" class="px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold font-mono bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/40 flex items-center gap-1.5 self-start sm:self-auto">
-              <span class="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-ping"></span> STATUS: SIAP SCAN
+            <!-- DYNAMIC TIME PRESENSI STATUS BADGE -->
+            <div id="live-status-badge" class="px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold font-mono bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/40 flex items-center gap-1.5 self-start sm:self-auto transition-all">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-ping"></span> STATUS: JAM MASUK
             </div>
             <div id="gps-distance-info" class="text-[10px] font-mono text-slate-500 dark:text-slate-400">
               Jarak Sekolah: <span id="gps-distance-text" class="font-bold text-amber-500">Mengecek...</span>
@@ -388,7 +389,7 @@
       </div>
     </section>
 
-    <!-- TAB 2: REKAP & MANAJEMEN KEHADIRAN (TERPISAH JAM MASUK & PULANG) -->
+    <!-- TAB 2: REKAP & MANAJEMEN KEHADIRAN -->
     <section id="view-rekap" class="hidden flex-1 flex flex-col gap-4 overflow-y-auto pr-1">
       
       <!-- FITUR KHUSUS ADMIN: LUPA PRESENSI (INPUT MANUAL JAM MASUK & PULANG) -->
@@ -496,7 +497,7 @@
             </select>
           </div>
 
-          <!-- 3 GROUP OPSI DOKUMEN EKSPOR: INDIVIDUAL & REKAP BULANAN SEMUA WARGA SEKOLAH -->
+          <!-- 3 GROUP OPSI DOKUMEN EKSPOR -->
           <div class="w-full xl:w-3/4 flex flex-wrap items-center justify-start xl:justify-end gap-2">
             
             <!-- Group 1: LAPORAN DETAIL HARIAN INDIVIDUAL -->
@@ -527,7 +528,7 @@
               </button>
             </div>
 
-            <!-- Group 3: REKAPITULASI BULANAN SEMUA GURU / TENDIK (TERBARU V.1.11) -->
+            <!-- Group 3: REKAPITULASI BULANAN SEMUA GURU / TENDIK -->
             <div class="flex items-center gap-1 bg-gradient-to-r from-emerald-950/40 via-teal-950/40 to-slate-900 p-1.5 rounded-xl border border-emerald-500/40 shadow-md">
               <span class="text-[10px] font-extrabold text-emerald-400 px-1 font-mono uppercase flex items-center gap-1">
                 <i class="fa-solid fa-users font-normal"></i> 3. Rekap Bulanan Semua:
@@ -754,9 +755,9 @@
 
       <div class="lg:col-span-6 bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-4 sm:p-5 flex flex-col gap-3 shadow-md transition-colors">
         <h2 class="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-          <i class="fa-solid fa-code text-emerald-500 dark:text-emerald-400"></i> Skrip SQL Migrasi Database (V.1.11)
+          <i class="fa-solid fa-code text-emerald-500 dark:text-emerald-400"></i> Skrip SQL Migrasi Database (V.1.12)
         </h2>
-        <pre class="bg-slate-900 text-emerald-400 p-3 rounded-lg text-xs font-mono overflow-x-auto max-h-[350px] whitespace-pre">-- SKRIP DATABASE SUPABASE SMAN 1 LABUHAN HAJI (V.1.11)
+        <pre class="bg-slate-900 text-emerald-400 p-3 rounded-lg text-xs font-mono overflow-x-auto max-h-[350px] whitespace-pre">-- SKRIP DATABASE SUPABASE SMAN 1 LABUHAN HAJI (V.1.12)
 CREATE TABLE IF NOT EXISTS public.students (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     nisn TEXT UNIQUE NOT NULL,
@@ -767,7 +768,7 @@ CREATE TABLE IF NOT EXISTS public.students (
     created_at TIMESTAMPTZ DEFAULT now()
 );
 
--- STRUKTUR TERBARU PRESENSI (time_in TERPISAH DARI time_out)
+-- STRUKTUR PRESENSI (time_in TERPISAH DARI time_out)
 CREATE TABLE IF NOT EXISTS public.attendances (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     student_id UUID NOT NULL REFERENCES public.students(id) ON DELETE CASCADE,
@@ -818,6 +819,46 @@ CREATE TABLE IF NOT EXISTS public.attendances (
     let selectedKhususStatus = null;
 
     const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model';
+
+    // --- LOGIKA ATURAN STATUS JAM WAKTU PRESENSI (V.1.12) ---
+    // 06:00 - 07:59 WIB => JAM MASUK
+    // 08:00 - 13:59 WIB => TERLAMBAT
+    // 14:00 - 17:59 WIB => JAM PULANG
+    // 18:00 - 05:59 WIB => PRESENSI DITUTUP
+    function getPresensiStatusByTime() {
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      const totalMinutes = hours * 60 + minutes;
+
+      if (totalMinutes >= 360 && totalMinutes <= 479) { // 06:00 (360) - 07:59 (479)
+        return { code: 'MASUK', label: 'JAM MASUK', colorClass: 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/40', dotClass: 'bg-emerald-500 dark:bg-emerald-400' };
+      } else if (totalMinutes >= 480 && totalMinutes <= 839) { // 08:00 (480) - 13:59 (839)
+        return { code: 'TERLAMBAT', label: 'TERLAMBAT', colorClass: 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/40', dotClass: 'bg-amber-500 dark:bg-amber-400' };
+      } else if (totalMinutes >= 840 && totalMinutes <= 1079) { // 14:00 (840) - 17:59 (1079)
+        return { code: 'PULANG', label: 'JAM PULANG', colorClass: 'bg-sky-500/20 text-sky-600 dark:text-sky-400 border-sky-500/40', dotClass: 'bg-sky-500 dark:bg-sky-400' };
+      } else { // 18:00 - 05:59
+        return { code: 'DITUTUP', label: 'PRESENSI DITUTUP', colorClass: 'bg-rose-500/20 text-rose-600 dark:text-rose-400 border-rose-500/40', dotClass: 'bg-rose-500 dark:bg-rose-400' };
+      }
+    }
+
+    function updateLiveStatusBadge() {
+      const liveStatusBadge = document.getElementById('live-status-badge');
+      if (!liveStatusBadge) return;
+
+      const timeStatus = getPresensiStatusByTime();
+
+      if (!isGpsExempt() && (!userLocation || !userLocation.active)) {
+        liveStatusBadge.className = "px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold font-mono bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/40 flex items-center gap-1.5 self-start sm:self-auto transition-all";
+        liveStatusBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-500"></i> STATUS: ${timeStatus.label} (WAJIB GPS)`;
+      } else if (!isGpsExempt() && userLocation && !userLocation.isWithinRadius) {
+        liveStatusBadge.className = "px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold font-mono bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/40 flex items-center gap-1.5 self-start sm:self-auto transition-all";
+        liveStatusBadge.innerHTML = `<i class="fa-solid fa-ban text-rose-500"></i> STATUS: ${timeStatus.label} (LUAR RADIUS 300M)`;
+      } else {
+        liveStatusBadge.className = `px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold font-mono ${timeStatus.colorClass} border flex items-center gap-1.5 self-start sm:self-auto transition-all`;
+        liveStatusBadge.innerHTML = `<span class="w-2 h-2 rounded-full ${timeStatus.dotClass} animate-ping"></span> STATUS: ${timeStatus.label}`;
+      }
+    }
 
     // --- LOGIKA ATURAN BEBAS GPS vs WAJIB GPS ---
     function isGpsExempt() {
@@ -988,9 +1029,7 @@ CREATE TABLE IF NOT EXISTS public.attendances (
 
     function updateGPSUI() {
       const badge = document.getElementById('gps-status-badge');
-      const text = document.getElementById('gps-status-text');
       const distEl = document.getElementById('gps-distance-text');
-      const liveStatusBadge = document.getElementById('live-status-badge');
 
       if (!badge) return;
 
@@ -1000,17 +1039,12 @@ CREATE TABLE IF NOT EXISTS public.attendances (
         else if (currentRole === 'kepsek') roleLabel = 'KEPALA SEKOLAH';
 
         badge.className = "flex items-center gap-1.5 text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30";
-        badge.innerHTML = `<i class="fa-solid fa-user-shield text-emerald-500"></i> <span>Presensi Bebas GPS (${roleLabel})</span>`;
+        badge.innerHTML = `<i class="fa-solid fa-user-shield text-emerald-500"></i> <span>Bebas GPS (${roleLabel})</span>`;
         
         if (distEl) {
           const distMeters = (userLocation && userLocation.active) ? (userLocation.distance < 1 ? `${Math.round(userLocation.distance * 1000)} Meter` : `${userLocation.distance.toFixed(2)} KM`) : 'Bebas GPS';
           distEl.textContent = distMeters;
           distEl.className = 'font-bold text-emerald-600 dark:text-emerald-400';
-        }
-
-        if (liveStatusBadge) {
-          liveStatusBadge.className = "px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold font-mono bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/40 flex items-center gap-1.5 self-start sm:self-auto";
-          liveStatusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-ping"></span> STATUS: SIAP SCAN (${roleLabel})`;
         }
       } else {
         if (!userLocation || !userLocation.active) {
@@ -1021,24 +1055,14 @@ CREATE TABLE IF NOT EXISTS public.attendances (
             distEl.textContent = 'Mencari / GPS Off';
             distEl.className = 'font-bold text-rose-500';
           }
-
-          if (liveStatusBadge) {
-            liveStatusBadge.className = "px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold font-mono bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/40 flex items-center gap-1.5 self-start sm:self-auto";
-            liveStatusBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-500"></i> WAJIB AKTIFKAN GPS!`;
-          }
         } else if (userLocation.isWithinRadius) {
           const distDisplay = userLocation.distance < 1 ? `${Math.round(userLocation.distance * 1000)} Meter` : `${userLocation.distance.toFixed(2)} KM`;
           badge.className = "flex items-center gap-1.5 text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30";
-          badge.innerHTML = `<i class="fa-solid fa-location-dot text-emerald-500"></i> <span>GPS: Aktif (${distDisplay})</span>`;
+          badge.innerHTML = `<i class="fa-solid fa-location-dot text-emerald-500"></i> <span>GPS Aktif (${distDisplay})</span>`;
           
           if (distEl) {
             distEl.textContent = `${distDisplay} (Dalam Radius 300m)`;
             distEl.className = 'font-bold text-emerald-600 dark:text-emerald-400';
-          }
-
-          if (liveStatusBadge) {
-            liveStatusBadge.className = "px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold font-mono bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/40 flex items-center gap-1.5 self-start sm:self-auto";
-            liveStatusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-ping"></span> STATUS: SIAP SCAN (PIKET/GURU)`;
           }
         } else {
           const distDisplay = userLocation.distance < 1 ? `${Math.round(userLocation.distance * 1000)} Meter` : `${userLocation.distance.toFixed(2)} KM`;
@@ -1049,13 +1073,10 @@ CREATE TABLE IF NOT EXISTS public.attendances (
             distEl.textContent = `${distDisplay} (>300m dari Sekolah)`;
             distEl.className = 'font-bold text-rose-500';
           }
-
-          if (liveStatusBadge) {
-            liveStatusBadge.className = "px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold font-mono bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/40 flex items-center gap-1.5 self-start sm:self-auto";
-            liveStatusBadge.innerHTML = `<i class="fa-solid fa-ban text-rose-500"></i> TERBLOKIR: DILUAR RADIUS 300M`;
-          }
         }
       }
+
+      updateLiveStatusBadge();
     }
 
     function loginAsKhusus() {
@@ -1335,6 +1356,8 @@ CREATE TABLE IF NOT EXISTS public.attendances (
 
         const clockEl = document.getElementById('live-digital-clock');
         if (clockEl) clockEl.textContent = `${timeStr} WIB`;
+
+        updateLiveStatusBadge();
       }, 1000);
     }
 
@@ -1619,6 +1642,17 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       const now = new Date();
       const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0') + ':' + String(now.getSeconds()).padStart(2, '0');
 
+      const timeStatus = getPresensiStatusByTime();
+
+      // CEK ATURAN PRESENSI DITUTUP (18:00 - 05:59)
+      if (timeStatus.code === 'DITUTUP' && currentRole !== 'admin') {
+        if (Date.now() - lastSpokenTime > 8000) {
+          lastSpokenTime = Date.now();
+          speakText("Presensi ditutup.");
+        }
+        return;
+      }
+
       if (!isGpsExempt()) {
         if (!userLocation || !userLocation.active) {
           if (Date.now() - lastSpokenTime > 8000) {
@@ -1639,15 +1673,9 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       if (lastSpokenStudentId === student.id && (Date.now() - lastSpokenTime) < 10000) return;
 
       const existingRec = todayAttendances.find(a => a.student_id === student.id && a.date === today);
-      const settings = getAttendanceSettings();
-      const [hOutStd, mOutStd] = (settings.jamPulang || '14:00').split(':').map(Number);
-      const minsOutStd = hOutStd * 60 + mOutStd;
-      const minsNow = now.getHours() * 60 + now.getMinutes();
-
-      const isPulangTime = minsNow >= (minsOutStd - 30);
 
       if (existingRec) {
-        if (!existingRec.time_out || isPulangTime) {
+        if (!existingRec.time_out || timeStatus.code === 'PULANG') {
           existingRec.time_out = timeStr;
           if (existingRec.status === 'Hadir' || existingRec.status === 'Terlambat') {
             existingRec.status = 'Pulang';
@@ -1665,8 +1693,9 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       }
 
       let initialStatus = 'Hadir';
-      const [hInStd, mInStd] = (settings.jamMasuk || '08:00').split(':').map(Number);
-      if (minsNow > (hInStd * 60 + mInStd)) initialStatus = 'Terlambat';
+      if (timeStatus.code === 'TERLAMBAT') initialStatus = 'Terlambat';
+      else if (timeStatus.code === 'PULANG') initialStatus = 'Pulang';
+
       if (isKhususMode && selectedKhususStatus) initialStatus = selectedKhususStatus;
 
       lastSpokenStudentId = student.id;
@@ -1679,7 +1708,7 @@ CREATE TABLE IF NOT EXISTS public.attendances (
         class_name: student.class_name,
         date: today,
         time_in: timeStr,
-        time_out: null,
+        time_out: (initialStatus === 'Pulang') ? timeStr : null,
         status: initialStatus
       };
 
@@ -1935,7 +1964,7 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       return { selectedUser, rows };
     }
 
-    // --- ENGINES REKAPITULASI BULANAN KESELURUHAN GURU/TENDIK (V.1.11) ---
+    // --- ENGINES REKAPITULASI BULANAN KESELURUHAN GURU/TENDIK ---
     function computeMonthlySummaryData() {
       const startDateVal = document.getElementById('rekap-start-date').value || new Date().toISOString().split('T')[0];
       const endDateVal = document.getElementById('rekap-end-date').value || new Date().toISOString().split('T')[0];
