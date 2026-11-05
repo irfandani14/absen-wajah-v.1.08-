@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Presensi Wajah V.1.13 - SMA NEGERI 1 LABUHAN HAJI</title>
+  <title>Presensi Wajah V.1.14 - SMA NEGERI 1 LABUHAN HAJI</title>
   <meta name="description" content="Sistem Presensi Wajah Realtime berbasis Browser, Validasi GPS 300m, Status Presensi Otomatis Jam Kerja, Dual Tracking Jam Masuk & Pulang, Rekapitulasi Bulanan PDF, Word, Excel." />
   
   <!-- Tailwind CSS CDN -->
@@ -65,7 +65,7 @@
       <div>
         <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight flex flex-wrap items-center justify-center gap-2">
           Presensi Wajah (Face Recognition)
-          <span class="text-xs sm:text-sm font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-semibold">V.1.13</span>
+          <span class="text-xs sm:text-sm font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-semibold">V.1.14</span>
         </h1>
         <h2 class="text-emerald-400 font-bold text-base sm:text-lg md:text-xl mt-1 tracking-wide uppercase">SMA NEGERI 1 LABUHAN HAJI</h2>
       </div>
@@ -145,7 +145,7 @@
       </div>
       <div>
         <h1 class="font-extrabold text-xs sm:text-base tracking-tight text-slate-800 dark:text-white flex items-center gap-1.5">
-          Presensi Wajah <span class="text-[10px] font-mono text-emerald-500 font-normal">v1.13</span>
+          Presensi Wajah <span class="text-[10px] font-mono text-emerald-500 font-normal">v1.14</span>
           <span id="user-role-badge" class="text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-semibold font-mono">ADMIN</span>
         </h1>
         <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium">SMA Negeri 1 Labuhan Haji</p>
@@ -755,9 +755,9 @@
 
       <div class="lg:col-span-6 bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-4 sm:p-5 flex flex-col gap-3 shadow-md transition-colors">
         <h2 class="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-          <i class="fa-solid fa-code text-emerald-500 dark:text-emerald-400"></i> Skrip SQL Migrasi Database (V.1.13)
+          <i class="fa-solid fa-code text-emerald-500 dark:text-emerald-400"></i> Skrip SQL Migrasi Database (V.1.14)
         </h2>
-        <pre class="bg-slate-900 text-emerald-400 p-3 rounded-lg text-xs font-mono overflow-x-auto max-h-[350px] whitespace-pre">-- SKRIP DATABASE SUPABASE SMAN 1 LABUHAN HAJI (V.1.13)
+        <pre class="bg-slate-900 text-emerald-400 p-3 rounded-lg text-xs font-mono overflow-x-auto max-h-[350px] whitespace-pre">-- SKRIP DATABASE SUPABASE SMAN 1 LABUHAN HAJI (V.1.14)
 CREATE TABLE IF NOT EXISTS public.students (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     nisn TEXT UNIQUE NOT NULL,
@@ -768,7 +768,7 @@ CREATE TABLE IF NOT EXISTS public.students (
     created_at TIMESTAMPTZ DEFAULT now()
 );
 
--- STRUKTUR PRESENSI (time_in TERPISAH DARI time_out)
+-- STRUKTUR PRESENSI DUAL TIMESTAMP (time_in DAN time_out)
 CREATE TABLE IF NOT EXISTS public.attendances (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     student_id UUID NOT NULL REFERENCES public.students(id) ON DELETE CASCADE,
@@ -889,7 +889,7 @@ CREATE TABLE IF NOT EXISTS public.attendances (
 
     const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model';
 
-    // --- LOGIKA ATURAN STATUS JAM & SUARA AI SPESIFIK (V.1.13) ---
+    // --- LOGIKA ATURAN STATUS JAM & SUARA AI SPESIFIK (V.1.14) ---
     // 06:00 - 07:59 WIB => MULAI PRESENSI
     // 08:00 - 13:59 WIB => PRESENSI TERLAMBAT
     // 14:00 - 17:59 WIB => PRESENSI PULANG
@@ -1899,7 +1899,7 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       }, 300);
     }
 
-    // --- PROSES TRIGGER KEHADIRAN & UCAPAN SUARA AI ---
+    // --- PROSES TRIGGER KEHADIRAN & DUAL TIMESTAMP (MASUK & PULANG) ---
     async function triggerAttendance(student) {
       const today = new Date().toISOString().split('T')[0];
       const now = new Date();
@@ -1938,11 +1938,18 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       const existingRec = todayAttendances.find(a => a.student_id === student.id && a.date === today);
 
       if (existingRec) {
+        // PERBAIKAN V.1.14: JAM MASUK TETAP DIPERTAHANKAN DAN JAM PULANG DIPERBARUI
         if (!existingRec.time_out || timeStatus.code === 'PULANG') {
-          existingRec.time_out = timeStr;
+          existingRec.time_out = timeStr; // Memperbarui jam pulang
+          
+          if (!existingRec.time_in) {
+            existingRec.time_in = timeStr; // Jaga-jaga jika presensi masuk belum terisi
+          }
+
           if (existingRec.status === 'Hadir' || existingRec.status === 'Terlambat') {
             existingRec.status = 'Pulang';
           }
+
           lastSpokenStudentId = student.id;
           lastSpokenTime = Date.now();
           
@@ -1953,18 +1960,37 @@ CREATE TABLE IF NOT EXISTS public.attendances (
           }
 
           if (supabaseClient) {
-            await supabaseClient.from('attendances').update({ time_out: timeStr, status: existingRec.status }).eq('id', existingRec.id);
+            // MENYIMPAN KEDUA REKAMAN JAM MASUK & JAM PULANG DI SUPABASE DATABASE
+            await supabaseClient.from('attendances').update({ 
+              time_in: existingRec.time_in, 
+              time_out: timeStr, 
+              status: existingRec.status 
+            }).eq('id', existingRec.id);
           }
           renderAttendanceList();
         }
         return;
       }
 
+      // KETIKA BELUM ADA REKAMAN KEHADIRAN PERTAMA KALI HARI INI
       let initialStatus = 'Hadir';
-      if (timeStatus.code === 'TERLAMBAT') initialStatus = 'Terlambat';
-      else if (timeStatus.code === 'PULANG') initialStatus = 'Pulang';
+      let initialTimeIn = timeStr;
+      let initialTimeOut = null;
 
-      if (isKhususMode && selectedKhususStatus) initialStatus = selectedKhususStatus;
+      if (timeStatus.code === 'TERLAMBAT') {
+        initialStatus = 'Terlambat';
+        initialTimeIn = timeStr;
+        initialTimeOut = null;
+      } else if (timeStatus.code === 'PULANG') {
+        initialStatus = 'Pulang';
+        initialTimeIn = null; // Belum scan masuk pagi
+        initialTimeOut = timeStr;
+      }
+
+      if (isKhususMode && selectedKhususStatus) {
+        initialStatus = selectedKhususStatus;
+        initialTimeIn = timeStr;
+      }
 
       lastSpokenStudentId = student.id;
       lastSpokenTime = Date.now();
@@ -1980,8 +2006,8 @@ CREATE TABLE IF NOT EXISTS public.attendances (
         student_id: student.id,
         class_name: student.class_name,
         date: today,
-        time_in: timeStr,
-        time_out: (initialStatus === 'Pulang') ? timeStr : null,
+        time_in: initialTimeIn,
+        time_out: initialTimeOut,
         status: initialStatus
       };
 
@@ -2018,8 +2044,8 @@ CREATE TABLE IF NOT EXISTS public.attendances (
           ...s, 
           isAttended: !!att, 
           attendanceStatus: att ? att.status : 'Belum Hadir', 
-          timeIn: att ? (att.time_in || att.time || '-') : '-',
-          timeOut: att ? (att.time_out || '-') : '-'
+          timeIn: att && att.time_in ? att.time_in : (att && att.time && att.status !== 'Pulang' ? att.time : '-'),
+          timeOut: att && att.time_out ? att.time_out : (att && att.time && att.status === 'Pulang' ? att.time : '-')
         };
       });
 
