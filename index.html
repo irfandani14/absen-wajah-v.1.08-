@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Presensi Wajah V.1.12 - SMA NEGERI 1 LABUHAN HAJI</title>
-  <meta name="description" content="Sistem Presensi Wajah Realtime berbasis Browser, Validasi GPS 300m, Status Presensi Otomatis Jam Kerja, Dual Tracking Jam Masuk & Pulang, Rekapitulasi Bulanan PDF, Word, Excel." />
+  <title>Presensi Wajah V.1.06 (GPS & Rekap Total) - SMA NEGERI 1 LABUHAN HAJI</title>
+  <meta name="description" content="Sistem Presensi Wajah Realtime berbasis Browser, Validasi GPS 300m, Presensi Khusus, dan Rekap Total Terintegrasi." />
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -35,13 +35,6 @@
   <!-- face-api.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
 
-  <!-- jsPDF & AutoTable CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-
-  <!-- SheetJS (XLSX Export) CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
     .font-mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
@@ -61,11 +54,11 @@
         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjVk0MHL5dsqcUlyfNMdRKmoCZJCSSY0oOCS6EnwHz527OTsdWdJIEyPsbC8Rnd9u6yjA3nlYzj9D0xsJF1FRWkkqCdsK2YNYKGRcqmioqjWWXT4FAvRH8f4apHMf9970hVr1LsVPSIgzrE/s1600/logo+sma+negeri+1+lhaji+new+transparan.png" alt="Logo SMAN 1 Labuhan Haji" class="w-28 sm:w-32 md:w-36 h-auto object-contain drop-shadow-2xl">
       </div>
       
-      <!-- Title & School Name -->
+      <!-- Title & School Name + Versi V.1.06 GPS -->
       <div>
         <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight flex flex-wrap items-center justify-center gap-2">
           Presensi Wajah (Face Recognition)
-          <span class="text-xs sm:text-sm font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-semibold">V.1.12</span>
+          <span class="text-xs sm:text-sm font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-semibold">V.1.06 GPS 300m</span>
         </h1>
         <h2 class="text-emerald-400 font-bold text-base sm:text-lg md:text-xl mt-1 tracking-wide uppercase">SMA NEGERI 1 LABUHAN HAJI</h2>
       </div>
@@ -78,7 +71,7 @@
       <!-- Action Area: Multi-Role Selection & Password Modals -->
       <div id="home-action-container" class="w-full flex flex-col items-center gap-3 mt-1">
         
-        <!-- Role Buttons -->
+        <!-- Role Buttons & Tombol Presensi Khusus -->
         <div id="role-selection-box" class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2.5 w-full max-w-xl">
           <button onclick="openAdminPasswordModal()" class="w-full sm:w-auto flex-1 py-3 px-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl shadow-lg shadow-emerald-600/20 transition-all flex items-center justify-center gap-2 cursor-pointer transform active:scale-95 whitespace-nowrap">
             <i class="fa-solid fa-user-shield"></i> Masuk Sebagai Admin
@@ -87,9 +80,10 @@
             <i class="fa-solid fa-user-tie"></i> Masuk Sebagai Kepala Sekolah
           </button>
           <button onclick="loginAsPiket()" class="w-full sm:w-auto flex-1 py-3 px-3.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer transform active:scale-95 whitespace-nowrap">
-            <i class="fa-solid fa-user-clock"></i> Masuk Sebagai Piket atau Guru
+            <i class="fa-solid fa-user-clock"></i> Masuk Sebagai Guru atau Piket
           </button>
           
+          <!-- TOMBOL KHUSUS PRESENSI SAKIT / IZIN / DINAS LUAR (TANPA GPS) -->
           <button onclick="loginAsKhusus()" class="w-full py-3 px-3.5 bg-gradient-to-r from-purple-600 via-indigo-600 to-amber-600 hover:from-purple-500 hover:to-amber-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-indigo-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer transform active:scale-95 whitespace-nowrap mt-1">
             <i class="fa-solid fa-notes-medical text-base"></i> PRESENSI KHUSUS (SAKIT / IZIN / DINAS LUAR)
           </button>
@@ -145,7 +139,7 @@
       </div>
       <div>
         <h1 class="font-extrabold text-xs sm:text-base tracking-tight text-slate-800 dark:text-white flex items-center gap-1.5">
-          Presensi Wajah <span class="text-[10px] font-mono text-emerald-500 font-normal">v1.12</span>
+          Presensi Wajah <span class="text-[10px] font-mono text-emerald-500 font-normal">v1.06 GPS</span>
           <span id="user-role-badge" class="text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-semibold font-mono">ADMIN</span>
         </h1>
         <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium">SMA Negeri 1 Labuhan Haji</p>
@@ -199,7 +193,7 @@
           <i id="fullscreen-icon" class="fa-solid fa-expand"></i>
         </button>
 
-        <button onclick="logoutApp()" title="Keluar / Ke Halaman Utama" class="p-2 text-rose-500 dark:text-rose-400 hover:text-rose-600 dark:hover:text-rose-300 hover:bg-rose-500/10 rounded-lg text-xs sm:text-sm transition-colors flex items-center gap-1 font-medium">
+        <button onclick="logoutApp()" title="Keluar / Home" class="p-2 text-rose-500 dark:text-rose-400 hover:text-rose-600 dark:hover:text-rose-300 hover:bg-rose-500/10 rounded-lg text-xs sm:text-sm transition-colors flex items-center gap-1 font-medium">
           <i class="fa-solid fa-right-from-bracket"></i> <span class="hidden sm:inline text-xs">Keluar</span>
         </button>
       </div>
@@ -228,8 +222,7 @@
           </div>
 
           <div class="flex flex-col items-start sm:items-end gap-1">
-            <!-- DYNAMIC TIME PRESENSI STATUS BADGE -->
-            <div id="live-status-badge" class="px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold font-mono bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/40 flex items-center gap-1.5 self-start sm:self-auto transition-all">
+            <div id="live-status-badge" class="px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold font-mono bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/40 flex items-center gap-1.5 self-start sm:self-auto">
               <span class="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-ping"></span> STATUS: JAM MASUK
             </div>
             <div id="gps-distance-info" class="text-[10px] font-mono text-slate-500 dark:text-slate-400">
@@ -241,7 +234,7 @@
         <!-- Camera Card -->
         <div class="bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-3 sm:p-4 flex flex-col gap-3 relative shadow-md flex-1 transition-colors">
           
-          <!-- BANNER PRESENSI KHUSUS -->
+          <!-- BANNER PRESENSI KHUSUS (DIREKTORAT TANPA GPS) -->
           <div id="khusus-mode-banner" class="hidden bg-gradient-to-r from-purple-950/90 via-indigo-950/90 to-slate-900/90 border border-indigo-500/50 p-3 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-2.5 shadow-lg">
             <div class="flex items-center gap-2">
               <i class="fa-solid fa-notes-medical text-indigo-400 text-lg animate-pulse"></i>
@@ -277,6 +270,7 @@
                 <option value="">Otomatis (Kamera)</option>
               </select>
 
+              <!-- TOMBOL TOGGLE SUARA AI -->
               <button id="btn-toggle-voice" onclick="toggleVoiceAI()" title="Hidup/Matikan Suara AI" class="px-2.5 py-1.5 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs rounded-lg transition-colors flex items-center gap-1">
                 <i id="icon-voice-ai" class="fa-solid fa-volume-high text-emerald-500"></i>
                 <span id="label-voice-ai" class="text-[11px] font-medium hidden xs:inline">Suara: ON</span>
@@ -303,8 +297,24 @@
               <p class="text-xs sm:text-sm font-medium text-slate-300">Kamera Belum Aktif</p>
               <p class="text-[11px] sm:text-xs text-slate-500 mt-1 max-w-xs">Klik "Mulai Kamera" di atas untuk memindai kehadiran.</p>
             </div>
+
+            <!-- Toast Banner -->
+            <div id="success-toast" class="absolute top-3 inset-x-3 bg-emerald-600/90 border border-emerald-400/50 backdrop-blur-md text-white rounded-lg p-3 shadow-2xl flex items-center justify-between transform -translate-y-20 opacity-0 transition-all duration-300 z-30">
+              <div class="flex items-center gap-2.5">
+                <div id="toast-icon-box" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/20 flex items-center justify-center text-base sm:text-lg shrink-0">
+                  <i id="toast-icon" class="fa-solid fa-check"></i>
+                </div>
+                <div>
+                  <div id="toast-title-text" class="text-[10px] uppercase tracking-wider text-emerald-200 font-semibold">Presensi Berhasil</div>
+                  <div id="toast-student-name" class="font-bold text-xs sm:text-base text-white truncate max-w-[150px] sm:max-w-none">Nama Siswa</div>
+                  <div id="toast-student-meta" class="text-[10px] sm:text-xs text-emerald-100 font-mono">NISN: - · Kategori: -</div>
+                </div>
+              </div>
+              <div id="toast-student-time" class="text-right font-mono text-xs sm:text-sm text-emerald-100">00:00:00</div>
+            </div>
           </div>
 
+          <!-- Camera Footnote & GPS Warning -->
           <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 gap-1 pt-0.5">
             <span id="geofence-footer-info" class="flex items-center gap-1.5 truncate">
               <i class="fa-solid fa-location-crosshairs text-emerald-500"></i> Geofencing Radius Maks: <b>300 Meter</b> (SMA Negeri 1 Labuhan Haji)
@@ -317,7 +327,7 @@
       <!-- Sisi Kanan: Log Kehadiran Realtime -->
       <div class="lg:col-span-5 flex flex-col gap-3 sm:gap-4">
         
-        <!-- Summary Stats Card -->
+        <!-- Summary Stats Card (8 Konter Statistik Presensi) -->
         <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-2">
           <div class="bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-2 transition-colors">
             <span class="text-[10px] text-slate-500 dark:text-slate-400 block truncate">Total</span>
@@ -335,6 +345,8 @@
             <span class="text-[10px] text-sky-600 dark:text-sky-400 block truncate">Pulang</span>
             <div id="stat-leave" class="text-base sm:text-lg font-bold font-mono text-sky-600 dark:text-sky-400 mt-0.5">0</div>
           </div>
+
+          <!-- Konter Tambahan: Sakit, Izin, Dinas Luar, Belum Hadir -->
           <div class="bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-2 transition-colors">
             <span class="text-[10px] text-purple-600 dark:text-purple-400 block truncate">Sakit</span>
             <div id="stat-sakit" class="text-base sm:text-lg font-bold font-mono text-purple-600 dark:text-purple-400 mt-0.5">0</div>
@@ -392,165 +404,58 @@
     <!-- TAB 2: REKAP & MANAJEMEN KEHADIRAN -->
     <section id="view-rekap" class="hidden flex-1 flex flex-col gap-4 overflow-y-auto pr-1">
       
-      <!-- FITUR KHUSUS ADMIN: LUPA PRESENSI (INPUT MANUAL JAM MASUK & PULANG) -->
-      <div id="admin-lupa-presensi-box" class="hidden bg-slate-900 border border-emerald-500/40 rounded-xl p-4 shadow-lg transition-colors">
-        <div class="flex items-center justify-between mb-3">
-          <h3 class="text-xs sm:text-sm font-bold text-emerald-400 flex items-center gap-2">
-            <i class="fa-solid fa-user-pen text-emerald-400"></i> Fitur Lupa Presensi (Input Manual - Khusus Admin)
-          </h3>
-          <span class="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono px-2 py-0.5 rounded font-semibold">KHUSUS ADMIN</span>
-        </div>
-        <form onsubmit="handleManualAttendanceSubmit(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3 items-end">
-          <div>
-            <label class="text-[10px] text-slate-400 block mb-1 font-medium">Pilih Pegawai / Siswa *</label>
-            <select id="manual-user-select" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-medium">
-              <!-- Populated via JS -->
+      <!-- Rekap Filter Bar -->
+      <div class="bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-4 shadow-md flex flex-wrap items-center justify-between gap-3 transition-colors">
+        <div class="flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
+          <div class="flex-1 sm:flex-none">
+            <label class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 block mb-0.5">Mulai Tanggal</label>
+            <input type="date" id="rekap-start-date" class="w-full sm:w-auto bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-2 py-1 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
+          </div>
+          <div class="flex-1 sm:flex-none">
+            <label class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 block mb-0.5">Sampai Tanggal</label>
+            <input type="date" id="rekap-end-date" class="w-full sm:w-auto bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-2 py-1 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
+          </div>
+          <div class="flex-1 sm:flex-none">
+            <label class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 block mb-0.5">Kategori</label>
+            <select id="rekap-class-filter" class="w-full sm:w-auto bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-2 py-1 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500">
+              <option value="ALL">Semua Kategori</option>
+              <option value="GURU">GURU</option>
+              <option value="TENDIK">TENDIK</option>
+              <option value="SISWA">SISWA</option>
             </select>
           </div>
-          <div>
-            <label class="text-[10px] text-slate-400 block mb-1 font-medium">Tanggal *</label>
-            <input type="date" id="manual-date" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-mono">
-          </div>
-          <div>
-            <label class="text-[10px] text-slate-400 block mb-1 font-medium">Scan Jam Masuk *</label>
-            <input type="time" id="manual-time-in" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-mono">
-          </div>
-          <div>
-            <label class="text-[10px] text-slate-400 block mb-1 font-medium">Scan Jam Pulang</label>
-            <input type="time" id="manual-time-out" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-mono">
-          </div>
-          <div>
-            <label class="text-[10px] text-slate-400 block mb-1 font-medium">Status Kehadiran *</label>
-            <select id="manual-status" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-emerald-500 font-medium">
+          <div class="flex-1 sm:flex-none">
+            <label class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 block mb-0.5">Status</label>
+            <select id="rekap-status-filter" class="w-full sm:w-auto bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-2 py-1 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500">
+              <option value="ALL">Semua Status</option>
               <option value="Hadir">Hadir</option>
               <option value="Terlambat">Terlambat</option>
               <option value="Pulang">Pulang</option>
               <option value="Sakit">Sakit</option>
               <option value="Izin">Izin</option>
               <option value="Dinas Luar">Dinas Luar</option>
+              <option value="Tidak Hadir">Tidak Hadir</option>
             </select>
           </div>
-          <div>
-            <button type="submit" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-md">
-              <i class="fa-solid fa-floppy-disk"></i> Simpan Presensi
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <!-- Rekap Filter & Export Controls Bar -->
-      <div class="bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-4 shadow-md flex flex-col gap-4 transition-colors">
-        
-        <!-- Filter Row 1 -->
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <div class="flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
-            <div class="flex-1 sm:flex-none">
-              <label class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 block mb-0.5 font-medium">Mulai Tanggal</label>
-              <input type="date" id="rekap-start-date" onchange="fetchRekapData()" class="w-full sm:w-auto bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-2 py-1 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
-            </div>
-            <div class="flex-1 sm:flex-none">
-              <label class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 block mb-0.5 font-medium">Sampai Tanggal</label>
-              <input type="date" id="rekap-end-date" onchange="fetchRekapData()" class="w-full sm:w-auto bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-2 py-1 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500 font-mono">
-            </div>
-            <div class="flex-1 sm:flex-none">
-              <label class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 block mb-0.5 font-medium">Kategori</label>
-              <select id="rekap-class-filter" onchange="renderRekapTable()" class="w-full sm:w-auto bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-2 py-1 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500">
-                <option value="ALL">Semua Kategori</option>
-                <option value="GURU">GURU</option>
-                <option value="TENDIK">TENDIK</option>
-                <option value="SISWA">SISWA</option>
-              </select>
-            </div>
-            <div class="flex-1 sm:flex-none">
-              <label class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 block mb-0.5 font-medium">Status Kehadiran</label>
-              <select id="rekap-status-filter" onchange="renderRekapTable()" class="w-full sm:w-auto bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-2 py-1 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500">
-                <option value="ALL">Semua Status</option>
-                <option value="Hadir">Hadir</option>
-                <option value="Terlambat">Terlambat</option>
-                <option value="Pulang">Pulang</option>
-                <option value="Sakit">Sakit</option>
-                <option value="Izin">Izin</option>
-                <option value="Dinas Luar">Dinas Luar</option>
-                <option value="Tidak Hadir">Tidak Hadir</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-2 w-full lg:w-auto justify-between lg:justify-end">
-            <div class="relative flex-1 lg:flex-none">
-              <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 dark:text-slate-500 text-xs"></i>
-              <input type="text" id="rekap-search" oninput="renderRekapTable()" placeholder="Cari Nama/NIP/NIPPPK" class="w-full bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500 lg:w-52">
-            </div>
-            <button onclick="fetchRekapData()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium rounded-lg transition-colors flex items-center gap-1.5 shrink-0">
-              <i class="fa-solid fa-rotate"></i> Refresh
+          <div class="self-end w-full sm:w-auto mt-1 sm:mt-0">
+            <button onclick="fetchRekapData()" class="w-full sm:w-auto px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-filter"></i> Filter
             </button>
           </div>
         </div>
 
-        <!-- Filter Row 2: Form Cetak & Pilihan Dokumen Ekspor (PDF, WORD, EXCEL) -->
-        <div class="pt-3 border-t border-slate-200 dark:border-slate-800 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-3">
-          
-          <div class="w-full xl:w-1/4">
-            <label class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 block mb-0.5 font-medium">Pilih Guru / Tendik Perorangan</label>
-            <select id="rekap-user-select" class="w-full bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500 font-semibold">
-              <!-- Populated via JS -->
-            </select>
+        <div class="flex items-center gap-2 w-full lg:w-auto justify-between lg:justify-end">
+          <div class="relative flex-1 lg:flex-none">
+            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 dark:text-slate-500 text-xs"></i>
+            <input type="text" id="rekap-search" oninput="renderRekapTable()" placeholder="Nama/NISN/NIP/NIPPPK" class="w-full bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500 lg:w-56">
           </div>
-
-          <!-- 3 GROUP OPSI DOKUMEN EKSPOR -->
-          <div class="w-full xl:w-3/4 flex flex-wrap items-center justify-start xl:justify-end gap-2">
-            
-            <!-- Group 1: LAPORAN DETAIL HARIAN INDIVIDUAL -->
-            <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-950 p-1.5 rounded-xl border border-slate-200 dark:border-slate-800">
-              <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 px-1 font-mono uppercase">1. Detail Individu:</span>
-              <button onclick="exportDetailHarianPDF()" title="Cetak PDF Detail Individu" class="px-2 py-1 bg-rose-600 hover:bg-rose-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
-                <i class="fa-solid fa-file-pdf"></i> PDF
-              </button>
-              <button onclick="exportDetailHarianWord()" title="Cetak Word Detail Individu" class="px-2 py-1 bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
-                <i class="fa-solid fa-file-word"></i> Word
-              </button>
-              <button onclick="exportDetailHarianExcel()" title="Cetak Excel Detail Individu" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
-                <i class="fa-solid fa-file-excel"></i> Excel
-              </button>
-            </div>
-
-            <!-- Group 2: DAFTAR KEHADIRAN INDIVIDUAL -->
-            <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-950 p-1.5 rounded-xl border border-slate-200 dark:border-slate-800">
-              <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 px-1 font-mono uppercase">2. Log Individu:</span>
-              <button onclick="exportDaftarKehadiranPDF()" title="Cetak PDF Log Kehadiran" class="px-2 py-1 bg-rose-600 hover:bg-rose-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
-                <i class="fa-solid fa-file-pdf"></i> PDF
-              </button>
-              <button onclick="exportDaftarKehadiranWord()" title="Cetak Word Log Kehadiran" class="px-2 py-1 bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
-                <i class="fa-solid fa-file-word"></i> Word
-              </button>
-              <button onclick="exportDaftarKehadiranExcel()" title="Cetak Excel Log Kehadiran" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
-                <i class="fa-solid fa-file-excel"></i> Excel
-              </button>
-            </div>
-
-            <!-- Group 3: REKAPITULASI BULANAN SEMUA GURU / TENDIK -->
-            <div class="flex items-center gap-1 bg-gradient-to-r from-emerald-950/40 via-teal-950/40 to-slate-900 p-1.5 rounded-xl border border-emerald-500/40 shadow-md">
-              <span class="text-[10px] font-extrabold text-emerald-400 px-1 font-mono uppercase flex items-center gap-1">
-                <i class="fa-solid fa-users font-normal"></i> 3. Rekap Bulanan Semua:
-              </span>
-              <button onclick="exportRekapBulananPDF()" title="Cetak PDF Rekapitulasi Bulanan Seluruh Guru/Tendik" class="px-2 py-1 bg-rose-600 hover:bg-rose-500 text-white text-[11px] font-bold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
-                <i class="fa-solid fa-file-pdf"></i> PDF
-              </button>
-              <button onclick="exportRekapBulananWord()" title="Cetak Word Rekapitulasi Bulanan Seluruh Guru/Tendik" class="px-2 py-1 bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-bold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
-                <i class="fa-solid fa-file-word"></i> Word
-              </button>
-              <button onclick="exportRekapBulananExcel()" title="Cetak Excel Rekapitulasi Bulanan Seluruh Guru/Tendik" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
-                <i class="fa-solid fa-file-excel"></i> Excel
-              </button>
-            </div>
-
-          </div>
-
+          <button onclick="exportRekapCSV()" class="px-3.5 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-medium rounded-lg transition-colors flex items-center gap-1.5 border border-slate-300 dark:border-slate-700 shrink-0">
+            <i class="fa-solid fa-file-csv text-emerald-500 dark:text-emerald-400"></i> Ekspor CSV
+          </button>
         </div>
-
       </div>
 
-      <!-- Rekap Summary Stats -->
+      <!-- Rekap Summary Stats (8 Konter Lengkap termasuk Sakit, Izin, Dinas Luar, & Tidak Hadir) -->
       <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2.5">
         <div class="bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-2.5 shadow-md transition-colors">
           <span class="text-[10px] text-slate-500 dark:text-slate-400 block truncate">Total Presensi</span>
@@ -590,23 +495,23 @@
       <div class="bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-4 sm:p-5 shadow-md flex-1 flex flex-col min-h-[300px] transition-colors">
         <div class="flex items-center justify-between mb-3">
           <h2 class="text-xs sm:text-base font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
-            <i class="fa-solid fa-list-check text-emerald-500 dark:text-emerald-400"></i> Tabel Rekapitulasi Presensi Keseluruhan
+            <i class="fa-solid fa-list-check text-emerald-500 dark:text-emerald-400"></i> Tabel Rekapitulasi Presensi (Keseluruhan User)
           </h2>
           <span id="rekap-count-badge" class="font-mono text-xs px-2.5 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-md">0 Record</span>
         </div>
 
         <div class="overflow-x-auto flex-1 border border-slate-200 dark:border-slate-800 rounded-lg">
-          <table class="w-full text-left text-xs text-slate-700 dark:text-slate-300 min-w-[700px]">
+          <table class="w-full text-left text-xs text-slate-700 dark:text-slate-300 min-w-[650px]">
             <thead class="bg-slate-100 dark:bg-slate-950 text-slate-500 dark:text-slate-400 uppercase font-mono border-b border-slate-200 dark:border-slate-800 text-[10px] sm:text-[11px]">
               <tr>
                 <th class="px-3 py-2.5">No</th>
                 <th class="px-3 py-2.5">Tanggal</th>
-                <th class="px-3 py-2.5">Jam Masuk</th>
-                <th class="px-3 py-2.5">Jam Pulang</th>
+                <th class="px-3 py-2.5">Jam</th>
                 <th class="px-3 py-2.5">NISN/NIP/NIPPPK</th>
                 <th class="px-3 py-2.5">Nama Lengkap</th>
                 <th class="px-3 py-2.5">Kategori</th>
                 <th class="px-3 py-2.5">Status</th>
+                <th class="px-3 py-2.5 text-center">Aksi</th>
               </tr>
             </thead>
             <tbody id="rekap-tbody" class="divide-y divide-slate-200 dark:divide-slate-800/60 font-sans">
@@ -644,6 +549,7 @@
             </select>
           </div>
 
+          <!-- Capture / Upload Preview -->
           <div class="border border-dashed border-slate-300 dark:border-slate-700 rounded-lg p-3 text-center flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-950/60">
             <div id="enroll-preview-box" class="w-32 h-32 sm:w-36 sm:h-36 rounded-lg bg-slate-200 dark:bg-slate-900 overflow-hidden flex items-center justify-center relative mb-2 border border-slate-300 dark:border-slate-800">
               <video id="enroll-webcam" autoplay muted playsinline class="hidden w-full h-full object-cover transform -scale-x-100"></video>
@@ -693,12 +599,17 @@
 
     <!-- TAB 4: KONFIGURASI SUPABASE, SETTING WAKTU & BACKUP DATABASE -->
     <section id="view-config" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 h-full overflow-y-auto">
+      
+      <!-- Sisi Kiri: Setting Supabase, Setting Jam & Backup Data -->
       <div class="lg:col-span-6 flex flex-col gap-4 sm:gap-5">
         
+        <!-- Setting Supabase -->
         <div class="bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-4 sm:p-5 flex flex-col gap-3 shadow-md transition-colors">
           <h2 class="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
             <i class="fa-solid fa-database text-emerald-500 dark:text-emerald-400"></i> Pengaturan Supabase Backend
           </h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 -mt-1">Kredensial tersimpan secara aman di LocalStorage browser perangkat ini.</p>
+
           <form onsubmit="handleSaveConfig(event)" class="flex flex-col gap-3">
             <div>
               <label class="text-xs text-slate-700 dark:text-slate-300 mb-1 block">SUPABASE URL</label>
@@ -706,23 +617,31 @@
             </div>
             <div>
               <label class="text-xs text-slate-700 dark:text-slate-300 mb-1 block">SUPABASE ANON KEY</label>
-              <input type="password" id="cfg-key" placeholder="eyJhbGciOiJIUzI1..." class="w-full bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-3 py-2 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500 font-mono">
+              <input type="password" id="cfg-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI..." class="w-full bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-3 py-2 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500 font-mono">
             </div>
+
             <div class="flex flex-wrap items-center gap-2 pt-1">
               <button type="submit" class="flex-1 sm:flex-none px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5">
                 <i class="fa-solid fa-check"></i> Simpan & Uji Koneksi
               </button>
+              <button type="button" onclick="loadSampleDemoData()" class="flex-1 sm:flex-none px-4 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-box-archive"></i> Data Demo
+              </button>
             </div>
           </form>
+
           <div id="cfg-test-result" class="p-2.5 rounded-lg text-xs font-mono bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border text-slate-600 dark:text-slate-400">
             Status koneksi akan tampil di sini saat diuji.
           </div>
         </div>
 
+        <!-- Setting Waktu Kehadiran Sekolah -->
         <div class="bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-4 sm:p-5 flex flex-col gap-3 shadow-md transition-colors">
           <h2 class="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
             <i class="fa-solid fa-clock text-emerald-500 dark:text-emerald-400"></i> Setting Waktu Kehadiran Sekolah
           </h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 -mt-1">Default jam operasional (Senin-Kamis & Sabtu: Pulang 14:00, Jumat: Pulang 11:30).</p>
+
           <form onsubmit="handleSaveTimeSettings(event)" class="flex flex-col gap-3">
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
               <div>
@@ -746,18 +665,57 @@
                 <input type="time" id="cfg-time-akhir-pulang" required class="w-full bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-2 py-1.5 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500 font-mono">
               </div>
             </div>
+
+            <div class="text-[11px] text-slate-600 dark:text-slate-400 bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border p-2.5 rounded-lg leading-relaxed font-mono">
+              • &lt; <span id="disp-time-mulai" class="text-slate-500 font-bold">06:00</span> &rarr; <span class="text-slate-500 font-bold">Belum Dibuka</span><br>
+              • <span id="disp-time-mulai-2" class="text-emerald-600 dark:text-emerald-400 font-bold">06:00</span> - <span id="disp-time-terlambat" class="text-emerald-600 dark:text-emerald-400 font-bold">08:00</span> &rarr; <span class="text-emerald-600 dark:text-emerald-400 font-bold">JAM MASUK (Hadir)</span><br>
+              • &gt; <span id="disp-time-terlambat-2" class="text-amber-600 dark:text-amber-400 font-bold">08:00</span> s.d. &lt; <span id="disp-time-pulang" class="text-sky-600 dark:text-sky-400 font-bold">14:00</span> &rarr; <span class="text-amber-600 dark:text-amber-400 font-bold">TERLAMBAT</span><br>
+              • <span id="disp-time-pulang-2" class="text-sky-600 dark:text-sky-400 font-bold">14:00</span> - <span id="disp-time-akhir-pulang" class="text-sky-600 dark:text-sky-400 font-bold">18:00</span> &rarr; <span class="text-sky-600 dark:text-sky-400 font-bold">JAM PULANG</span><br>
+              • &gt; <span id="disp-time-akhir-pulang-2" class="text-rose-600 dark:text-rose-400 font-bold">18:00</span> &rarr; <span class="text-rose-600 dark:text-rose-400 font-bold">Presensi Ditutup</span>
+            </div>
+
             <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5">
               <i class="fa-solid fa-floppy-disk"></i> Simpan Pengaturan Jam
             </button>
           </form>
         </div>
+
+        <!-- Backup & Restore Database -->
+        <div class="bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-4 sm:p-5 flex flex-col gap-3 shadow-md transition-colors">
+          <h2 class="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+            <i class="fa-solid fa-box-archive text-emerald-500 dark:text-emerald-400"></i> Backup & Restore Database
+          </h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 -mt-1">Cadangkan seluruh data pengguna (beserta vektor biometrik) dan riwayat presensi ke file JSON.</p>
+
+          <div class="flex flex-col sm:flex-row items-center gap-2.5">
+            <button onclick="exportDatabaseJSON()" class="w-full sm:flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium rounded-lg transition-colors flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-download"></i> Unduh Backup JSON
+            </button>
+            <label class="w-full sm:flex-1 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-medium rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-1.5 border border-slate-300 dark:border-slate-700">
+              <i class="fa-solid fa-upload"></i> Restore File JSON
+              <input type="file" id="restore-json-input" accept=".json" onchange="importDatabaseJSON(event)" class="hidden">
+            </label>
+          </div>
+        </div>
+
       </div>
 
+      <!-- Sisi Kanan: Panduan & Skrip SQL -->
       <div class="lg:col-span-6 bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-4 sm:p-5 flex flex-col gap-3 shadow-md transition-colors">
-        <h2 class="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-          <i class="fa-solid fa-code text-emerald-500 dark:text-emerald-400"></i> Skrip SQL Migrasi Database (V.1.12)
-        </h2>
-        <pre class="bg-slate-900 text-emerald-400 p-3 rounded-lg text-xs font-mono overflow-x-auto max-h-[350px] whitespace-pre">-- SKRIP DATABASE SUPABASE SMAN 1 LABUHAN HAJI (V.1.12)
+        <div class="flex items-center justify-between">
+          <h2 class="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+            <i class="fa-solid fa-code text-emerald-500 dark:text-emerald-400"></i> Skrip SQL Migrasi Database
+          </h2>
+          <button onclick="copySqlScript()" id="btn-copy-sql" class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs rounded-lg transition-colors flex items-center gap-1">
+            <i class="fa-solid fa-copy"></i> Salin Skrip
+          </button>
+        </div>
+        <p class="text-xs text-slate-500 dark:text-slate-400">Buka Supabase Dashboard &gt; Proyek Anda &gt; Menu <b>SQL Editor</b> &gt; Tempel skrip ini dan klik <b>RUN</b>.</p>
+
+        <pre class="bg-slate-900 text-emerald-400 p-3 rounded-lg text-xs font-mono overflow-x-auto max-h-[400px] whitespace-pre">-- ==============================================================================
+-- SISTEM ABSENSI WAJAH REALTIME - SKEMA DATABASE SUPABASE
+-- ==============================================================================
+
 CREATE TABLE IF NOT EXISTS public.students (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     nisn TEXT UNIQUE NOT NULL,
@@ -768,34 +726,117 @@ CREATE TABLE IF NOT EXISTS public.students (
     created_at TIMESTAMPTZ DEFAULT now()
 );
 
--- STRUKTUR PRESENSI (time_in TERPISAH DARI time_out)
+CREATE INDEX IF NOT EXISTS idx_students_nisn ON public.students(nisn);
+CREATE INDEX IF NOT EXISTS idx_students_class ON public.students(class_name);
+
 CREATE TABLE IF NOT EXISTS public.attendances (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     student_id UUID NOT NULL REFERENCES public.students(id) ON DELETE CASCADE,
     class_name TEXT NOT NULL,
     date DATE NOT NULL DEFAULT CURRENT_DATE,
-    time_in TIME,
-    time_out TIME,
+    time TIME NOT NULL DEFAULT CURRENT_TIME,
     status TEXT NOT NULL DEFAULT 'Hadir',
     created_at TIMESTAMPTZ DEFAULT now(),
     CONSTRAINT unique_student_daily_attendance UNIQUE (student_id, date)
 );
+
+CREATE INDEX IF NOT EXISTS idx_attendances_date ON public.attendances(date);
+CREATE INDEX IF NOT EXISTS idx_attendances_student ON public.attendances(student_id);
+
+ALTER TABLE public.students ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.attendances ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Akses Penuh Siswa untuk Aplikasi Sekolah" ON public.students;
+CREATE POLICY "Akses Penuh Siswa untuk Aplikasi Sekolah"
+    ON public.students FOR ALL TO anon, authenticated USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Akses Penuh Presensi untuk Aplikasi Sekolah" ON public.attendances;
+CREATE POLICY "Akses Penuh Presensi untuk Aplikasi Sekolah"
+    ON public.attendances FOR ALL TO anon, authenticated USING (true) WITH CHECK (true);
+
+ALTER PUBLICATION supabase_realtime ADD TABLE public.attendances;
 </pre>
       </div>
     </section>
 
   </main>
 
+  <!-- MODAL EDIT SISWA -->
+  <div id="modal-edit-student" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-5 max-w-lg w-full flex flex-col gap-3 shadow-2xl transition-colors">
+      <div class="flex items-center justify-between">
+        <h3 class="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+          <i class="fa-solid fa-user-pen text-emerald-500 dark:text-emerald-400"></i> Edit Data
+        </h3>
+        <button onclick="closeEditStudentModal()" class="text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <form id="form-edit-student" onsubmit="handleUpdateStudent(event)" class="flex flex-col gap-3">
+        <input type="hidden" id="edit-student-id">
+        <div>
+          <label class="text-xs text-slate-700 dark:text-slate-300 mb-1 block">NISN/NIP/NIPPPK *</label>
+          <input type="text" id="edit-student-nisn" required class="w-full bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-3 py-2 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500 font-mono">
+        </div>
+        <div>
+          <label class="text-xs text-slate-700 dark:text-slate-300 mb-1 block">Nama Lengkap *</label>
+          <input type="text" id="edit-student-name" required class="w-full bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-3 py-2 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500">
+        </div>
+        <div>
+          <label class="text-xs text-slate-700 dark:text-slate-300 mb-1 block">Kategori *</label>
+          <select id="edit-student-class" required class="w-full bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-3 py-2 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-emerald-500 font-medium">
+            <option value="GURU">GURU</option>
+            <option value="TENDIK">TENDIK</option>
+            <option value="SISWA">SISWA</option>
+          </select>
+        </div>
+        
+        <!-- Optional Face Update -->
+        <div class="border border-dashed border-slate-300 dark:border-slate-700 rounded-lg p-3 text-center flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-950/60">
+          <div class="text-xs text-slate-500 dark:text-slate-400 mb-2">Update Foto / Vektor Wajah (Opsional)</div>
+          <div id="edit-preview-box" class="w-28 h-28 rounded-lg bg-slate-200 dark:bg-slate-900 overflow-hidden flex items-center justify-center relative mb-2 border border-slate-300 dark:border-slate-800">
+            <video id="edit-webcam" autoplay muted playsinline class="hidden w-full h-full object-cover transform -scale-x-100"></video>
+            <img id="edit-photo-img" class="hidden w-full h-full object-cover" alt="Preview Wajah Edit">
+            <span id="edit-placeholder-icon" class="text-slate-400 dark:text-slate-600 text-2xl"><i class="fa-solid fa-user"></i></span>
+          </div>
+
+          <div class="flex items-center gap-1.5">
+            <button type="button" onclick="startEditWebcam()" class="px-2.5 py-1 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-[11px] rounded-lg transition-colors flex items-center gap-1">
+              <i class="fa-solid fa-camera"></i> Kamera
+            </button>
+            <button type="button" id="btn-snap-edit" onclick="snapEditPhoto()" class="hidden px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] rounded-lg transition-colors flex items-center gap-1">
+              <i class="fa-solid fa-camera-retro"></i> Ambil
+            </button>
+            <label class="px-2.5 py-1 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-[11px] rounded-lg transition-colors cursor-pointer flex items-center gap-1">
+              <i class="fa-solid fa-upload"></i> Unggah
+              <input type="file" id="edit-file-input" accept="image/*" onchange="handleEditFileUpload(event)" class="hidden">
+            </label>
+          </div>
+
+          <div id="edit-descriptor-status" class="mt-2 text-[11px] font-mono text-slate-500 dark:text-slate-400">
+            Biarkan kosong jika tidak ingin mengubah data biometrik wajah.
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-1">
+          <button type="button" onclick="closeEditStudentModal()" class="px-3.5 py-1.5 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs rounded-lg transition-colors">Batal</button>
+          <button type="submit" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium rounded-lg transition-colors flex items-center gap-1.5">
+            <i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- JAVASCRIPT LOGIC ENGINE -->
   <script>
-    // --- KREDENSIAL SUPABASE OLEH USER ---
+    // --- DEFAULT KREDENSIAL SUPABASE ---
     const DEFAULT_SUPABASE_URL = 'https://aqwwcrxbsuyytseykfqi.supabase.co';
     const DEFAULT_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxd3djcnhic3V5eXRzZXlrZnFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIxNDczMTYsImV4cCI6MjEwNzcyMzMxNn0.FQ_mqmHmRYX7dGPEUxxbXQ_WyCyu__cmDm8NyckwhoM';
 
-    // --- KOORDINAT TERBARU SMA NEGERI 1 LABUHAN HAJI ---
-    const SCHOOL_LAT = 3.5552076613992845;
-    const SCHOOL_LNG = 96.99583077489011;
-    const MAX_RADIUS_KM = 0.3; // 300 Meter
+    // --- KOORDINAT SMAN 1 LABUHAN HAJI & KONFIGURASI GPS ---
+    const SCHOOL_LAT = 3.555350;
+    const SCHOOL_LNG = 96.99590;
+    const MAX_RADIUS_KM = 0.3; // Maksimal radius 300 Meter (0.3 KM)
 
     // --- STATE MANAGEMENT ---
     let supabaseClient = null;
@@ -806,206 +847,41 @@ CREATE TABLE IF NOT EXISTS public.attendances (
     let videoStream = null;
     let detectionInterval = null;
     let enrollmentDescriptor = null;
+    let enrollmentStream = null;
+    let editStudentDescriptor = null;
+    let editStudentStream = null;
     let lastSpokenStudentId = null;
     let lastSpokenTime = 0;
     let currentRole = 'admin'; 
     let currentFacingMode = 'user';
     let isRealtimeConnected = false;
-    let isVoiceEnabled = true;
-    let userLocation = null;
+    let isVoiceEnabled = true; // State Suara AI
+    let userLocation = null; // Data GPS Pengguna { lat, lng, distance, isWithinRadius }
     let gpsWatchId = null;
 
+    // --- STATE PRESENSI KHUSUS (SAKIT / IZIN / DINAS LUAR) ---
     let isKhususMode = false;
     let selectedKhususStatus = null;
 
     const MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model';
 
-    // --- LOGIKA ATURAN STATUS JAM WAKTU PRESENSI (V.1.12) ---
-    // 06:00 - 07:59 WIB => JAM MASUK
-    // 08:00 - 13:59 WIB => TERLAMBAT
-    // 14:00 - 17:59 WIB => JAM PULANG
-    // 18:00 - 05:59 WIB => PRESENSI DITUTUP
-    function getPresensiStatusByTime() {
-      const now = new Date();
-      const hours = now.getHours();
-      const minutes = now.getMinutes();
-      const totalMinutes = hours * 60 + minutes;
-
-      if (totalMinutes >= 360 && totalMinutes <= 479) { // 06:00 (360) - 07:59 (479)
-        return { code: 'MASUK', label: 'JAM MASUK', colorClass: 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/40', dotClass: 'bg-emerald-500 dark:bg-emerald-400' };
-      } else if (totalMinutes >= 480 && totalMinutes <= 839) { // 08:00 (480) - 13:59 (839)
-        return { code: 'TERLAMBAT', label: 'TERLAMBAT', colorClass: 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/40', dotClass: 'bg-amber-500 dark:bg-amber-400' };
-      } else if (totalMinutes >= 840 && totalMinutes <= 1079) { // 14:00 (840) - 17:59 (1079)
-        return { code: 'PULANG', label: 'JAM PULANG', colorClass: 'bg-sky-500/20 text-sky-600 dark:text-sky-400 border-sky-500/40', dotClass: 'bg-sky-500 dark:bg-sky-400' };
-      } else { // 18:00 - 05:59
-        return { code: 'DITUTUP', label: 'PRESENSI DITUTUP', colorClass: 'bg-rose-500/20 text-rose-600 dark:text-rose-400 border-rose-500/40', dotClass: 'bg-rose-500 dark:bg-rose-400' };
-      }
-    }
-
-    function updateLiveStatusBadge() {
-      const liveStatusBadge = document.getElementById('live-status-badge');
-      if (!liveStatusBadge) return;
-
-      const timeStatus = getPresensiStatusByTime();
-
-      if (!isGpsExempt() && (!userLocation || !userLocation.active)) {
-        liveStatusBadge.className = "px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold font-mono bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/40 flex items-center gap-1.5 self-start sm:self-auto transition-all";
-        liveStatusBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-500"></i> STATUS: ${timeStatus.label} (WAJIB GPS)`;
-      } else if (!isGpsExempt() && userLocation && !userLocation.isWithinRadius) {
-        liveStatusBadge.className = "px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold font-mono bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/40 flex items-center gap-1.5 self-start sm:self-auto transition-all";
-        liveStatusBadge.innerHTML = `<i class="fa-solid fa-ban text-rose-500"></i> STATUS: ${timeStatus.label} (LUAR RADIUS 300M)`;
-      } else {
-        liveStatusBadge.className = `px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold font-mono ${timeStatus.colorClass} border flex items-center gap-1.5 self-start sm:self-auto transition-all`;
-        liveStatusBadge.innerHTML = `<span class="w-2 h-2 rounded-full ${timeStatus.dotClass} animate-ping"></span> STATUS: ${timeStatus.label}`;
-      }
-    }
-
-    // --- LOGIKA ATURAN BEBAS GPS vs WAJIB GPS ---
-    function isGpsExempt() {
-      return (currentRole === 'admin' || currentRole === 'kepsek' || isKhususMode);
-    }
-
-    // --- FITUR LUPA PRESENSI (INPUT MANUAL DUAL JAM MASUK & PULANG) ---
-    async function handleManualAttendanceSubmit(event) {
-      if (event) event.preventDefault();
-
-      if (currentRole !== 'admin') {
-        alert('Akses Ditolak: Fitur Lupa Presensi hanya dapat digunakan oleh Admin.');
-        return;
-      }
-
-      const userId = document.getElementById('manual-user-select').value;
-      const date = document.getElementById('manual-date').value;
-      let timeIn = document.getElementById('manual-time-in').value;
-      let timeOut = document.getElementById('manual-time-out').value;
-      const status = document.getElementById('manual-status').value;
-
-      if (!userId || !date || !timeIn) {
-        alert('Mohon lengkapi sekurang-kurangnya Nama, Tanggal, dan Scan Jam Masuk.');
-        return;
-      }
-
-      if (timeIn && timeIn.length === 5) timeIn += ':00';
-      if (timeOut && timeOut.length === 5) timeOut += ':00';
-
-      const student = registeredStudents.find(s => s.id === userId);
-      if (!student) {
-        alert('Pengguna tidak ditemukan.');
-        return;
-      }
-
-      const manualRecord = {
-        student_id: student.id,
-        class_name: student.class_name,
-        date: date,
-        time_in: timeIn,
-        time_out: timeOut || null,
-        status: status
-      };
-
-      if (supabaseClient) {
-        try {
-          const { error } = await supabaseClient.from('attendances').upsert(manualRecord, { onConflict: 'student_id,date' });
-          if (error) throw error;
-        } catch (err) {
-          console.warn('Gagal menyimpan ke Supabase:', err.message);
-        }
-      }
-
-      const today = new Date().toISOString().split('T')[0];
-      if (date === today) {
-        const idx = todayAttendances.findIndex(a => a.student_id === student.id && a.date === date);
-        if (idx !== -1) todayAttendances[idx] = { ...todayAttendances[idx], ...manualRecord };
-        else todayAttendances.unshift({ id: 'att-manual-' + Date.now(), ...manualRecord });
-        renderAttendanceList();
-      }
-
-      const rekapIdx = rekapData.findIndex(a => a.student_id === student.id && a.date === date);
-      if (rekapIdx !== -1) rekapData[rekapIdx] = { ...rekapData[rekapIdx], ...manualRecord };
-      else rekapData.unshift({ id: 'att-manual-' + Date.now(), ...manualRecord });
-
-      renderRekapTable();
-      alert(`Presensi manual untuk ${student.name} (${status}) tanggal ${date} berhasil disimpan.`);
-    }
-
-    // --- UJI KONEKSI SUPABASE ---
-    async function handleSaveConfig(event) {
-      if (event) event.preventDefault();
-
-      const url = document.getElementById('cfg-url').value.trim();
-      const key = document.getElementById('cfg-key').value.trim();
-      const resultEl = document.getElementById('cfg-test-result');
-
-      if (!url || !key) {
-        resultEl.className = "p-2.5 rounded-lg text-xs font-mono bg-rose-500/10 border border-rose-500/30 text-rose-400";
-        resultEl.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> URL dan Anon Key tidak boleh kosong!';
-        return;
-      }
-
-      localStorage.setItem('absensi_supabase_url', url);
-      localStorage.setItem('absensi_supabase_anon_key', key);
-
-      resultEl.className = "p-2.5 rounded-lg text-xs font-mono bg-amber-500/10 border border-amber-500/30 text-amber-400";
-      resultEl.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Menguji koneksi ke Supabase...';
-
-      try {
-        if (window.supabase) {
-          supabaseClient = window.supabase.createClient(url, key);
-          const { data, error } = await supabaseClient.from('students').select('id').limit(1);
-          if (error) throw error;
-          
-          isRealtimeConnected = true;
-          updateOnlineStatus();
-          subscribeRealtime();
-          await loadInitialData();
-
-          resultEl.className = "p-2.5 rounded-lg text-xs font-mono bg-emerald-500/10 border border-emerald-500/30 text-emerald-400";
-          resultEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> Koneksi Supabase Berhasil! Data berhasil disinkronisasi.';
-        } else {
-          throw new Error("Library Supabase JS belum siap.");
-        }
-      } catch (err) {
-        resultEl.className = "p-2.5 rounded-lg text-xs font-mono bg-rose-500/10 border border-rose-500/30 text-rose-400";
-        resultEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Gagal terhubung: ${err.message || err}`;
-      }
-    }
-
-    function handleSaveTimeSettings(event) {
-      if (event) event.preventDefault();
-      const settings = {
-        jamMulai: document.getElementById('cfg-time-mulai').value,
-        jamMasuk: document.getElementById('cfg-time-masuk').value,
-        jamTerlambat: document.getElementById('cfg-time-terlambat').value,
-        jamPulang: document.getElementById('cfg-time-pulang').value,
-        jamAkhirPulang: document.getElementById('cfg-time-akhir-pulang').value,
-      };
-      localStorage.setItem('absensi_time_settings', JSON.stringify(settings));
-      alert('Pengaturan jam kehadiran sekolah berhasil disimpan.');
-    }
-
-    function loadTimeSettings() {
-      const settings = getAttendanceSettings();
-      document.getElementById('cfg-time-mulai').value = settings.jamMulai || '06:00';
-      document.getElementById('cfg-time-masuk').value = settings.jamMasuk || '08:00';
-      document.getElementById('cfg-time-terlambat').value = settings.jamTerlambat || '08:00';
-      document.getElementById('cfg-time-pulang').value = settings.jamPulang || '14:00';
-      document.getElementById('cfg-time-akhir-pulang').value = settings.jamAkhirPulang || '18:00';
-    }
-
-    // --- HAVERSINE GPS DISTANCE ---
+    // --- RUMUS HAVERSINE DISTANCE (PERHITUNGAN JARAK DALAM KM) ---
     function calculateDistance(lat1, lon1, lat2, lon2) {
-      const R = 6371;
+      const R = 6371; // Radius bumi (KM)
       const dLat = (lat2 - lat1) * Math.PI / 180;
       const dLon = (lon2 - lon1) * Math.PI / 180;
-      const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
       const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
       return R * c;
     }
 
+    // --- INISIALISASI GPS & MONITORING LOKASI ---
     function initGPS() {
       if (!navigator.geolocation) {
-        userLocation = { active: false };
-        updateGPSUI();
+        updateGPSUI(false, 'GPS Tidak Didukung', null);
         return;
       }
 
@@ -1016,69 +892,58 @@ CREATE TABLE IF NOT EXISTS public.attendances (
           const dist = calculateDistance(SCHOOL_LAT, SCHOOL_LNG, lat, lng);
           const isWithin = dist <= MAX_RADIUS_KM;
 
-          userLocation = { lat, lng, distance: dist, isWithinRadius: isWithin, active: true };
-          updateGPSUI();
+          userLocation = {
+            lat: lat,
+            lng: lng,
+            distance: dist,
+            isWithinRadius: isWithin
+          };
+
+          const distDisplay = dist < 1 ? `${Math.round(dist * 1000)} Meter` : `${dist.toFixed(2)} KM`;
+
+          if (isWithin) {
+            updateGPSUI(true, `GPS: Aktif (${distDisplay})`, distDisplay, true);
+          } else {
+            updateGPSUI(true, `GPS: Luar Radius (${distDisplay})`, distDisplay, false);
+          }
         },
         (error) => {
-          userLocation = { active: false };
-          updateGPSUI();
+          userLocation = null;
+          let msg = 'GPS Tidak Aktif';
+          if (error.code === error.PERMISSION_DENIED) msg = 'Akses GPS Ditolak';
+          else if (error.code === error.POSITION_UNAVAILABLE) msg = 'Sinyal GPS Lemah';
+          else if (error.code === error.TIMEOUT) msg = 'GPS Timeout';
+          updateGPSUI(false, msg, 'GPS Eror', false);
         },
         { enableHighAccuracy: true, timeout: 15000, maximumAge: 3000 }
       );
     }
 
-    function updateGPSUI() {
+    function updateGPSUI(isActive, badgeText, distanceText, isWithin = false) {
       const badge = document.getElementById('gps-status-badge');
+      const text = document.getElementById('gps-status-text');
       const distEl = document.getElementById('gps-distance-text');
 
-      if (!badge) return;
+      if (distEl) distEl.textContent = distanceText || 'Tidak Diketahui';
 
-      if (isGpsExempt()) {
-        let roleLabel = 'ADMIN';
-        if (isKhususMode) roleLabel = 'KHUSUS';
-        else if (currentRole === 'kepsek') roleLabel = 'KEPALA SEKOLAH';
+      if (!badge || !text) return;
 
+      if (isActive && isWithin) {
         badge.className = "flex items-center gap-1.5 text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30";
-        badge.innerHTML = `<i class="fa-solid fa-user-shield text-emerald-500"></i> <span>Bebas GPS (${roleLabel})</span>`;
-        
-        if (distEl) {
-          const distMeters = (userLocation && userLocation.active) ? (userLocation.distance < 1 ? `${Math.round(userLocation.distance * 1000)} Meter` : `${userLocation.distance.toFixed(2)} KM`) : 'Bebas GPS';
-          distEl.textContent = distMeters;
-          distEl.className = 'font-bold text-emerald-600 dark:text-emerald-400';
-        }
+        badge.innerHTML = `<i class="fa-solid fa-location-dot text-emerald-500"></i> <span>${badgeText}</span>`;
+        if (distEl) distEl.className = 'font-bold text-emerald-600 dark:text-emerald-400';
+      } else if (isActive && !isWithin) {
+        badge.className = "flex items-center gap-1.5 text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30";
+        badge.innerHTML = `<i class="fa-solid fa-location-crosshairs text-rose-500"></i> <span>${badgeText}</span>`;
+        if (distEl) distEl.className = 'font-bold text-rose-500';
       } else {
-        if (!userLocation || !userLocation.active) {
-          badge.className = "flex items-center gap-1.5 text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 animate-pulse";
-          badge.innerHTML = `<i class="fa-solid fa-location-crosshairs text-rose-500"></i> <span>GPS TIDAK AKTIF!</span>`;
-          
-          if (distEl) {
-            distEl.textContent = 'Mencari / GPS Off';
-            distEl.className = 'font-bold text-rose-500';
-          }
-        } else if (userLocation.isWithinRadius) {
-          const distDisplay = userLocation.distance < 1 ? `${Math.round(userLocation.distance * 1000)} Meter` : `${userLocation.distance.toFixed(2)} KM`;
-          badge.className = "flex items-center gap-1.5 text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30";
-          badge.innerHTML = `<i class="fa-solid fa-location-dot text-emerald-500"></i> <span>GPS Aktif (${distDisplay})</span>`;
-          
-          if (distEl) {
-            distEl.textContent = `${distDisplay} (Dalam Radius 300m)`;
-            distEl.className = 'font-bold text-emerald-600 dark:text-emerald-400';
-          }
-        } else {
-          const distDisplay = userLocation.distance < 1 ? `${Math.round(userLocation.distance * 1000)} Meter` : `${userLocation.distance.toFixed(2)} KM`;
-          badge.className = "flex items-center gap-1.5 text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30";
-          badge.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-rose-500"></i> <span>DILUAR RADIUS (${distDisplay})</span>`;
-          
-          if (distEl) {
-            distEl.textContent = `${distDisplay} (>300m dari Sekolah)`;
-            distEl.className = 'font-bold text-rose-500';
-          }
-        }
+        badge.className = "flex items-center gap-1.5 text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30";
+        badge.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-500"></i> <span>${badgeText}</span>`;
+        if (distEl) distEl.className = 'font-bold text-amber-500';
       }
-
-      updateLiveStatusBadge();
     }
 
+    // --- FUNGSI TATA KELOLA MODE PRESENSI KHUSUS ---
     function loginAsKhusus() {
       currentRole = 'piket';
       isKhususMode = true;
@@ -1103,17 +968,37 @@ CREATE TABLE IF NOT EXISTS public.attendances (
     function updateKhususBannerUI() {
       const banner = document.getElementById('khusus-mode-banner');
       const footerInfo = document.getElementById('geofence-footer-info');
+      const btnSakit = document.getElementById('btn-status-sakit');
+      const btnIzin = document.getElementById('btn-status-izin');
+      const btnDinas = document.getElementById('btn-status-dinas');
 
       if (isKhususMode) {
         if (banner) banner.classList.remove('hidden');
-        if (footerInfo) footerInfo.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-400"></i> Status: <b class="text-indigo-400">Presensi Khusus (Tanpa Verifikasi Radius GPS)</b>`;
+        if (footerInfo) {
+          footerInfo.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-400"></i> Status: <b class="text-indigo-400">Presensi Khusus (Tanpa Verifikasi Radius GPS)</b>`;
+        }
       } else {
         if (banner) banner.classList.add('hidden');
-        if (footerInfo) footerInfo.innerHTML = `<i class="fa-solid fa-location-crosshairs text-emerald-500"></i> Geofencing Radius Maks: <b>300 Meter</b> (SMA Negeri 1 Labuhan Haji)`;
+        if (footerInfo) {
+          footerInfo.innerHTML = `<i class="fa-solid fa-location-crosshairs text-emerald-500"></i> Geofencing Radius Maks: <b>300 Meter</b> (SMA Negeri 1 Labuhan Haji)`;
+        }
       }
-      updateGPSUI();
+
+      // Reset style tombol pilihan
+      if (btnSakit) btnSakit.className = (selectedKhususStatus === 'Sakit') 
+        ? 'flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg border border-purple-400 bg-purple-600 text-white shadow-md shadow-purple-600/30'
+        : 'flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg border border-purple-500/50 bg-purple-900/40 text-purple-200 hover:bg-purple-600 hover:text-white transition-all';
+
+      if (btnIzin) btnIzin.className = (selectedKhususStatus === 'Izin')
+        ? 'flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg border border-indigo-400 bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+        : 'flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg border border-indigo-500/50 bg-indigo-900/40 text-indigo-200 hover:bg-indigo-600 hover:text-white transition-all';
+
+      if (btnDinas) btnDinas.className = (selectedKhususStatus === 'Dinas Luar')
+        ? 'flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg border border-amber-400 bg-amber-600 text-white shadow-md shadow-amber-600/30'
+        : 'flex-1 sm:flex-none px-3 py-1.5 text-xs font-bold rounded-lg border border-amber-500/50 bg-amber-900/40 text-amber-200 hover:bg-amber-600 hover:text-white transition-all';
     }
 
+    // --- TOGGLE VOICE AI CONTROLS ---
     function toggleVoiceAI() {
       isVoiceEnabled = !isVoiceEnabled;
       localStorage.setItem('absensi_voice_enabled', isVoiceEnabled ? 'true' : 'false');
@@ -1132,6 +1017,7 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       }
     }
 
+    // --- TEXT TO SPEECH (VOICE AI ENGINE) ---
     function speakText(text) {
       if (!isVoiceEnabled) return;
       if ('speechSynthesis' in window) {
@@ -1139,16 +1025,19 @@ CREATE TABLE IF NOT EXISTS public.attendances (
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'id-ID';
         utterance.rate = 0.95;
+        utterance.pitch = 1.0;
         window.speechSynthesis.speak(utterance);
       }
     }
 
+    // --- ONLINE / OFFLINE STATUS MONITORING ---
     function updateOnlineStatus() {
       const badge = document.getElementById('connection-status-badge');
       const text = document.getElementById('connection-status-text');
       if (!badge || !text) return;
 
       const isOnline = navigator.onLine && (supabaseClient !== null) && isRealtimeConnected;
+
       if (isOnline) {
         badge.className = "flex items-center gap-1.5 text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30";
         badge.firstElementChild.className = "w-2 h-2 rounded-full bg-emerald-500 animate-ping";
@@ -1160,9 +1049,15 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       }
     }
 
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+
+    // --- DEFAULT ATTENDANCE TIME SETTINGS ---
     function getAttendanceSettings() {
       const now = new Date();
-      const isFriday = (now.getDay() === 5);
+      const day = now.getDay();
+      const isFriday = (day === 5);
+
       const defaults = { 
         jamMulai: '06:00',
         jamMasuk: '08:00', 
@@ -1175,7 +1070,11 @@ CREATE TABLE IF NOT EXISTS public.attendances (
         const saved = localStorage.getItem('absensi_time_settings');
         if (saved) {
           const parsed = JSON.parse(saved);
-          return { ...defaults, ...parsed, jamPulang: isFriday ? '11:30' : (parsed.jamPulang || '14:00') };
+          return {
+            ...defaults,
+            ...parsed,
+            jamPulang: isFriday ? '11:30' : (parsed.jamPulang || '14:00')
+          };
         }
         return defaults;
       } catch (e) {
@@ -1183,6 +1082,7 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       }
     }
 
+    // --- THEME ENGINE ---
     function initTheme() {
       const savedTheme = localStorage.getItem('absensi_theme') || 'dark';
       applyTheme(savedTheme);
@@ -1206,6 +1106,86 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       applyTheme(isDark ? 'light' : 'dark');
     }
 
+    // --- SOUND SYNTHESIZER ---
+    function playClickSound() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const now = ctx.currentTime;
+        
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(600, now);
+        osc.frequency.exponentialRampToValueAtTime(200, now + 0.05);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.05);
+      } catch (e) {}
+    }
+
+    function playSuccessChime() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioCtx();
+        const now = ctx.currentTime;
+        
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(880, now);
+        gain1.gain.setValueAtTime(0, now);
+        gain1.gain.linearRampToValueAtTime(0.2, now + 0.02);
+        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.22);
+
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(1318.5, now + 0.08);
+        gain2.gain.setValueAtTime(0, now + 0.08);
+        gain2.gain.linearRampToValueAtTime(0.25, now + 0.1);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.start(now + 0.08);
+        osc2.stop(now + 0.48);
+      } catch (e) {}
+    }
+
+    function playErrorChime() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioCtx();
+        const now = ctx.currentTime;
+        
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.setValueAtTime(180, now + 0.15);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.4);
+      } catch (e) {}
+    }
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('button, a, input[type="submit"], select, label.cursor-pointer');
+      if (btn) playClickSound();
+    });
+
+    // --- ROLE MANAGEMENT ---
     function openAdminPasswordModal() {
       document.getElementById('role-selection-box').classList.add('hidden');
       document.getElementById('admin-password-box').classList.remove('hidden');
@@ -1223,7 +1203,6 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       const pass = document.getElementById('input-admin-password').value;
       if (pass === '141187') {
         currentRole = 'admin';
-        isKhususMode = false;
         document.getElementById('admin-password-box').classList.add('hidden');
         startAppTransition();
       } else {
@@ -1248,13 +1227,21 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       const pass = document.getElementById('input-kepsek-password').value;
       if (pass === 'herisatria') {
         currentRole = 'kepsek';
-        isKhususMode = false;
         document.getElementById('kepsek-password-box').classList.add('hidden');
         startAppTransition();
       } else {
         document.getElementById('kepsek-pass-error').classList.remove('hidden');
       }
     }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const adminPassBox = document.getElementById('admin-password-box');
+        if (adminPassBox && !adminPassBox.classList.contains('hidden')) verifyAdminPassword();
+        const kepsekPassBox = document.getElementById('kepsek-password-box');
+        if (kepsekPassBox && !kepsekPassBox.classList.contains('hidden')) verifyKepsekPassword();
+      }
+    });
 
     function loginAsPiket() {
       currentRole = 'piket';
@@ -1269,57 +1256,78 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       const btnEnroll = document.getElementById('tab-btn-enroll');
       const btnConfig = document.getElementById('tab-btn-config');
       const roleBadge = document.getElementById('user-role-badge');
-      const adminLupaPresensiBox = document.getElementById('admin-lupa-presensi-box');
 
       if (currentRole === 'piket') {
         if (btnRekap) btnRekap.classList.add('hidden');
         if (btnEnroll) btnEnroll.classList.add('hidden');
         if (btnConfig) btnConfig.classList.add('hidden');
-        if (adminLupaPresensiBox) adminLupaPresensiBox.classList.add('hidden');
-        if (roleBadge) roleBadge.textContent = isKhususMode ? 'PRESENSI KHUSUS' : 'PIKET / GURU';
+        if (roleBadge) {
+          roleBadge.textContent = isKhususMode ? 'PRESENSI KHUSUS' : 'PIKET';
+          roleBadge.className = isKhususMode
+            ? 'text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-600 dark:text-purple-400 border border-purple-500/30 font-semibold font-mono'
+            : 'text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-600 dark:text-sky-400 border border-sky-500/30 font-semibold font-mono';
+        }
         switchTab('presensi');
       } else if (currentRole === 'kepsek') {
         if (btnRekap) btnRekap.classList.remove('hidden');
         if (btnEnroll) btnEnroll.classList.add('hidden');
         if (btnConfig) btnConfig.classList.add('hidden');
-        if (adminLupaPresensiBox) adminLupaPresensiBox.classList.add('hidden');
-        if (roleBadge) roleBadge.textContent = 'KEPALA SEKOLAH';
+        if (roleBadge) {
+          roleBadge.textContent = 'KEPALA SEKOLAH';
+          roleBadge.className = 'text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 font-semibold font-mono';
+        }
         switchTab('presensi');
       } else {
         if (btnRekap) btnRekap.classList.remove('hidden');
         if (btnEnroll) btnEnroll.classList.remove('hidden');
         if (btnConfig) btnConfig.classList.remove('hidden');
-        if (adminLupaPresensiBox) adminLupaPresensiBox.classList.remove('hidden');
-        if (roleBadge) roleBadge.textContent = 'ADMIN';
+        if (roleBadge) {
+          roleBadge.textContent = 'ADMIN';
+          roleBadge.className = 'text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-semibold font-mono';
+        }
       }
-
-      updateGPSUI();
     }
 
     function toggleFullScreen() {
       const icon = document.getElementById('fullscreen-icon');
       if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().then(() => { if (icon) icon.className = 'fa-solid fa-compress'; }).catch(e => {});
+        document.documentElement.requestFullscreen().then(() => {
+          if (icon) icon.className = 'fa-solid fa-compress';
+        }).catch(err => {});
       } else {
         if (document.exitFullscreen) {
-          document.exitFullscreen().then(() => { if (icon) icon.className = 'fa-solid fa-expand'; });
+          document.exitFullscreen().then(() => {
+            if (icon) icon.className = 'fa-solid fa-expand';
+          });
         }
       }
     }
 
     function logoutApp() {
+      if (!confirm('Apakah Anda yakin ingin keluar dari aplikasi?')) return;
       stopCamera();
+      if (document.fullscreenElement) document.exitFullscreen().catch(e => {});
+
       currentRole = 'admin';
       isKhususMode = false;
-
-      document.getElementById('home-action-container').classList.remove('hidden');
-      document.getElementById('home-loading-container').classList.add('hidden');
-      document.getElementById('home-progress-bar').style.width = '0%';
-      document.getElementById('role-selection-box').classList.remove('hidden');
-      document.getElementById('admin-password-box').classList.add('hidden');
-      document.getElementById('kepsek-password-box').classList.add('hidden');
+      selectedKhususStatus = null;
+      updateKhususBannerUI();
 
       const homeScreen = document.getElementById('home-screen');
+      const actionContainer = document.getElementById('home-action-container');
+      const loadingContainer = document.getElementById('home-loading-container');
+      const progressBar = document.getElementById('home-progress-bar');
+      const roleSelectBox = document.getElementById('role-selection-box');
+      const adminPassBox = document.getElementById('admin-password-box');
+      const kepsekPassBox = document.getElementById('kepsek-password-box');
+
+      progressBar.style.width = '0%';
+      loadingContainer.classList.add('hidden');
+      actionContainer.classList.remove('hidden');
+      roleSelectBox.classList.remove('hidden');
+      adminPassBox.classList.add('hidden');
+      if (kepsekPassBox) kepsekPassBox.classList.add('hidden');
+
       homeScreen.classList.remove('hidden', 'opacity-0');
     }
 
@@ -1330,6 +1338,11 @@ CREATE TABLE IF NOT EXISTS public.attendances (
 
       actionContainer.classList.add('hidden');
       loadingContainer.classList.remove('hidden');
+
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(err => {});
+      }
+
       setTimeout(() => { progressBar.style.width = '100%'; }, 50);
 
       setTimeout(() => {
@@ -1357,7 +1370,28 @@ CREATE TABLE IF NOT EXISTS public.attendances (
         const clockEl = document.getElementById('live-digital-clock');
         if (clockEl) clockEl.textContent = `${timeStr} WIB`;
 
-        updateLiveStatusBadge();
+        const timeShort = `${hours}:${minutes}`;
+        const settings = getAttendanceSettings();
+        const statusBadge = document.getElementById('live-status-badge');
+
+        if (statusBadge) {
+          if (timeShort < settings.jamMulai) {
+            statusBadge.className = 'px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold font-mono bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-300 dark:border-slate-700 flex items-center gap-1.5 self-start sm:self-auto';
+            statusBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-slate-500"></span> STATUS: BELUM DIBUKA';
+          } else if (timeShort >= settings.jamMulai && timeShort <= settings.jamTerlambat) {
+            statusBadge.className = 'px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold font-mono bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/40 flex items-center gap-1.5 self-start sm:self-auto';
+            statusBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-ping"></span> STATUS: JAM MASUK';
+          } else if (timeShort > settings.jamTerlambat && timeShort < settings.jamPulang) {
+            statusBadge.className = 'px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold font-mono bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/40 flex items-center gap-1.5 self-start sm:self-auto';
+            statusBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-500 dark:bg-amber-400 animate-ping"></span> STATUS: TERLAMBAT';
+          } else if (timeShort >= settings.jamPulang && timeShort <= settings.jamAkhirPulang) {
+            statusBadge.className = 'px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold font-mono bg-sky-500/20 text-sky-600 dark:text-sky-400 border border-sky-500/40 flex items-center gap-1.5 self-start sm:self-auto';
+            statusBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-sky-500 dark:bg-sky-400 animate-ping"></span> STATUS: JAM PULANG';
+          } else {
+            statusBadge.className = 'px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold font-mono bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/40 flex items-center gap-1.5 self-start sm:self-auto';
+            statusBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-rose-500"></span> STATUS: PRESENSI DITUTUP';
+          }
+        }
       }, 1000);
     }
 
@@ -1368,25 +1402,18 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       initSupabase();
       loadTimeSettings();
       startDigitalClock();
-      initGPS();
+      initGPS(); // Inisialisasi Layanan GPS
 
       const savedVoice = localStorage.getItem('absensi_voice_enabled');
-      if (savedVoice !== null) isVoiceEnabled = (savedVoice === 'true');
+      if (savedVoice !== null) {
+        isVoiceEnabled = (savedVoice === 'true');
+      }
       updateVoiceUIButton();
 
       await loadFaceApiModels();
       await loadInitialData();
       await populateCameraList();
-      populateRekapUserSelect();
       updateOnlineStatus();
-
-      const todayStr = new Date().toISOString().split('T')[0];
-      const manualDateEl = document.getElementById('manual-date');
-      const manualTimeInEl = document.getElementById('manual-time-in');
-      const manualTimeOutEl = document.getElementById('manual-time-out');
-      if (manualDateEl) manualDateEl.value = todayStr;
-      if (manualTimeInEl) manualTimeInEl.value = '07:30';
-      if (manualTimeOutEl) manualTimeOutEl.value = '14:00';
     });
 
     function updateTodayDateDisplay() {
@@ -1403,8 +1430,14 @@ CREATE TABLE IF NOT EXISTS public.attendances (
     }
 
     function switchTab(tab) {
-      if (currentRole === 'piket' && tab !== 'presensi') return alert('Akses Ditolak: User Piket/Guru hanya diizinkan membuka Presensi.');
-      if (currentRole === 'kepsek' && (tab === 'enroll' || tab === 'config')) return alert('Akses Ditolak');
+      if (currentRole === 'piket' && tab !== 'presensi') {
+        alert('Akses Ditolak: User Piket hanya diizinkan mengakses menu Presensi.');
+        return;
+      }
+      if (currentRole === 'kepsek' && (tab === 'enroll' || tab === 'config')) {
+        alert('Akses Ditolak: Kepala Sekolah hanya diizinkan mengakses menu Presensi dan Rekap.');
+        return;
+      }
 
       document.getElementById('view-presensi').classList.toggle('hidden', tab !== 'presensi');
       document.getElementById('view-rekap').classList.toggle('hidden', tab !== 'rekap');
@@ -1422,15 +1455,13 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       });
 
       if (tab === 'enroll') renderRegisteredStudentsTable();
-      else if (tab === 'rekap') {
-        populateRekapUserSelect();
-        fetchRekapData();
-      }
+      else if (tab === 'rekap') fetchRekapData();
     }
 
     function initSupabase() {
       const url = localStorage.getItem('absensi_supabase_url') || DEFAULT_SUPABASE_URL;
       const key = localStorage.getItem('absensi_supabase_anon_key') || DEFAULT_SUPABASE_KEY;
+      
       document.getElementById('cfg-url').value = url;
       document.getElementById('cfg-key').value = key;
 
@@ -1438,27 +1469,44 @@ CREATE TABLE IF NOT EXISTS public.attendances (
         try {
           supabaseClient = window.supabase.createClient(url, key);
           subscribeRealtime();
-        } catch (e) { supabaseClient = null; }
+        } catch (e) {
+          supabaseClient = null;
+          isRealtimeConnected = false;
+        }
+      } else {
+        supabaseClient = null;
+        isRealtimeConnected = false;
       }
+      updateOnlineStatus();
     }
 
     function subscribeRealtime() {
       if (!supabaseClient) return;
       try {
-        supabaseClient.channel('public:attendances').on('postgres_changes', { event: '*', schema: 'public', table: 'attendances' }, payload => {
-          if (payload.new) {
-            const rec = payload.new;
-            const idx = todayAttendances.findIndex(a => a.id === rec.id);
-            if (idx !== -1) todayAttendances[idx] = rec;
-            else todayAttendances.unshift(rec);
-            renderAttendanceList();
-            if (!document.getElementById('view-rekap').classList.contains('hidden')) fetchRekapData();
-          }
-        }).subscribe(status => {
-          isRealtimeConnected = (status === 'SUBSCRIBED');
-          updateOnlineStatus();
-        });
-      } catch (err) { updateOnlineStatus(); }
+        supabaseClient
+          .channel('public:attendances')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'attendances' }, payload => {
+            if (payload.new) {
+              const rec = payload.new;
+              const idx = todayAttendances.findIndex(a => a.id === rec.id);
+              if (idx !== -1) todayAttendances[idx] = rec;
+              else todayAttendances.unshift(rec);
+              renderAttendanceList();
+              if (!document.getElementById('view-rekap').classList.contains('hidden')) fetchRekapData();
+            }
+          })
+          .subscribe((status) => {
+            if (status === 'SUBSCRIBED') {
+              isRealtimeConnected = true;
+            } else {
+              isRealtimeConnected = false;
+            }
+            updateOnlineStatus();
+          });
+      } catch (err) {
+        isRealtimeConnected = false;
+        updateOnlineStatus();
+      }
     }
 
     async function loadFaceApiModels() {
@@ -1468,10 +1516,13 @@ CREATE TABLE IF NOT EXISTS public.attendances (
         await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
         await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
         await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
+        
         modelStatus.className = 'flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400';
+        modelStatus.firstElementChild.className = 'w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400';
         modelText.textContent = 'Face-AI Siap';
       } catch (e) {
         modelStatus.className = 'flex items-center gap-1.5 text-rose-600 dark:text-rose-400';
+        modelStatus.firstElementChild.className = 'w-2 h-2 rounded-full bg-rose-500 dark:bg-rose-400';
         modelText.textContent = 'Gagal Memuat AI Model';
       }
     }
@@ -1480,8 +1531,11 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       let loadedFromSupabase = false;
       if (supabaseClient) {
         try {
-          const { data: stdData } = await supabaseClient.from('students').select('*').order('name');
-          if (stdData) { registeredStudents = stdData; loadedFromSupabase = true; }
+          const { data: stdData, error: stdErr } = await supabaseClient.from('students').select('*').order('name');
+          if (!stdErr && stdData) {
+            registeredStudents = stdData;
+            loadedFromSupabase = true;
+          }
           const today = new Date().toISOString().split('T')[0];
           const { data: attData } = await supabaseClient.from('attendances').select('*').eq('date', today);
           if (attData) todayAttendances = attData;
@@ -1492,17 +1546,19 @@ CREATE TABLE IF NOT EXISTS public.attendances (
         const storedStudents = localStorage.getItem('absensi_local_students');
         if (storedStudents) {
           try { registeredStudents = JSON.parse(storedStudents); } catch (e) { registeredStudents = []; }
+        } else {
+          loadSampleDemoData();
         }
       }
 
       rebuildFaceMatcher();
       renderAttendanceList();
-      populateRekapUserSelect();
     }
 
     function rebuildFaceMatcher() {
       if (!window.faceapi) return;
       const labeledDescriptors = [];
+
       for (const s of registeredStudents) {
         if (s.face_descriptor && Array.isArray(s.face_descriptor) && s.face_descriptor.length >= 128) {
           try {
@@ -1511,7 +1567,12 @@ CREATE TABLE IF NOT EXISTS public.attendances (
           } catch (e) {}
         }
       }
-      faceMatcher = (labeledDescriptors.length > 0) ? new faceapi.FaceMatcher(labeledDescriptors, 0.40) : null;
+
+      if (labeledDescriptors.length > 0) {
+        faceMatcher = new faceapi.FaceMatcher(labeledDescriptors, 0.40);
+      } else {
+        faceMatcher = null;
+      }
     }
 
     async function populateCameraList() {
@@ -1520,11 +1581,13 @@ CREATE TABLE IF NOT EXISTS public.attendances (
         if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
           let devices = await navigator.mediaDevices.enumerateDevices();
           let videoDevices = devices.filter(d => d.kind === 'videoinput');
+
           select.innerHTML = '<option value="">Otomatis (Kamera)</option>';
           videoDevices.forEach((device, i) => {
             const opt = document.createElement('option');
             opt.value = device.deviceId;
-            opt.text = device.label || ('Kamera ' + (i + 1));
+            let label = device.label || ('Kamera ' + (i + 1));
+            opt.text = label;
             select.appendChild(opt);
           });
         }
@@ -1534,10 +1597,29 @@ CREATE TABLE IF NOT EXISTS public.attendances (
     function switchFacingMode() {
       currentFacingMode = (currentFacingMode === 'user') ? 'environment' : 'user';
       document.getElementById('label-facing-mode').textContent = (currentFacingMode === 'user') ? 'Depan' : 'Belakang';
+      document.getElementById('camera-select').value = '';
+
+      if (videoStream) startCamera();
+      else updateCameraMirroring();
+    }
+
+    function handleCameraSelectChange() {
       if (videoStream) startCamera();
     }
 
-    function handleCameraSelectChange() { if (videoStream) startCamera(); }
+    function updateCameraMirroring() {
+      const video = document.getElementById('webcam-video');
+      const canvas = document.getElementById('detection-canvas');
+      const isFront = (currentFacingMode === 'user');
+
+      if (isFront) {
+        video.classList.add('-scale-x-100');
+        canvas.classList.add('-scale-x-100');
+      } else {
+        video.classList.remove('-scale-x-100');
+        canvas.classList.remove('-scale-x-100');
+      }
+    }
 
     async function toggleCamera() {
       const btn = document.getElementById('btn-toggle-cam');
@@ -1565,9 +1647,16 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       try {
         videoStream = await navigator.mediaDevices.getUserMedia({ video: videoConstraints });
         video.srcObject = videoStream;
+        updateCameraMirroring();
         placeholder.classList.add('hidden');
-        video.onloadedmetadata = () => { video.play(); startDetectionLoop(); };
-      } catch (e) { alert('Gagal membuka kamera: ' + e.message); }
+        
+        video.onloadedmetadata = () => {
+          video.play();
+          startDetectionLoop();
+        };
+      } catch (e) {
+        alert('Gagal mengakses kamera: ' + e.message);
+      }
     }
 
     function stopCameraOnly() {
@@ -1582,17 +1671,25 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       stopCameraOnly();
       const video = document.getElementById('webcam-video');
       if (video) video.srcObject = null;
-      document.getElementById('cam-placeholder').classList.remove('hidden');
+      const placeholder = document.getElementById('cam-placeholder');
+      if (placeholder) placeholder.classList.remove('hidden');
+      const canvas = document.getElementById('detection-canvas');
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
     }
 
     function startDetectionLoop() {
       const video = document.getElementById('webcam-video');
       const canvas = document.getElementById('detection-canvas');
       const ctx = canvas.getContext('2d');
+
       if (detectionInterval) clearInterval(detectionInterval);
 
       detectionInterval = setInterval(async () => {
         if (!video || video.paused || video.ended || !faceapi) return;
+
         canvas.width = video.videoWidth || 640;
         canvas.height = video.videoHeight || 480;
 
@@ -1603,6 +1700,7 @@ CREATE TABLE IF NOT EXISTS public.attendances (
             .withFaceDescriptors();
 
           ctx.clearRect(0, 0, canvas.width, canvas.height);
+
           if (!detections || detections.length === 0) return;
 
           for (const det of detections) {
@@ -1612,125 +1710,266 @@ CREATE TABLE IF NOT EXISTS public.attendances (
 
             if (faceMatcher && det.descriptor) {
               const bestMatch = faceMatcher.findBestMatch(det.descriptor);
+              
               if (bestMatch.label !== 'unknown' && bestMatch.distance <= 0.40) {
                 matchedStudent = registeredStudents.find(s => s.id === bestMatch.label);
                 if (matchedStudent) {
                   label = matchedStudent.name;
                   triggerAttendance(matchedStudent);
                 }
-              } else label = 'Tidak Terdaftar';
+              } else {
+                label = 'Tidak Terdaftar';
+              }
             }
 
-            let isAllowedByGps = isGpsExempt() || (userLocation && userLocation.active && userLocation.isWithinRadius);
-
             ctx.lineWidth = 3;
-            ctx.strokeStyle = matchedStudent ? (isAllowedByGps ? '#10B981' : '#F59E0B') : '#F43F5E';
+            ctx.strokeStyle = matchedStudent ? '#10B981' : '#F43F5E';
             ctx.strokeRect(box.x, box.y, box.width, box.height);
 
-            ctx.fillStyle = matchedStudent ? (isAllowedByGps ? '#10B981' : '#F59E0B') : '#F43F5E';
-            ctx.fillRect(box.x, box.y - 24, Math.max(140, box.width), 24);
+            ctx.fillStyle = matchedStudent ? '#10B981' : '#F43F5E';
+            ctx.fillRect(box.x, box.y - 24, Math.max(120, box.width), 24);
+
             ctx.fillStyle = '#FFFFFF';
             ctx.font = 'bold 12px Plus Jakarta Sans, sans-serif';
-            ctx.fillText(matchedStudent ? (isAllowedByGps ? label : `${label} (Luar GPS)`) : label, box.x + 6, box.y - 7);
+            ctx.fillText(label, box.x + 6, box.y - 7);
           }
         } catch (e) {}
       }, 300);
     }
 
+    // --- EKSEKUSI PRESENSI (MODE REGULER GPS & MODE KHUSUS SAKIT/IZIN/DINAS) ---
     async function triggerAttendance(student) {
       const today = new Date().toISOString().split('T')[0];
       const now = new Date();
       const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0') + ':' + String(now.getSeconds()).padStart(2, '0');
+      const timeShort = timeStr.substring(0, 5);
 
-      const timeStatus = getPresensiStatusByTime();
+      // --- ALUR MODE PRESENSI KHUSUS (SAKIT / IZIN / DINAS LUAR - TANPA VERIFIKASI GPS) ---
+      if (isKhususMode) {
+        if (!selectedKhususStatus) {
+          if (lastSpokenStudentId !== student.id || (Date.now() - lastSpokenTime) >= 6000) {
+            showToastError(student, timeStr, 'Pilih Kategori Khusus', 'Tekan Sakit, Izin, atau Dinas Luar');
+            playErrorChime();
+            speakText('Harap pilih tombol Sakit, Izin, atau Dinas Luar terlebih dahulu');
+            lastSpokenStudentId = student.id;
+            lastSpokenTime = Date.now();
+          }
+          return;
+        }
 
-      // CEK ATURAN PRESENSI DITUTUP (18:00 - 05:59)
-      if (timeStatus.code === 'DITUTUP' && currentRole !== 'admin') {
-        if (Date.now() - lastSpokenTime > 8000) {
+        if (lastSpokenStudentId === student.id && (Date.now() - lastSpokenTime) < 10000) return;
+
+        const alreadyKhusus = todayAttendances.find(a => a.student_id === student.id && a.date === today);
+        if (alreadyKhusus) {
+          showSuccessToast(student, alreadyKhusus.time, 'Sudah Absen (' + alreadyKhusus.status + ')');
+          speakText(`${student.name} Sudah Terdata ${alreadyKhusus.status}`);
+          lastSpokenStudentId = student.id;
           lastSpokenTime = Date.now();
-          speakText("Presensi ditutup.");
+          return;
+        }
+
+        lastSpokenStudentId = student.id;
+        lastSpokenTime = Date.now();
+
+        playSuccessChime();
+        speakText(`${student.name} Presensi ${selectedKhususStatus}`);
+
+        const newKhususRec = {
+          id: 'att-' + Date.now(),
+          student_id: student.id,
+          class_name: student.class_name,
+          date: today,
+          time: timeStr,
+          status: selectedKhususStatus
+        };
+
+        todayAttendances.unshift(newKhususRec);
+        renderAttendanceList();
+        showSuccessToast(student, timeStr, 'Presensi Khusus (' + selectedKhususStatus + ')');
+
+        if (supabaseClient) {
+          try {
+            await supabaseClient.from('attendances').insert([{
+              student_id: student.id,
+              class_name: student.class_name,
+              date: today,
+              time: timeStr,
+              status: selectedKhususStatus
+            }]);
+          } catch (e) {}
+        } else {
+          localStorage.setItem('absensi_local_attendances', JSON.stringify(todayAttendances));
         }
         return;
       }
 
-      if (!isGpsExempt()) {
-        if (!userLocation || !userLocation.active) {
-          if (Date.now() - lastSpokenTime > 8000) {
-            lastSpokenTime = Date.now();
-            speakText("Presensi gagal. Aktifkan GPS lokasi Anda.");
-          }
-          return;
+      // --- ALUR MODE PRESENSI REGULER (DENGAN GPS 300 METER) ---
+
+      // 1. VERIFIKASI LOKASI GPS (RADIUS MAKSIMAL 300 METER SEKOLAH)
+      if (!userLocation) {
+        if (lastSpokenStudentId !== student.id || (Date.now() - lastSpokenTime) >= 8000) {
+          showToastError(student, timeStr, 'GPS Belum Aktif', 'Aktifkan GPS Perangkat Anda');
+          playErrorChime();
+          speakText('anda berada diluar sekolah, harap datang ke sekolah untuk presensi');
+          lastSpokenStudentId = student.id;
+          lastSpokenTime = Date.now();
         }
-        if (!userLocation.isWithinRadius) {
-          if (Date.now() - lastSpokenTime > 8000) {
-            lastSpokenTime = Date.now();
-            speakText("Presensi gagal. Anda berada di luar radius 300 meter lokasi sekolah.");
-          }
-          return;
+        return;
+      }
+
+      if (!userLocation.isWithinRadius) {
+        if (lastSpokenStudentId !== student.id || (Date.now() - lastSpokenTime) >= 8000) {
+          const distStr = userLocation.distance < 1 ? `${Math.round(userLocation.distance * 1000)}m` : `${userLocation.distance.toFixed(2)}km`;
+          showToastError(student, timeStr, 'Di Luar Radius Sekolah', `Jarak: ${distStr} (Maks 300 Meter)`);
+          playErrorChime();
+          speakText('anda berada diluar sekolah, harap datang ke sekolah untuk presensi');
+          lastSpokenStudentId = student.id;
+          lastSpokenTime = Date.now();
         }
+        return;
+      }
+
+      // 2. VERIFIKASI JAM OPERASIONAL SEKOLAH
+      const settings = getAttendanceSettings();
+
+      if (timeShort < settings.jamMulai) {
+        if (lastSpokenStudentId !== student.id || (Date.now() - lastSpokenTime) >= 10000) {
+          showSuccessToast(student, timeStr, 'Presensi Belum Dibuka');
+          speakText(`${student.name}, Presensi Belum Dibuka`);
+          lastSpokenStudentId = student.id;
+          lastSpokenTime = Date.now();
+        }
+        return;
+      }
+
+      if (timeShort > settings.jamAkhirPulang) {
+        if (lastSpokenStudentId !== student.id || (Date.now() - lastSpokenTime) >= 10000) {
+          showSuccessToast(student, timeStr, 'Presensi Sudah Ditutup');
+          speakText(`${student.name}, Presensi Sudah Ditutup`);
+          lastSpokenStudentId = student.id;
+          lastSpokenTime = Date.now();
+        }
+        return;
+      }
+
+      let calcStatus = 'Hadir';
+      if (timeShort > settings.jamTerlambat && timeShort < settings.jamPulang) {
+        calcStatus = 'Terlambat';
+      } else if (timeShort >= settings.jamPulang && timeShort <= settings.jamAkhirPulang) {
+        calcStatus = 'Pulang';
+      } else {
+        calcStatus = 'Hadir';
       }
 
       if (lastSpokenStudentId === student.id && (Date.now() - lastSpokenTime) < 10000) return;
 
-      const existingRec = todayAttendances.find(a => a.student_id === student.id && a.date === today);
-
-      if (existingRec) {
-        if (!existingRec.time_out || timeStatus.code === 'PULANG') {
-          existingRec.time_out = timeStr;
-          if (existingRec.status === 'Hadir' || existingRec.status === 'Terlambat') {
-            existingRec.status = 'Pulang';
-          }
-          lastSpokenStudentId = student.id;
-          lastSpokenTime = Date.now();
-          speakText(`${student.name} Presensi Pulang`);
-
+      const already = todayAttendances.find(a => a.student_id === student.id && a.date === today);
+      if (already) {
+        if (timeShort >= settings.jamPulang && timeShort <= settings.jamAkhirPulang && already.status !== 'Pulang') {
+          already.status = 'Pulang';
+          already.time = timeStr;
+          
           if (supabaseClient) {
-            await supabaseClient.from('attendances').update({ time_out: timeStr, status: existingRec.status }).eq('id', existingRec.id);
+            try { await supabaseClient.from('attendances').update({ status: 'Pulang', time: timeStr }).eq('id', already.id); } catch (e) {}
           }
           renderAttendanceList();
+          showSuccessToast(student, timeStr, 'Presensi Pulang Berhasil');
+          playSuccessChime();
+          speakText(`${student.name} Pulang`);
+        } else {
+          showSuccessToast(student, already.time, 'Sudah Absen (' + already.status + ')');
+          speakText(`${student.name} Sudah Hadir`);
         }
+
+        lastSpokenStudentId = student.id;
+        lastSpokenTime = Date.now();
         return;
       }
 
-      let initialStatus = 'Hadir';
-      if (timeStatus.code === 'TERLAMBAT') initialStatus = 'Terlambat';
-      else if (timeStatus.code === 'PULANG') initialStatus = 'Pulang';
-
-      if (isKhususMode && selectedKhususStatus) initialStatus = selectedKhususStatus;
-
       lastSpokenStudentId = student.id;
       lastSpokenTime = Date.now();
-      speakText(`${student.name} ${initialStatus}`);
+
+      playSuccessChime();
+      speakText(`${student.name} Hadir`);
 
       const newRec = {
         id: 'att-' + Date.now(),
         student_id: student.id,
         class_name: student.class_name,
         date: today,
-        time_in: timeStr,
-        time_out: (initialStatus === 'Pulang') ? timeStr : null,
-        status: initialStatus
+        time: timeStr,
+        status: calcStatus
       };
-
-      if (supabaseClient) {
-        try {
-          const { data } = await supabaseClient.from('attendances').upsert(newRec, { onConflict: 'student_id,date' }).select();
-          if (data && data[0]) newRec.id = data[0].id;
-        } catch (err) {}
-      }
 
       todayAttendances.unshift(newRec);
       renderAttendanceList();
+      showSuccessToast(student, timeStr, 'Presensi (' + calcStatus + ')');
+
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('attendances').insert([{
+            student_id: student.id,
+            class_name: student.class_name,
+            date: today,
+            time: timeStr,
+            status: calcStatus
+          }]);
+        } catch (e) {}
+      } else {
+        localStorage.setItem('absensi_local_attendances', JSON.stringify(todayAttendances));
+      }
+    }
+
+    function showSuccessToast(student, time, title) {
+      const toast = document.getElementById('success-toast');
+      toast.className = "absolute top-3 inset-x-3 bg-emerald-600/90 border border-emerald-400/50 backdrop-blur-md text-white rounded-lg p-3 shadow-2xl flex items-center justify-between transform transition-all duration-300 z-30 translate-y-0 opacity-100";
+      document.getElementById('toast-icon-box').className = "w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/20 flex items-center justify-center text-base sm:text-lg shrink-0";
+      document.getElementById('toast-icon').className = "fa-solid fa-check";
+      document.getElementById('toast-title-text').textContent = title || 'Presensi Berhasil';
+      document.getElementById('toast-student-name').textContent = student.name;
+      document.getElementById('toast-student-meta').textContent = 'ID: ' + student.nisn + ' · Kategori: ' + student.class_name;
+      document.getElementById('toast-student-time').textContent = time + ' WIB';
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('-translate-y-20', 'opacity-0');
+      }, 4000);
+    }
+
+    function showToastError(student, time, title, submsg) {
+      const toast = document.getElementById('success-toast');
+      toast.className = "absolute top-3 inset-x-3 bg-rose-600/95 border border-rose-400/50 backdrop-blur-md text-white rounded-lg p-3 shadow-2xl flex items-center justify-between transform transition-all duration-300 z-30 translate-y-0 opacity-100";
+      document.getElementById('toast-icon-box').className = "w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/20 flex items-center justify-center text-base sm:text-lg shrink-0";
+      document.getElementById('toast-icon').className = "fa-solid fa-location-crosshairs";
+      document.getElementById('toast-title-text').textContent = title || 'Presensi Ditolak';
+      document.getElementById('toast-student-name').textContent = student.name;
+      document.getElementById('toast-student-meta').textContent = submsg || 'Di Luar Radius 300m Sekolah';
+      document.getElementById('toast-student-time').textContent = time + ' WIB';
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('-translate-y-20', 'opacity-0');
+      }, 4500);
     }
 
     function getStatusBadgeHTML(status) {
-      if (status === 'Terlambat') return `<span class="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/40 font-mono font-medium">Terlambat</span>`;
-      if (status === 'Pulang') return `<span class="text-[10px] px-2 py-0.5 rounded bg-sky-500/20 text-sky-400 border border-sky-500/40 font-mono font-medium">Pulang</span>`;
-      if (status === 'Sakit') return `<span class="text-[10px] px-2 py-0.5 rounded bg-purple-500/20 text-purple-400 border border-purple-500/40 font-mono font-medium">Sakit</span>`;
-      if (status === 'Izin') return `<span class="text-[10px] px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-400 border border-indigo-500/40 font-mono font-medium">Izin</span>`;
-      if (status === 'Dinas Luar') return `<span class="text-[10px] px-2 py-0.5 rounded bg-orange-500/20 text-orange-400 border border-orange-500/40 font-mono font-medium">Dinas Luar</span>`;
-      if (status === 'Hadir') return `<span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-mono font-medium">Hadir</span>`;
-      return `<span class="text-[10px] px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 border border-rose-500/40 font-mono font-medium">Tidak Hadir</span>`;
+      if (status === 'Terlambat') {
+        return `<span class="text-[10px] sm:text-xs px-2 py-0.5 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/40 font-mono font-medium">Terlambat</span>`;
+      } else if (status === 'Pulang') {
+        return `<span class="text-[10px] sm:text-xs px-2 py-0.5 rounded bg-sky-500/20 text-sky-600 dark:text-sky-400 border border-sky-500/40 font-mono font-medium">Pulang</span>`;
+      } else if (status === 'Sakit') {
+        return `<span class="text-[10px] sm:text-xs px-2 py-0.5 rounded bg-purple-500/20 text-purple-600 dark:text-purple-400 border border-purple-500/40 font-mono font-medium">Sakit</span>`;
+      } else if (status === 'Izin') {
+        return `<span class="text-[10px] sm:text-xs px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-500/40 font-mono font-medium">Izin</span>`;
+      } else if (status === 'Dinas Luar') {
+        return `<span class="text-[10px] sm:text-xs px-2 py-0.5 rounded bg-orange-500/20 text-orange-600 dark:text-orange-400 border border-orange-500/40 font-mono font-medium">Dinas Luar</span>`;
+      } else if (status === 'Hadir') {
+        return `<span class="text-[10px] sm:text-xs px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/40 font-mono font-medium">Hadir</span>`;
+      } else if (status === 'Tidak Hadir') {
+        return `<span class="text-[10px] sm:text-xs px-2 py-0.5 rounded bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/40 font-mono font-medium">Tidak Hadir</span>`;
+      } else {
+        return `<span class="text-[10px] sm:text-xs px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-300 dark:border-slate-700 font-medium">Belum Hadir</span>`;
+      }
     }
 
     function renderAttendanceList() {
@@ -1741,31 +1980,51 @@ CREATE TABLE IF NOT EXISTS public.attendances (
 
       let list = registeredStudents.map(s => {
         const att = todayAttendances.find(a => a.student_id === s.id && a.date === today);
-        return { 
-          ...s, 
-          isAttended: !!att, 
-          attendanceStatus: att ? att.status : 'Belum Hadir', 
-          timeIn: att ? (att.time_in || att.time || '-') : '-',
-          timeOut: att ? (att.time_out || '-') : '-'
+        return {
+          ...s,
+          isAttended: !!att,
+          attendanceStatus: att ? att.status : 'Belum Hadir',
+          attendanceTime: att ? att.time : null
         };
       });
 
       if (filterClass !== 'ALL') list = list.filter(s => s.class_name === filterClass);
       if (search) list = list.filter(s => s.name.toLowerCase().includes(search) || s.nisn.includes(search));
 
-      document.getElementById('stat-total').textContent = list.length;
-      document.getElementById('stat-present').textContent = list.filter(s => s.attendanceStatus === 'Hadir').length;
-      document.getElementById('stat-late').textContent = list.filter(s => s.attendanceStatus === 'Terlambat').length;
-      document.getElementById('stat-leave').textContent = list.filter(s => s.attendanceStatus === 'Pulang').length;
-      document.getElementById('stat-sakit').textContent = list.filter(s => s.attendanceStatus === 'Sakit').length;
-      document.getElementById('stat-izin').textContent = list.filter(s => s.attendanceStatus === 'Izin').length;
-      document.getElementById('stat-dinas').textContent = list.filter(s => s.attendanceStatus === 'Dinas Luar').length;
-      document.getElementById('stat-absent').textContent = list.filter(s => !s.isAttended).length;
+      list.sort((a, b) => {
+        if (a.isAttended && !b.isAttended) return -1;
+        if (!a.isAttended && b.isAttended) return 1;
+        return a.name.localeCompare(b.name);
+      });
+
+      const total = list.length;
+      const presentList = list.filter(s => s.isAttended);
+      const present = presentList.filter(s => s.attendanceStatus === 'Hadir').length;
+      const late = presentList.filter(s => s.attendanceStatus === 'Terlambat').length;
+      const leave = presentList.filter(s => s.attendanceStatus === 'Pulang').length;
+      const sakit = presentList.filter(s => s.attendanceStatus === 'Sakit').length;
+      const izin = presentList.filter(s => s.attendanceStatus === 'Izin').length;
+      const dinas = presentList.filter(s => s.attendanceStatus === 'Dinas Luar').length;
+      const absent = total - presentList.length;
+
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-present').textContent = present;
+      document.getElementById('stat-late').textContent = late;
+      document.getElementById('stat-leave').textContent = leave;
+      document.getElementById('stat-sakit').textContent = sakit;
+      document.getElementById('stat-izin').textContent = izin;
+      document.getElementById('stat-dinas').textContent = dinas;
+      document.getElementById('stat-absent').textContent = absent;
+
+      if (list.length === 0) {
+        container.innerHTML = '<div class="text-center py-8 text-xs text-slate-500">Tidak ada data ditemukan.</div>';
+        return;
+      }
 
       container.innerHTML = list.map(s => `
         <div class="p-2.5 rounded-lg border ${s.isAttended ? 'bg-slate-50 border-emerald-500/40 dark:bg-slate-900/90 dark:border-emerald-500/30' : 'bg-slate-50/50 border-slate-200 dark:bg-slate-950/60 dark:border-slate-800'} flex items-center justify-between transition-all">
           <div class="flex items-center gap-2.5 min-w-0 pr-2">
-            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full ${s.isAttended ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'} flex items-center justify-center font-bold text-xs shrink-0">
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full ${s.isAttended ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'} flex items-center justify-center font-bold text-xs shrink-0">
               ${s.name.charAt(0)}
             </div>
             <div class="truncate">
@@ -1774,24 +2033,13 @@ CREATE TABLE IF NOT EXISTS public.attendances (
             </div>
           </div>
           <div class="text-right flex items-center gap-1.5 shrink-0">
-            ${s.isAttended ? `
-              <div class="flex flex-col items-end">
-                ${getStatusBadgeHTML(s.attendanceStatus)}
-                <span class="text-[10px] text-slate-400 font-mono mt-0.5">M: ${s.timeIn} | P: ${s.timeOut}</span>
-              </div>
-            ` : `<span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700 font-medium">Belum Hadir</span>`}
+            ${s.isAttended 
+              ? `${getStatusBadgeHTML(s.attendanceStatus)} <span class="text-[11px] sm:text-xs text-slate-700 dark:text-slate-300 font-mono font-medium">${s.attendanceTime}</span>`
+              : `<span class="text-[10px] sm:text-xs px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-300 dark:border-slate-700 font-medium">Belum Hadir</span>`
+            }
           </div>
         </div>
       `).join('');
-    }
-
-    function populateRekapUserSelect() {
-      const select = document.getElementById('rekap-user-select');
-      const manualSelect = document.getElementById('manual-user-select');
-      const options = registeredStudents.map(s => `<option value="${s.id}">${s.name} (${s.class_name} - ${s.nisn})</option>`).join('');
-
-      if (select) select.innerHTML = '<option value="ALL">-- Pilih Guru / Tendik Perorangan --</option>' + options;
-      if (manualSelect) manualSelect.innerHTML = '<option value="">-- Pilih Pegawai / Siswa --</option>' + options;
     }
 
     async function fetchRekapData() {
@@ -1801,47 +2049,77 @@ CREATE TABLE IF NOT EXISTS public.attendances (
 
       if (supabaseClient) {
         try {
-          const { data } = await supabaseClient.from('attendances').select('*').gte('date', startDate).lte('date', endDate).order('date', { ascending: false });
-          if (data) rekapData = data;
-        } catch (e) { rekapData = todayAttendances; }
+          const { data, error } = await supabaseClient
+            .from('attendances')
+            .select('*')
+            .gte('date', startDate)
+            .lte('date', endDate)
+            .order('date', { ascending: false })
+            .order('time', { ascending: false });
+
+          if (!error && data) rekapData = data;
+        } catch (e) {
+          rekapData = todayAttendances;
+        }
       } else {
-        rekapData = todayAttendances.filter(a => a.date >= startDate && a.date <= endDate);
+        const stored = localStorage.getItem('absensi_local_attendances');
+        let localAtts = todayAttendances;
+        if (stored) { try { localAtts = JSON.parse(stored); } catch (e) {} }
+        rekapData = localAtts.filter(a => a.date >= startDate && a.date <= endDate);
       }
+
       renderRekapTable();
     }
 
+    // --- REKAP TABEL DENGAN DAFTAR USER KESELURUHAN TERMASUK STATUS "TIDAK HADIR" ---
     function renderRekapTable() {
       const tbody = document.getElementById('rekap-tbody');
       const search = (document.getElementById('rekap-search').value || '').toLowerCase();
       const filterClass = document.getElementById('rekap-class-filter').value;
       const filterStatus = document.getElementById('rekap-status-filter').value;
-      const selectedUserId = document.getElementById('rekap-user-select').value;
       const startDate = document.getElementById('rekap-start-date').value || new Date().toISOString().split('T')[0];
 
+      // Ambil daftar student_id yang sudah ada presensinya di rekapData
       const attendedStudentIds = new Set(rekapData.map(a => a.student_id));
+
+      // 1. Masukkan record presensi asli
       let combined = rekapData.map(a => {
         const student = registeredStudents.find(s => s.id === a.student_id) || {};
-        return { 
-          ...a, 
-          student_name: student.name || 'Pengguna Tidak Ditemukan', 
-          nisn: student.nisn || '-',
-          time_in: a.time_in || (a.time && a.status !== 'Pulang' ? a.time : '-'),
-          time_out: a.time_out || (a.time && a.status === 'Pulang' ? a.time : '-')
+        return {
+          ...a,
+          student_name: student.name || 'Pengguna Tidak Ditemukan',
+          nisn: student.nisn || '-'
         };
       });
 
+      // 2. Masukkan pengguna yang belum/tidak hadir ke dalam list rekap
       registeredStudents.forEach(s => {
         if (!attendedStudentIds.has(s.id)) {
-          combined.push({ id: 'absent-' + s.id, student_id: s.id, class_name: s.class_name, date: startDate, time_in: '-', time_out: '-', status: 'Tidak Hadir', student_name: s.name, nisn: s.nisn });
+          combined.push({
+            id: 'absent-' + s.id,
+            student_id: s.id,
+            class_name: s.class_name,
+            date: startDate,
+            time: '-',
+            status: 'Tidak Hadir',
+            student_name: s.name,
+            nisn: s.nisn
+          });
         }
       });
 
       let filtered = combined;
+
       if (filterClass !== 'ALL') filtered = filtered.filter(item => item.class_name === filterClass);
       if (filterStatus !== 'ALL') filtered = filtered.filter(item => item.status === filterStatus);
-      if (selectedUserId !== 'ALL') filtered = filtered.filter(item => item.student_id === selectedUserId);
-      if (search) filtered = filtered.filter(item => item.student_name.toLowerCase().includes(search) || item.nisn.includes(search));
 
+      if (search) {
+        filtered = filtered.filter(item => 
+          item.student_name.toLowerCase().includes(search) || item.nisn.includes(search)
+        );
+      }
+
+      // Update konter statistik di Rekap secara lengkap
       document.getElementById('rekap-stat-total').textContent = filtered.length;
       document.getElementById('rekap-stat-hadir').textContent = filtered.filter(i => i.status === 'Hadir').length;
       document.getElementById('rekap-stat-terlambat').textContent = filtered.filter(i => i.status === 'Terlambat').length;
@@ -1849,7 +2127,8 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       document.getElementById('rekap-stat-sakit').textContent = filtered.filter(i => i.status === 'Sakit').length;
       document.getElementById('rekap-stat-izin').textContent = filtered.filter(i => i.status === 'Izin').length;
       document.getElementById('rekap-stat-dinas').textContent = filtered.filter(i => i.status === 'Dinas Luar').length;
-      document.getElementById('rekap-stat-tidakhadir').textContent = filtered.filter(i => i.status === 'Tidak Hadir').length;
+      document.getElementById('rekap-stat-tidakhadir').textContent = filtered.filter(i => i.status === 'Tidak Hadir' || i.status === 'Belum Hadir').length;
+      
       document.getElementById('rekap-count-badge').textContent = filtered.length + ' Record';
 
       if (filtered.length === 0) {
@@ -1861,604 +2140,213 @@ CREATE TABLE IF NOT EXISTS public.attendances (
         <tr class="hover:bg-slate-100 dark:hover:bg-slate-800/40 transition-colors">
           <td class="px-3 py-2.5 font-mono text-slate-500">${index + 1}</td>
           <td class="px-3 py-2.5 font-mono text-slate-700 dark:text-slate-300">${item.date}</td>
-          <td class="px-3 py-2.5 font-mono text-emerald-500 font-semibold">${item.time_in || '-'}</td>
-          <td class="px-3 py-2.5 font-mono text-sky-400 font-semibold">${item.time_out || '-'}</td>
+          <td class="px-3 py-2.5 font-mono text-slate-700 dark:text-slate-300">${item.time}</td>
           <td class="px-3 py-2.5 font-mono text-slate-500 dark:text-slate-400">${item.nisn}</td>
           <td class="px-3 py-2.5 font-semibold text-slate-800 dark:text-slate-200">${item.student_name}</td>
           <td class="px-3 py-2.5 text-slate-700 dark:text-slate-300">${item.class_name}</td>
           <td class="px-3 py-2.5">${getStatusBadgeHTML(item.status)}</td>
+          <td class="px-3 py-2.5 text-center">
+            <div class="flex items-center justify-center gap-1.5">
+              ${item.status === 'Tidak Hadir'
+                ? `<select onchange="createOrUpdateAbsentRecord('${item.student_id}', '${item.class_name}', this.value)" class="bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border text-[10px] rounded px-1.5 py-1 text-slate-800 dark:text-slate-300 focus:outline-none focus:border-emerald-500">
+                    <option value="Tidak Hadir" selected>Tidak Hadir</option>
+                    <option value="Hadir">Hadir</option>
+                    <option value="Terlambat">Terlambat</option>
+                    <option value="Pulang">Pulang</option>
+                    <option value="Sakit">Sakit</option>
+                    <option value="Izin">Izin</option>
+                    <option value="Dinas Luar">Dinas Luar</option>
+                   </select>`
+                : `<select onchange="updateAttendanceStatus('${item.id}', this.value)" class="bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border text-[10px] rounded px-1.5 py-1 text-slate-800 dark:text-slate-300 focus:outline-none focus:border-emerald-500">
+                    <option value="Hadir" ${item.status === 'Hadir' ? 'selected' : ''}>Hadir</option>
+                    <option value="Terlambat" ${item.status === 'Terlambat' ? 'selected' : ''}>Terlambat</option>
+                    <option value="Pulang" ${item.status === 'Pulang' ? 'selected' : ''}>Pulang</option>
+                    <option value="Sakit" ${item.status === 'Sakit' ? 'selected' : ''}>Sakit</option>
+                    <option value="Izin" ${item.status === 'Izin' ? 'selected' : ''}>Izin</option>
+                    <option value="Dinas Luar" ${item.status === 'Dinas Luar' ? 'selected' : ''}>Dinas Luar</option>
+                   </select>
+                   <button onclick="deleteAttendanceRecord('${item.id}')" title="Hapus Record" class="p-1 text-slate-400 hover:text-rose-500 transition-colors">
+                     <i class="fa-solid fa-trash"></i>
+                   </button>`
+              }
+            </div>
+          </td>
         </tr>
       `).join('');
     }
 
-    // --- HELPER DOKUMEN CETAK & EKSPOR ---
-    function formatTanggalIndo(dateObj) {
-      if (!dateObj || isNaN(dateObj.getTime())) return '-';
-      const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-      return `${dateObj.getDate()} ${months[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
-    }
+    async function createOrUpdateAbsentRecord(studentId, className, newStatus) {
+      if (newStatus === 'Tidak Hadir') return;
+      const today = new Date().toISOString().split('T')[0];
+      const now = new Date();
+      const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0') + ':' + String(now.getSeconds()).padStart(2, '0');
 
-    function getIndonesianDayName(dateString) {
-      if (!dateString || dateString === '-') return '-';
-      const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-      return days[new Date(dateString).getDay()] || '-';
-    }
+      const newRec = {
+        id: 'att-' + Date.now(),
+        student_id: studentId,
+        class_name: className,
+        date: today,
+        time: timeStr,
+        status: newStatus
+      };
 
-    function calculateWorkingDays(startDateStr, endDateStr) {
-      if (!startDateStr || !endDateStr) return 0;
-      let start = new Date(startDateStr);
-      let end = new Date(endDateStr);
-      if (start > end) return 0;
-      let count = 0;
-      let cur = new Date(start);
-      while (cur <= end) {
-        if (cur.getDay() !== 0) { // Mengabaikan Hari Minggu
-          count++;
-        }
-        cur.setDate(cur.getDate() + 1);
-      }
-      return count;
-    }
+      todayAttendances.unshift(newRec);
+      rekapData.unshift(newRec);
 
-    function getSelectedUserAndFilterContext() {
-      const selectedUserId = document.getElementById('rekap-user-select').value;
-      const startDateVal = document.getElementById('rekap-start-date').value;
-      
-      let selectedUser = registeredStudents.find(s => s.id === selectedUserId);
-      if (!selectedUser) {
-        selectedUser = registeredStudents.length > 0 ? registeredStudents[0] : { name: 'Pendidik / Tendik', nisn: '-', class_name: 'GURU' };
-      }
-
-      const d = startDateVal ? new Date(startDateVal) : new Date();
-      const monthsIndo = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
-      const bulanNama = monthsIndo[d.getMonth()];
-      const tahunNama = d.getFullYear();
-
-      let userRecords = rekapData.filter(a => a.student_id === selectedUser.id);
-      if (userRecords.length === 0) {
-        userRecords = [{ date: startDateVal || new Date().toISOString().split('T')[0], time_in: '-', time_out: '-', status: 'Tidak Hadir' }];
-      }
-
-      return { selectedUser, bulanNama, tahunNama, userRecords };
-    }
-
-    function computeDetailedReportData() {
-      const { selectedUser, userRecords } = getSelectedUserAndFilterContext();
-      const settings = getAttendanceSettings();
-
-      const rows = userRecords.map(r => {
-        const jamMasukStd = settings.jamMasuk || '08:00';
-        const jamPulangStd = settings.jamPulang || '14:00';
-
-        const scanMasuk = r.time_in || (r.time && r.status !== 'Pulang' ? r.time : '-');
-        const scanPulang = r.time_out || (r.time && r.status === 'Pulang' ? r.time : '-');
-
-        let terlambat = '0 mnt', pulangCepat = '0 mnt', lembur = '0 mnt', jamKerja = '6 jam 00 mnt', jumlahJamHadir = '0 jam 00 mnt';
-
-        if (r.status !== 'Tidak Hadir') {
-          if (scanMasuk !== '-') {
-            const [hIn, mIn] = scanMasuk.split(':').map(Number);
-            const [hInStd, mInStd] = jamMasukStd.split(':').map(Number);
-            const minsIn = hIn * 60 + mIn;
-            const minsInStd = hInStd * 60 + mInStd;
-            if (minsIn > minsInStd) terlambat = `${minsIn - minsInStd} mnt`;
-
-            if (scanPulang !== '-') {
-              const [hOut, mOut] = scanPulang.split(':').map(Number);
-              const [hOutStd, mOutStd] = jamPulangStd.split(':').map(Number);
-              const minsOut = hOut * 60 + mOut;
-              const minsOutStd = hOutStd * 60 + mOutStd;
-
-              if (minsOut < minsOutStd) pulangCepat = `${minsOutStd - minsOut} mnt`;
-              else if (minsOut > minsOutStd) lembur = `${minsOut - minsOutStd} mnt`;
-
-              const durMins = minsOut - minsIn;
-              if (durMins > 0) jumlahJamHadir = `${Math.floor(durMins / 60)} jam ${durMins % 60} mnt`;
-            }
-          }
-        }
-
-        return { tanggal: r.date, jamMasuk: jamMasukStd, jamPulang: jamPulangStd, scanMasuk, scanPulang, terlambat, pulangCepat, lembur, jamKerja, jumlahJamHadir };
-      });
-
-      return { selectedUser, rows };
-    }
-
-    // --- ENGINES REKAPITULASI BULANAN KESELURUHAN GURU/TENDIK ---
-    function computeMonthlySummaryData() {
-      const startDateVal = document.getElementById('rekap-start-date').value || new Date().toISOString().split('T')[0];
-      const endDateVal = document.getElementById('rekap-end-date').value || new Date().toISOString().split('T')[0];
-      const categoryFilter = document.getElementById('rekap-class-filter').value;
-
-      let staffList = registeredStudents;
-      if (categoryFilter !== 'ALL') {
-        staffList = staffList.filter(s => s.class_name === categoryFilter);
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('attendances').insert([{
+            student_id: studentId,
+            class_name: className,
+            date: today,
+            time: timeStr,
+            status: newStatus
+          }]);
+        } catch (e) {}
       } else {
-        staffList = staffList.filter(s => s.class_name === 'GURU' || s.class_name === 'TENDIK' || s.class_name === 'SISWA');
+        localStorage.setItem('absensi_local_attendances', JSON.stringify(rekapData));
       }
 
-      const jumlahHariNormal = calculateWorkingDays(startDateVal, endDateVal);
+      renderAttendanceList();
+      renderRekapTable();
+    }
 
-      const rows = staffList.map((s, idx) => {
-        const userAtt = rekapData.filter(a => a.student_id === s.id && a.date >= startDateVal && a.date <= endDateVal);
-        
-        let riilHadir = 0;
-        let sakit = 0;
-        let izin = 0;
-        let dinasLuar = 0;
-        let tidakHadirExplicit = 0;
+    async function updateAttendanceStatus(id, newStatus) {
+      const item = rekapData.find(a => a.id === id);
+      if (item) item.status = newStatus;
 
-        userAtt.forEach(a => {
-          if (a.status === 'Hadir' || a.status === 'Terlambat' || a.status === 'Pulang') {
-            riilHadir++;
-          } else if (a.status === 'Sakit') {
-            sakit++;
-          } else if (a.status === 'Izin') {
-            izin++;
-          } else if (a.status === 'Dinas Luar') {
-            dinasLuar++;
-          } else if (a.status === 'Tidak Hadir') {
-            tidakHadirExplicit++;
-          }
-        });
+      const todayItem = todayAttendances.find(a => a.id === id);
+      if (todayItem) todayItem.status = newStatus;
 
-        const recordedDays = riilHadir + sakit + izin + dinasLuar + tidakHadirExplicit;
-        const unrecordedDays = Math.max(0, jumlahHariNormal - recordedDays);
-        const totalTidakHadir = tidakHadirExplicit + unrecordedDays;
+      if (supabaseClient) {
+        try { await supabaseClient.from('attendances').update({ status: newStatus }).eq('id', id); } catch (e) {}
+      } else {
+        localStorage.setItem('absensi_local_attendances', JSON.stringify(rekapData));
+      }
 
-        const totalKehadiran = riilHadir + dinasLuar;
-        const pct = jumlahHariNormal > 0 ? ((totalKehadiran / jumlahHariNormal) * 100).toFixed(1) : '0';
+      renderAttendanceList();
+      renderRekapTable();
+    }
 
+    async function deleteAttendanceRecord(id) {
+      if (!confirm('Hapus record presensi ini?')) return;
+      rekapData = rekapData.filter(a => a.id !== id);
+      todayAttendances = todayAttendances.filter(a => a.id !== id);
+
+      if (supabaseClient) {
+        try { await supabaseClient.from('attendances').delete().eq('id', id); } catch (e) {}
+      } else {
+        localStorage.setItem('absensi_local_attendances', JSON.stringify(rekapData));
+      }
+
+      renderAttendanceList();
+      renderRekapTable();
+    }
+
+    function exportRekapCSV() {
+      const startDate = document.getElementById('rekap-start-date').value;
+      const endDate = document.getElementById('rekap-end-date').value;
+      let csv = 'No,Tanggal,Jam,NISN/NIP/NIPPPK,Nama Lengkap,Kategori,Status\n';
+
+      const attendedStudentIds = new Set(rekapData.map(a => a.student_id));
+      let combined = rekapData.map(a => {
+        const student = registeredStudents.find(s => s.id === a.student_id) || {};
         return {
-          no: idx + 1,
-          name: s.name,
-          nisn: s.nisn,
-          kategori: s.class_name,
-          jumlahHariNormal,
-          riilHadir,
-          tidakHadir: totalTidakHadir,
-          sakit,
-          izin,
-          dinasLuar,
-          totalKehadiran,
-          persentase: `${pct}%`
+          ...a,
+          student_name: student.name || 'Pengguna Tidak Ditemukan',
+          nisn: student.nisn || '-'
         };
       });
 
-      const startFormatted = formatTanggalIndo(new Date(startDateVal));
-      const endFormatted = formatTanggalIndo(new Date(endDateVal));
-
-      return { startDateVal, endDateVal, startFormatted, endFormatted, jumlahHariNormal, rows };
-    }
-
-    // --- EKSPOR REKAPITULASI BULANAN: EXCEL ---
-    function exportRekapBulananExcel() {
-      if (!window.XLSX) return alert('Library XLSX belum siap.');
-      const { startDateVal, endDateVal, startFormatted, endFormatted, rows } = computeMonthlySummaryData();
-      const filename = `Rekapitulasi_Bulanan_Kehadiran_${startDateVal}_sd_${endDateVal}.xlsx`;
-
-      const sheetData = [
-        ["REKAPITULASI BULANAN KEHADIRAN WARGA SEKOLAH"],
-        ["SMA NEGERI 1 LABUHAN HAJI"],
-        [`Periode: ${startFormatted} s.d. ${endFormatted}`],
-        [],
-        ["No", "Nama Guru/Tendik", "NIP/NIPPPK", "Kategori", "Jumlah Hari Normal Kehadiran", "Jumlah Hari Riil Kehadiran", "Tidak Hadir", "Sakit", "Izin", "Dinas Luar", "Total Kehadiran", "Persentase Kehadiran"]
-      ];
-
-      rows.forEach(r => {
-        sheetData.push([r.no, r.name, r.nisn, r.kategori, r.jumlahHariNormal, r.riilHadir, r.tidakHadir, r.sakit, r.izin, r.dinasLuar, r.totalKehadiran, r.persentase]);
-      });
-
-      sheetData.push([]);
-      sheetData.push([]);
-      sheetData.push(["", "", "", "", "", "", "", "", "", "", `Labuhanhaji, ${formatTanggalIndo(new Date())}`]);
-      sheetData.push(["", "", "", "", "", "", "", "", "", "", "Kepala Sekolah"]);
-      sheetData.push(["", "", "", "", "", "", "", "", "", "", "SMA Negeri 1 Labuhan Haji"]);
-      sheetData.push([]);
-      sheetData.push([]);
-      sheetData.push(["", "", "", "", "", "", "", "", "", "", "Heri Satria, S.Pd.,M.Pd"]);
-      sheetData.push(["", "", "", "", "", "", "", "", "", "", "NIP. 198205142006041005"]);
-
-      const wb = XLSX.utils.book_new();
-      const ws = XLSX.utils.aoa_to_sheet(sheetData);
-      XLSX.utils.book_append_sheet(wb, ws, "Rekap Bulanan");
-      XLSX.writeFile(wb, filename);
-    }
-
-    // --- EKSPOR REKAPITULASI BULANAN: WORD ---
-    function exportRekapBulananWord() {
-      const { startFormatted, endFormatted, rows } = computeMonthlySummaryData();
-      const tanggalCetak = formatTanggalIndo(new Date());
-
-      const rowsHTML = rows.map(r => `
-        <tr>
-          <td style="text-align: center;">${r.no}</td>
-          <td>${r.name}</td>
-          <td style="text-align: center;">${r.nisn}</td>
-          <td style="text-align: center;">${r.jumlahHariNormal}</td>
-          <td style="text-align: center;">${r.riilHadir}</td>
-          <td style="text-align: center;">${r.tidakHadir}</td>
-          <td style="text-align: center;">${r.sakit}</td>
-          <td style="text-align: center;">${r.izin}</td>
-          <td style="text-align: center;">${r.dinasLuar}</td>
-          <td style="text-align: center; font-weight: bold;">${r.totalKehadiran}</td>
-          <td style="text-align: center; font-weight: bold;">${r.persentase}</td>
-        </tr>
-      `).join('');
-
-      const htmlDocument = `
-        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-        <head>
-          <meta charset='utf-8'><title>REKAPITULASI BULANAN KEHADIRAN</title>
-          <style>
-            @page { size: A4 landscape; margin: 12mm; }
-            body { font-family: 'Times New Roman', Times, serif; font-size: 10pt; line-height: 1.2; }
-            .header-title { text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 2px; text-transform: uppercase; }
-            .sub-title { text-align: center; font-weight: bold; font-size: 11pt; margin-bottom: 12px; }
-            .data-table { width: 100%; border-collapse: collapse; margin-top: 5px; }
-            .data-table th, .data-table td { border: 1px solid #000; padding: 5px 6px; font-size: 9pt; }
-            .data-table th { background-color: #f2f2f2; font-weight: bold; text-align: center; }
-            .footer-table { width: 100%; margin-top: 30px; border-collapse: collapse; page-break-inside: avoid; }
-            .footer-table td { border: none; vertical-align: top; font-size: 10pt; }
-          </style>
-        </head>
-        <body>
-          <div class="header-title">REKAPITULASI BULANAN KEHADIRAN WARGA SEKOLAH</div>
-          <div class="sub-title">SMA NEGERI 1 LABUHAN HAJI<br><span style="font-size:10pt; font-weight:normal;">Periode: ${startFormatted} s.d. ${endFormatted}</span></div>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th width="30">No</th>
-                <th>Nama Guru/Tendik</th>
-                <th>NIP/NIPPPK</th>
-                <th>Hari Normal</th>
-                <th>Hari Riil</th>
-                <th>Tidak Hadir</th>
-                <th>Sakit</th>
-                <th>Izin</th>
-                <th>Dinas Luar</th>
-                <th>Total Hadir</th>
-                <th>Persentase</th>
-              </tr>
-            </thead>
-            <tbody>${rowsHTML}</tbody>
-          </table>
-          <table class="footer-table">
-            <tr>
-              <td width="65%"></td>
-              <td width="35%">
-                Labuhanhaji, ${tanggalCetak}<br>
-                Kepala Sekolah<br>
-                SMA Negeri 1 Labuhan Haji<br><br><br><br><br>
-                <b><u>Heri Satria, S.Pd.,M.Pd</u></b><br>
-                NIP. 198205142006041005
-              </td>
-            </tr>
-          </table>
-        </body>
-        </html>
-      `;
-
-      const blob = new Blob(['\ufeff' + htmlDocument], { type: 'application/msword' });
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `Rekapitulasi_Bulanan_Kehadiran.doc`; a.click();
-    }
-
-    // --- EKSPOR REKAPITULASI BULANAN: PDF ---
-    function exportRekapBulananPDF() {
-      const { jsPDF } = window.jspdf;
-      const { startFormatted, endFormatted, rows } = computeMonthlySummaryData();
-      const tanggalCetak = formatTanggalIndo(new Date());
-
-      const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
-      doc.setFont("helvetica", "bold"); doc.setFontSize(13);
-      doc.text("REKAPITULASI BULANAN KEHADIRAN WARGA SEKOLAH", 148, 14, { align: "center" });
-      doc.setFontSize(11);
-      doc.text("SMA NEGERI 1 LABUHAN HAJI", 148, 20, { align: "center" });
-      doc.setFont("helvetica", "normal"); doc.setFontSize(9);
-      doc.text(`Periode: ${startFormatted} s.d. ${endFormatted}`, 148, 25, { align: "center" });
-
-      const tableBody = rows.map(r => [
-        r.no, r.name, r.nisn, r.jumlahHariNormal, r.riilHadir, r.tidakHadir, r.sakit, r.izin, r.dinasLuar, r.totalKehadiran, r.persentase
-      ]);
-
-      doc.autoTable({
-        startY: 29,
-        head: [['No', 'Nama Guru/Tendik', 'NIP/NIPPPK', 'Hari Normal', 'Hari Riil', 'Tidak Hadir', 'Sakit', 'Izin', 'Dinas Luar', 'Total Hadir', 'Persentase']],
-        body: tableBody,
-        theme: 'grid',
-        headStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center', fontSize: 8 },
-        styles: { fontSize: 8, cellPadding: 2, textColor: [30, 30, 30] },
-        columnStyles: {
-          0: { halign: 'center', cellWidth: 10 },
-          1: { halign: 'left' },
-          2: { halign: 'center', cellWidth: 35 },
-          3: { halign: 'center', cellWidth: 20 },
-          4: { halign: 'center', cellWidth: 18 },
-          5: { halign: 'center', cellWidth: 18 },
-          6: { halign: 'center', cellWidth: 15 },
-          7: { halign: 'center', cellWidth: 15 },
-          8: { halign: 'center', cellWidth: 20 },
-          9: { halign: 'center', cellWidth: 20, fontStyle: 'bold' },
-          10: { halign: 'center', cellWidth: 22, fontStyle: 'bold' }
+      registeredStudents.forEach(s => {
+        if (!attendedStudentIds.has(s.id)) {
+          combined.push({
+            id: 'absent-' + s.id,
+            student_id: s.id,
+            class_name: s.class_name,
+            date: startDate || new Date().toISOString().split('T')[0],
+            time: '-',
+            status: 'Tidak Hadir',
+            student_name: s.name,
+            nisn: s.nisn
+          });
         }
       });
 
-      let finalY = doc.lastAutoTable.finalY + 12;
-      if (finalY > 150) { doc.addPage(); finalY = 20; }
-      const rightX = 210;
-      doc.setFont("helvetica", "normal"); doc.setFontSize(10);
-      doc.text(`Labuhanhaji, ${tanggalCetak}`, rightX, finalY);
-      doc.text("Kepala Sekolah", rightX, finalY + 5);
-      doc.text("SMA Negeri 1 Labuhan Haji", rightX, finalY + 10);
-      doc.setFont("helvetica", "bold"); doc.text("Heri Satria, S.Pd.,M.Pd", rightX, finalY + 30);
-      doc.setFont("helvetica", "normal"); doc.text("NIP. 198205142006041005", rightX, finalY + 35);
-
-      doc.save(`Rekapitulasi_Bulanan_Kehadiran.pdf`);
-    }
-
-    // --- DOKUMEN 1: LAPORAN DETAIL HARIAN INDIVIDUAL ---
-    function exportDetailHarianExcel() {
-      if (!window.XLSX) return alert('Library XLSX belum siap.');
-      const { selectedUser, rows } = computeDetailedReportData();
-      const filename = `Laporan_Detail_Harian_${selectedUser.name.replace(/\s+/g, '_')}.xlsx`;
-
-      const sheetData = [
-        ["LAPORAN DETAIL HARIAN"],
-        ["Nama", selectedUser.name],
-        ["NIP/NIPPPK", selectedUser.nisn],
-        ["Kategori", selectedUser.class_name],
-        [],
-        ["Tanggal", "Jam masuk", "jam pulang", "Scan Masuk", "Scan Pulang", "Terlambat", "Pulang Cepat", "Lembur", "Jam Kerja", "Jumlah Jam Hadir"]
-      ];
-
-      rows.forEach(r => {
-        sheetData.push([r.tanggal, r.jamMasuk, r.jamPulang, r.scanMasuk, r.scanPulang, r.terlambat, r.pulangCepat, r.lembur, r.jamKerja, r.jumlahJamHadir]);
+      combined.forEach((item, i) => {
+        csv += `"${i + 1}","${item.date}","${item.time}","${item.nisn}","${item.student_name}","${item.class_name}","${item.status}"\n`;
       });
 
-      const wb = XLSX.utils.book_new();
-      const ws = XLSX.utils.aoa_to_sheet(sheetData);
-      XLSX.utils.book_append_sheet(wb, ws, "Detail Harian");
-      XLSX.writeFile(wb, filename);
-    }
-
-    function exportDetailHarianWord() {
-      const { selectedUser, rows } = computeDetailedReportData();
-      const tanggalCetak = formatTanggalIndo(new Date());
-
-      const rowsHTML = rows.map(r => `
-        <tr>
-          <td style="text-align: center;">${r.tanggal}</td>
-          <td style="text-align: center;">${r.jamMasuk}</td>
-          <td style="text-align: center;">${r.jamPulang}</td>
-          <td style="text-align: center;">${r.scanMasuk}</td>
-          <td style="text-align: center;">${r.scanPulang}</td>
-          <td style="text-align: center;">${r.terlambat}</td>
-          <td style="text-align: center;">${r.pulangCepat}</td>
-          <td style="text-align: center;">${r.lembur}</td>
-          <td style="text-align: center;">${r.jamKerja}</td>
-          <td style="text-align: center;">${r.jumlahJamHadir}</td>
-        </tr>
-      `).join('');
-
-      const htmlDocument = `
-        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-        <head>
-          <meta charset='utf-8'><title>LAPORAN DETAIL HARIAN</title>
-          <style>
-            @page { size: A4 landscape; margin: 15mm; }
-            body { font-family: 'Times New Roman', Times, serif; font-size: 10pt; line-height: 1.2; }
-            .header-title { text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 15px; }
-            .identity-table { width: 100%; margin-bottom: 15px; border-collapse: collapse; }
-            .identity-table td { padding: 3px 0; font-size: 10.5pt; border: none; }
-            .data-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-            .data-table th, .data-table td { border: 1px solid #000; padding: 5px; font-size: 9pt; }
-            .data-table th { background-color: #f2f2f2; font-weight: bold; text-align: center; }
-            .footer-table { width: 100%; margin-top: 30px; border-collapse: collapse; page-break-inside: avoid; }
-            .footer-table td { border: none; vertical-align: top; font-size: 10pt; }
-          </style>
-        </head>
-        <body>
-          <div class="header-title">LAPORAN DETAIL HARIAN</div>
-          <table class="identity-table">
-            <tr><td width="120"><b>Nama</b></td><td width="15">:</td><td>${selectedUser.name}</td></tr>
-            <tr><td><b>NIP/NIPPPK</b></td><td>:</td><td>${selectedUser.nisn}</td></tr>
-            <tr><td><b>Kategori</b></td><td>:</td><td>${selectedUser.class_name}</td></tr>
-          </table>
-          <table class="data-table">
-            <thead>
-              <tr><th>Tanggal</th><th>Jam masuk</th><th>jam pulang</th><th>Scan Masuk</th><th>Scan Pulang</th><th>Terlambat</th><th>Pulang Cepat</th><th>Lembur</th><th>Jam Kerja</th><th>Jumlah Jam Hadir</th></tr>
-            </thead>
-            <tbody>${rowsHTML}</tbody>
-          </table>
-          <table class="footer-table">
-            <tr><td width="65%"></td><td width="35%">Labuhanhaji, ${tanggalCetak}<br>Kepala Sekolah<br>SMA Negeri 1 Labuhan Haji<br><br><br><br><br><b><u>Heri Satria, S.Pd.,M.Pd</u></b><br>NIP. 198205142006041005</td></tr>
-          </table>
-        </body>
-        </html>
-      `;
-
-      const blob = new Blob(['\ufeff' + htmlDocument], { type: 'application/msword' });
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `Laporan_Detail_Harian_${selectedUser.name.replace(/\s+/g, '_')}.doc`; a.click();
-    }
-
-    function exportDetailHarianPDF() {
-      const { jsPDF } = window.jspdf;
-      const { selectedUser, rows } = computeDetailedReportData();
-      const tanggalCetak = formatTanggalIndo(new Date());
-
-      const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
-      doc.setFont("helvetica", "bold"); doc.setFontSize(14); doc.text("LAPORAN DETAIL HARIAN", 148, 16, { align: "center" });
-      doc.setFontSize(10); doc.setFont("helvetica", "normal");
-      doc.text("Nama", 14, 28); doc.text(":", 42, 28); doc.setFont("helvetica", "bold"); doc.text(selectedUser.name, 45, 28);
-      doc.setFont("helvetica", "normal"); doc.text("NIP/NIPPPK", 14, 34); doc.text(":", 42, 34); doc.text(selectedUser.nisn, 45, 34);
-      doc.text("Kategori", 14, 40); doc.text(":", 42, 40); doc.text(selectedUser.class_name, 45, 40);
-
-      const tableBody = rows.map(r => [r.tanggal, r.jamMasuk, r.jamPulang, r.scanMasuk, r.scanPulang, r.terlambat, r.pulangCepat, r.lembur, r.jamKerja, r.jumlahJamHadir]);
-      doc.autoTable({
-        startY: 46, head: [['Tanggal', 'Jam masuk', 'jam pulang', 'Scan Masuk', 'Scan Pulang', 'Terlambat', 'Pulang Cepat', 'Lembur', 'Jam Kerja', 'Jumlah Jam Hadir']],
-        body: tableBody, theme: 'grid', headStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center', fontSize: 8.5 },
-        styles: { fontSize: 8, cellPadding: 2, textColor: [30, 30, 30], halign: 'center' }
-      });
-
-      let finalY = doc.lastAutoTable.finalY + 12;
-      if (finalY > 150) { doc.addPage(); finalY = 20; }
-      const rightX = 210;
-      doc.setFont("helvetica", "normal"); doc.setFontSize(10);
-      doc.text(`Labuhanhaji, ${tanggalCetak}`, rightX, finalY);
-      doc.text("Kepala Sekolah", rightX, finalY + 5);
-      doc.text("SMA Negeri 1 Labuhan Haji", rightX, finalY + 10);
-      doc.setFont("helvetica", "bold"); doc.text("Heri Satria, S.Pd.,M.Pd", rightX, finalY + 30);
-      doc.setFont("helvetica", "normal"); doc.text("NIP. 198205142006041005", rightX, finalY + 35);
-      doc.save(`Laporan_Detail_Harian_${selectedUser.name.replace(/\s+/g, '_')}.pdf`);
-    }
-
-    // --- DOKUMEN 2: DAFTAR KEHADIRAN INDIVIDUAL ---
-    function exportDaftarKehadiranExcel() {
-      if (!window.XLSX) return alert('Library XLSX belum siap.');
-      const { selectedUser, bulanNama, tahunNama, userRecords } = getSelectedUserAndFilterContext();
-      const filename = `Daftar_Kehadiran_${selectedUser.name.replace(/\s+/g, '_')}_${bulanNama}_${tahunNama}.xlsx`;
-
-      const sheetData = [
-        [`DAFTAR KEHADIRAN ${bulanNama} TAHUN ${tahunNama}`],
-        ["Nama", selectedUser.name],
-        ["NIP/NIPPPK", selectedUser.nisn],
-        ["Kategori", selectedUser.class_name],
-        [],
-        ["Tanggal", "Hari", "Jam Masuk", "Jam Pulang", "Keterangan"]
-      ];
-
-      userRecords.forEach(r => {
-        sheetData.push([
-          r.date,
-          getIndonesianDayName(r.date),
-          r.time_in || (r.time && r.status !== 'Pulang' ? r.time : '-'),
-          r.time_out || (r.time && r.status === 'Pulang' ? r.time : '-'),
-          r.status
-        ]);
-      });
-
-      const wb = XLSX.utils.book_new();
-      const ws = XLSX.utils.aoa_to_sheet(sheetData);
-      XLSX.utils.book_append_sheet(wb, ws, "Daftar Kehadiran");
-      XLSX.writeFile(wb, filename);
-    }
-
-    function exportDaftarKehadiranWord() {
-      const { selectedUser, bulanNama, tahunNama, userRecords } = getSelectedUserAndFilterContext();
-      const tanggalCetak = formatTanggalIndo(new Date());
-
-      const rowsHTML = userRecords.map(r => `
-        <tr>
-          <td style="text-align: center;">${r.date}</td>
-          <td style="text-align: center;">${getIndonesianDayName(r.date)}</td>
-          <td style="text-align: center;">${r.time_in || (r.time && r.status !== 'Pulang' ? r.time : '-')}</td>
-          <td style="text-align: center;">${r.time_out || (r.time && r.status === 'Pulang' ? r.time : '-')}</td>
-          <td>${r.status}</td>
-        </tr>
-      `).join('');
-
-      const htmlDocument = `
-        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-        <head>
-          <meta charset='utf-8'><title>DAFTAR KEHADIRAN ${bulanNama} TAHUN ${tahunNama}</title>
-          <style>
-            body { font-family: 'Times New Roman', Times, serif; font-size: 11pt; line-height: 1.3; }
-            .header-title { text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 15px; text-transform: uppercase; }
-            .identity-table { width: 100%; margin-bottom: 15px; border-collapse: collapse; }
-            .identity-table td { padding: 3px 0; border: none; font-size: 11pt; }
-            .data-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-            .data-table th, .data-table td { border: 1px solid #000; padding: 6px 8px; font-size: 10.5pt; }
-            .data-table th { background-color: #f2f2f2; font-weight: bold; text-align: center; }
-            .footer-table { width: 100%; margin-top: 35px; border-collapse: collapse; page-break-inside: avoid; }
-            .footer-table td { border: none; vertical-align: top; }
-          </style>
-        </head>
-        <body>
-          <div class="header-title">DAFTAR KEHADIRAN ${bulanNama} TAHUN ${tahunNama}</div>
-          <table class="identity-table">
-            <tr><td width="130"><b>Nama</b></td><td width="15">:</td><td>${selectedUser.name}</td></tr>
-            <tr><td><b>NIP/NIPPPK</b></td><td>:</td><td>${selectedUser.nisn}</td></tr>
-            <tr><td><b>Kategori</b></td><td>:</td><td>${selectedUser.class_name}</td></tr>
-          </table>
-          <table class="data-table">
-            <thead>
-              <tr><th width="120">Tanggal</th><th width="90">Hari</th><th width="100">Jam Masuk</th><th width="100">Jam Pulang</th><th>Keterangan</th></tr>
-            </thead>
-            <tbody>${rowsHTML}</tbody>
-          </table>
-          <table class="footer-table">
-            <tr><td width="55%"></td><td width="45%">Labuhanhaji, ${tanggalCetak}<br>Kepala Sekolah<br>SMA Negeri 1 Labuhan Haji<br><br><br><br><br><b><u>Heri Satria, S.Pd.,M.Pd</u></b><br>NIP. 198205142006041005</td></tr>
-          </table>
-        </body>
-        </html>
-      `;
-
-      const blob = new Blob(['\ufeff' + htmlDocument], { type: 'application/msword' });
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `Daftar_Kehadiran_${selectedUser.name.replace(/\s+/g, '_')}_${bulanNama}_${tahunNama}.doc`; a.click();
-    }
-
-    function exportDaftarKehadiranPDF() {
-      const { jsPDF } = window.jspdf;
-      const { selectedUser, bulanNama, tahunNama, userRecords } = getSelectedUserAndFilterContext();
-      const tanggalCetak = formatTanggalIndo(new Date());
-
-      const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
-      doc.setFont("helvetica", "bold"); doc.setFontSize(12);
-      doc.text(`DAFTAR KEHADIRAN ${bulanNama} TAHUN ${tahunNama}`, 105, 18, { align: "center" });
-
-      doc.setFontSize(10); doc.setFont("helvetica", "normal");
-      doc.text("Nama", 15, 30); doc.text(":", 48, 30); doc.setFont("helvetica", "bold"); doc.text(selectedUser.name, 52, 30);
-      doc.setFont("helvetica", "normal"); doc.text("NIP/NIPPPK", 15, 36); doc.text(":", 48, 36); doc.text(selectedUser.nisn, 52, 36);
-      doc.text("Kategori", 15, 42); doc.text(":", 48, 42); doc.text(selectedUser.class_name, 52, 42);
-
-      const tableBody = userRecords.map(r => [
-        r.date, 
-        getIndonesianDayName(r.date), 
-        r.time_in || (r.time && r.status !== 'Pulang' ? r.time : '-'), 
-        r.time_out || (r.time && r.status === 'Pulang' ? r.time : '-'), 
-        r.status
-      ]);
-
-      doc.autoTable({
-        startY: 48, head: [['Tanggal', 'Hari', 'Jam Masuk', 'Jam Pulang', 'Keterangan']],
-        body: tableBody, theme: 'grid', headStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center' },
-        styles: { fontSize: 9.5, cellPadding: 2.5, textColor: [30, 30, 30] },
-        columnStyles: { 0: { halign: 'center', cellWidth: 32 }, 1: { halign: 'center', cellWidth: 28 }, 2: { halign: 'center', cellWidth: 28 }, 3: { halign: 'center', cellWidth: 28 }, 4: { halign: 'left' } }
-      });
-
-      let finalY = doc.lastAutoTable.finalY + 14;
-      if (finalY > 230) { doc.addPage(); finalY = 20; }
-      const rightX = 125;
-      doc.setFont("helvetica", "normal"); doc.setFontSize(10);
-      doc.text(`Labuhanhaji, ${tanggalCetak}`, rightX, finalY);
-      doc.text("Kepala Sekolah", rightX, finalY + 5);
-      doc.text("SMA Negeri 1 Labuhan Haji", rightX, finalY + 10);
-      doc.setFont("helvetica", "bold"); doc.text("Heri Satria, S.Pd.,M.Pd", rightX, finalY + 32);
-      doc.setFont("helvetica", "normal"); doc.text("NIP. 198205142006041005", rightX, finalY + 37);
-
-      doc.save(`Daftar_Kehadiran_${selectedUser.name.replace(/\s+/g, '_')}_${bulanNama}_${tahunNama}.pdf`);
-    }
-
-    function exportToCSV() {
-      const today = new Date().toISOString().split('T')[0];
-      let csv = 'NISN/NIP/NIPPPK,Nama Lengkap,Kategori,Tanggal,Jam Masuk,Jam Pulang,Status\n';
-      registeredStudents.forEach(s => {
-        const att = todayAttendances.find(a => a.student_id === s.id && a.date === today);
-        csv += `"${s.nisn}","${s.name}","${s.class_name}","${today}","${att ? (att.time_in || att.time || '-') : '-'}","${att ? (att.time_out || '-') : '-'}","${att ? att.status : 'Belum Hadir'}"\n`;
-      });
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `Presensi_${today}.csv`; a.click();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Rekap_Presensi_${startDate}_sd_${endDate}.csv`;
+      a.click();
+    }
+
+    async function startEnrollWebcam() {
+      const video = document.getElementById('enroll-webcam');
+      const img = document.getElementById('enroll-photo-img');
+      const icon = document.getElementById('enroll-placeholder-icon');
+      const snapBtn = document.getElementById('btn-snap-enroll');
+
+      try {
+        enrollmentStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: currentFacingMode, width: 320, height: 320 } });
+        video.srcObject = enrollmentStream;
+        video.classList.remove('hidden');
+        img.classList.add('hidden');
+        icon.classList.add('hidden');
+        snapBtn.classList.remove('hidden');
+      } catch (e) {
+        alert('Gagal membuka kamera: ' + e.message);
+      }
+    }
+
+    async function snapEnrollPhoto() {
+      const video = document.getElementById('enroll-webcam');
+      const img = document.getElementById('enroll-photo-img');
+      const snapBtn = document.getElementById('btn-snap-enroll');
+      const statusText = document.getElementById('enroll-descriptor-status');
+
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth || 320;
+      canvas.height = video.videoHeight || 320;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0);
+
+      const dataUrl = canvas.toDataURL('image/jpeg');
+      img.src = dataUrl;
+      img.classList.remove('hidden');
+      video.classList.add('hidden');
+      snapBtn.classList.add('hidden');
+
+      if (enrollmentStream) {
+        enrollmentStream.getTracks().forEach(t => t.stop());
+        enrollmentStream = null;
+      }
+
+      statusText.innerHTML = '<span class="text-amber-500 font-semibold"><i class="fa-solid fa-spinner fa-spin"></i> Mengekstrak vektor biometrik...</span>';
+      await processEnrollImage(img);
     }
 
     function handleEnrollFileUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
+
       const img = document.getElementById('enroll-photo-img');
+      const video = document.getElementById('enroll-webcam');
+      const icon = document.getElementById('enroll-placeholder-icon');
+      const statusText = document.getElementById('enroll-descriptor-status');
+
+      video.classList.add('hidden');
+      icon.classList.add('hidden');
+
       const reader = new FileReader();
       reader.onload = async (e) => {
         img.src = e.target.result;
         img.classList.remove('hidden');
-        document.getElementById('enroll-placeholder-icon').classList.add('hidden');
+        statusText.innerHTML = '<span class="text-amber-500 font-semibold"><i class="fa-solid fa-spinner fa-spin"></i> Mengekstrak vektor biometrik...</span>';
         await processEnrollImage(img);
       };
       reader.readAsDataURL(file);
@@ -2467,46 +2355,484 @@ CREATE TABLE IF NOT EXISTS public.attendances (
     async function processEnrollImage(imageEl) {
       const statusText = document.getElementById('enroll-descriptor-status');
       try {
-        const detection = await faceapi.detectSingleFace(imageEl, new faceapi.TinyFaceDetectorOptions({ scoreThreshold: 0.4 })).withFaceLandmarks().withFaceDescriptor();
+        const detection = await faceapi
+          .detectSingleFace(imageEl, new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: 0.4 }))
+          .withFaceLandmarks()
+          .withFaceDescriptor();
+
         if (detection && detection.descriptor) {
           enrollmentDescriptor = Array.from(detection.descriptor);
-          statusText.innerHTML = '<span class="text-emerald-400 font-semibold">Wajah Terverifikasi (Biometrik Ready)</span>';
+          statusText.innerHTML = '<span class="text-emerald-600 dark:text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Wajah Terverifikasi Presisi (128 Vektor Siap)</span>';
         } else {
           enrollmentDescriptor = null;
-          statusText.innerHTML = '<span class="text-rose-500">Wajah tidak terdeteksi.</span>';
+          statusText.innerHTML = '<span class="text-rose-500"><i class="fa-solid fa-triangle-exclamation"></i> Wajah tidak terdeteksi. Pastikan pencahayaan terang dan wajah menghadap lurus.</span>';
         }
-      } catch (err) { enrollmentDescriptor = null; }
+      } catch (err) {
+        enrollmentDescriptor = null;
+        statusText.innerHTML = '<span class="text-rose-500">Gagal memproses gambar: ' + err.message + '</span>';
+      }
     }
 
     async function handleEnrollSubmit(event) {
-      if (event) event.preventDefault();
+      event.preventDefault();
       const nisn = document.getElementById('enroll-nisn').value.trim();
       const name = document.getElementById('enroll-name').value.trim();
       const className = document.getElementById('enroll-class').value;
+      const img = document.getElementById('enroll-photo-img');
 
-      if (!enrollmentDescriptor) return alert('Ambil/unggah foto wajah yang terdeteksi dengan jelas.');
+      if (!className) {
+        alert('Silakan pilih kategori pengguna (GURU, TENDIK, atau SISWA).');
+        return;
+      }
 
-      const newStudent = { id: crypto.randomUUID ? crypto.randomUUID() : 'std-' + Date.now(), nisn, name, class_name: className, face_descriptor: enrollmentDescriptor };
+      if (!enrollmentDescriptor) {
+        alert('Mohon ambil/unggah foto wajah hingga posisi wajah terverifikasi secara presisi.');
+        return;
+      }
+
+      const newStudent = {
+        id: crypto.randomUUID ? crypto.randomUUID() : 'std-' + Date.now(),
+        nisn,
+        name,
+        class_name: className,
+        face_descriptor: enrollmentDescriptor,
+        photo_url: img.src.startsWith('data:') ? img.src : '',
+        created_at: new Date().toISOString()
+      };
+
+      if (supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient.from('students').insert([{
+            nisn: newStudent.nisn,
+            name: newStudent.name,
+            class_name: newStudent.class_name,
+            face_descriptor: newStudent.face_descriptor,
+            photo_url: null
+          }]).select().single();
+
+          if (!error && data) newStudent.id = data.id;
+        } catch (e) {}
+      }
+
       registeredStudents.unshift(newStudent);
       localStorage.setItem('absensi_local_students', JSON.stringify(registeredStudents));
+
       rebuildFaceMatcher();
       renderAttendanceList();
-      populateRekapUserSelect();
-      alert('Berhasil mendaftarkan ' + name);
+      renderRegisteredStudentsTable();
+
+      alert('Pengguna ' + name + ' (' + className + ') berhasil terdaftar!');
       event.target.reset();
+      img.classList.add('hidden');
+      document.getElementById('enroll-placeholder-icon').classList.remove('hidden');
+      document.getElementById('enroll-descriptor-status').textContent = 'Menunggu pengambilan foto wajah...';
+      enrollmentDescriptor = null;
     }
 
     function renderRegisteredStudentsTable() {
       const container = document.getElementById('registered-students-table');
-      document.getElementById('registered-count-badge').textContent = registeredStudents.length + ' Pengguna';
+      const badge = document.getElementById('registered-count-badge');
+      badge.textContent = registeredStudents.length + ' Pengguna';
+
+      if (registeredStudents.length === 0) {
+        container.innerHTML = '<div class="text-center py-8 text-xs text-slate-500">Belum ada pengguna terdaftar.</div>';
+        return;
+      }
+
       container.innerHTML = registeredStudents.map(s => `
-        <div class="p-2.5 bg-slate-950/60 border-slate-800 border rounded-lg flex items-center justify-between">
-          <div class="truncate">
-            <div class="text-xs font-semibold text-slate-200 truncate">${s.name}</div>
-            <div class="text-[10px] text-slate-400 font-mono">${s.nisn} · ${s.class_name}</div>
+        <div class="p-2.5 bg-slate-50 border-slate-200 dark:bg-slate-950/60 dark:border-slate-800 border rounded-lg flex items-center justify-between">
+          <div class="flex items-center gap-2.5 min-w-0 pr-2">
+            <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center font-bold text-xs text-slate-700 dark:text-slate-300 shrink-0">
+              ${s.name.charAt(0)}
+            </div>
+            <div class="truncate">
+              <div class="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">${s.name}</div>
+              <div class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 font-mono">ID: ${s.nisn} · ${s.class_name}</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <span class="text-[9px] sm:text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 font-mono">
+              ${s.face_descriptor ? 'Biometrik Aktif' : 'Tanpa Vektor'}
+            </span>
+            <button onclick="openEditStudentModal('${s.id}')" title="Edit Data" class="p-1 text-slate-400 hover:text-emerald-500 text-xs transition-colors">
+              <i class="fa-solid fa-user-pen"></i>
+            </button>
+            <button onclick="deleteStudent('${s.id}')" title="Hapus" class="p-1 text-slate-400 hover:text-rose-500 text-xs transition-colors">
+              <i class="fa-solid fa-trash"></i>
+            </button>
           </div>
         </div>
       `).join('');
+    }
+
+    function openEditStudentModal(id) {
+      const student = registeredStudents.find(s => s.id === id);
+      if (!student) return;
+
+      document.getElementById('edit-student-id').value = student.id;
+      document.getElementById('edit-student-nisn').value = student.nisn;
+      document.getElementById('edit-student-name').value = student.name;
+      document.getElementById('edit-student-class').value = student.class_name;
+
+      editStudentDescriptor = null;
+      document.getElementById('edit-descriptor-status').innerHTML = 'Biarkan foto kosong jika tidak ingin mengubah data biometrik wajah.';
+      document.getElementById('edit-photo-img').classList.add('hidden');
+      document.getElementById('edit-webcam').classList.add('hidden');
+      document.getElementById('edit-placeholder-icon').classList.remove('hidden');
+
+      const modal = document.getElementById('modal-edit-student');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeEditStudentModal() {
+      if (editStudentStream) {
+        editStudentStream.getTracks().forEach(t => t.stop());
+        editStudentStream = null;
+      }
+      const modal = document.getElementById('modal-edit-student');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    async function startEditWebcam() {
+      const video = document.getElementById('edit-webcam');
+      const img = document.getElementById('edit-photo-img');
+      const icon = document.getElementById('edit-placeholder-icon');
+      const snapBtn = document.getElementById('btn-snap-edit');
+
+      try {
+        editStudentStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: currentFacingMode, width: 320, height: 320 } });
+        video.srcObject = editStudentStream;
+        video.classList.remove('hidden');
+        img.classList.add('hidden');
+        icon.classList.add('hidden');
+        snapBtn.classList.remove('hidden');
+      } catch (e) {
+        alert('Gagal membuka kamera: ' + e.message);
+      }
+    }
+
+    async function snapEditPhoto() {
+      const video = document.getElementById('edit-webcam');
+      const img = document.getElementById('edit-photo-img');
+      const snapBtn = document.getElementById('btn-snap-edit');
+      const statusText = document.getElementById('edit-descriptor-status');
+
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth || 320;
+      canvas.height = video.videoHeight || 320;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0);
+
+      const dataUrl = canvas.toDataURL('image/jpeg');
+      img.src = dataUrl;
+      img.classList.remove('hidden');
+      video.classList.add('hidden');
+      snapBtn.classList.add('hidden');
+
+      if (editStudentStream) {
+        editStudentStream.getTracks().forEach(t => t.stop());
+        editStudentStream = null;
+      }
+
+      statusText.innerHTML = '<span class="text-amber-500 font-semibold"><i class="fa-solid fa-spinner fa-spin"></i> Mengekstrak vektor biometrik...</span>';
+      await processEditImage(img);
+    }
+
+    function handleEditFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const img = document.getElementById('edit-photo-img');
+      const video = document.getElementById('edit-webcam');
+      const icon = document.getElementById('edit-placeholder-icon');
+      const statusText = document.getElementById('edit-descriptor-status');
+
+      video.classList.add('hidden');
+      icon.classList.add('hidden');
+
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        img.src = e.target.result;
+        img.classList.remove('hidden');
+        statusText.innerHTML = '<span class="text-amber-500 font-semibold"><i class="fa-solid fa-spinner fa-spin"></i> Mengekstrak vektor biometrik...</span>';
+        await processEditImage(img);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function processEditImage(imageEl) {
+      const statusText = document.getElementById('edit-descriptor-status');
+      try {
+        const detection = await faceapi
+          .detectSingleFace(imageEl, new faceapi.TinyFaceDetectorOptions({ inputSize: 416, scoreThreshold: 0.4 }))
+          .withFaceLandmarks()
+          .withFaceDescriptor();
+
+        if (detection && detection.descriptor) {
+          editStudentDescriptor = Array.from(detection.descriptor);
+          statusText.innerHTML = '<span class="text-emerald-600 dark:text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Vektor Wajah Baru Diekstrak!</span>';
+        } else {
+          editStudentDescriptor = null;
+          statusText.innerHTML = '<span class="text-rose-500"><i class="fa-solid fa-triangle-exclamation"></i> Wajah tidak terdeteksi. Silakan coba foto lain.</span>';
+        }
+      } catch (err) {
+        editStudentDescriptor = null;
+        statusText.innerHTML = '<span class="text-rose-500">Gagal memproses gambar: ' + err.message + '</span>';
+      }
+    }
+
+    async function handleUpdateStudent(event) {
+      event.preventDefault();
+      const id = document.getElementById('edit-student-id').value;
+      const nisn = document.getElementById('edit-student-nisn').value.trim();
+      const name = document.getElementById('edit-student-name').value.trim();
+      const className = document.getElementById('edit-student-class').value;
+
+      const idx = registeredStudents.findIndex(s => s.id === id);
+      if (idx === -1) return;
+
+      const updatedData = {
+        ...registeredStudents[idx],
+        nisn,
+        name,
+        class_name: className
+      };
+
+      if (editStudentDescriptor) {
+        updatedData.face_descriptor = editStudentDescriptor;
+      }
+
+      registeredStudents[idx] = updatedData;
+      localStorage.setItem('absensi_local_students', JSON.stringify(registeredStudents));
+
+      if (supabaseClient) {
+        try {
+          const updatePayload = {
+            nisn: updatedData.nisn,
+            name: updatedData.name,
+            class_name: updatedData.class_name
+          };
+          if (editStudentDescriptor) updatePayload.face_descriptor = editStudentDescriptor;
+          await supabaseClient.from('students').update(updatePayload).eq('id', id);
+        } catch (e) {}
+      }
+
+      rebuildFaceMatcher();
+      renderAttendanceList();
+      renderRegisteredStudentsTable();
+      closeEditStudentModal();
+
+      alert('Data ' + name + ' berhasil diperbarui!');
+    }
+
+    async function deleteStudent(id) {
+      if (!confirm('Hapus pengguna ini dari sistem?')) return;
+      registeredStudents = registeredStudents.filter(s => s.id !== id);
+      localStorage.setItem('absensi_local_students', JSON.stringify(registeredStudents));
+      if (supabaseClient) {
+        try { await supabaseClient.from('students').delete().eq('id', id); } catch (e) {}
+      }
+      rebuildFaceMatcher();
+      renderAttendanceList();
+      renderRegisteredStudentsTable();
+    }
+
+    async function handleSaveConfig(event) {
+      event.preventDefault();
+      const url = document.getElementById('cfg-url').value.trim();
+      const key = document.getElementById('cfg-key').value.trim();
+      const res = document.getElementById('cfg-test-result');
+
+      localStorage.setItem('absensi_supabase_url', url);
+      localStorage.setItem('absensi_supabase_anon_key', key);
+      initSupabase();
+
+      if (!url || !key) {
+        res.innerHTML = '<span class="text-amber-500 font-semibold">Kredensial dikosongkan. Kembali ke mode offline.</span>';
+        return;
+      }
+
+      res.innerHTML = '<span class="text-slate-500 dark:text-slate-400"><i class="fa-solid fa-spinner fa-spin"></i> Menguji koneksi ke Supabase...</span>';
+      try {
+        const { count, error } = await supabaseClient.from('students').select('*', { count: 'exact', head: true });
+        if (error) throw error;
+        res.innerHTML = '<span class="text-emerald-600 dark:text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Sukses terhubung ke Supabase! Total ' + (count || 0) + ' pengguna ditemukan.</span>';
+        await loadInitialData();
+      } catch (e) {
+        res.innerHTML = '<span class="text-rose-500 font-semibold"><i class="fa-solid fa-triangle-exclamation"></i> Gagal koneksi: ' + e.message + '</span>';
+      }
+    }
+
+    function handleSaveTimeSettings(event) {
+      event.preventDefault();
+      const jamMulai = document.getElementById('cfg-time-mulai').value;
+      const jamMasuk = document.getElementById('cfg-time-masuk').value;
+      const jamTerlambat = document.getElementById('cfg-time-terlambat').value;
+      const jamPulang = document.getElementById('cfg-time-pulang').value;
+      const jamAkhirPulang = document.getElementById('cfg-time-akhir-pulang').value;
+
+      const settings = { jamMulai, jamMasuk, jamTerlambat, jamPulang, jamAkhirPulang };
+      localStorage.setItem('absensi_time_settings', JSON.stringify(settings));
+
+      updateTimeDisplay();
+      alert('Pengaturan jam operasional presensi berhasil disimpan!');
+    }
+
+    function loadTimeSettings() {
+      const settings = getAttendanceSettings();
+      document.getElementById('cfg-time-mulai').value = settings.jamMulai;
+      document.getElementById('cfg-time-masuk').value = settings.jamMasuk;
+      document.getElementById('cfg-time-terlambat').value = settings.jamTerlambat;
+      document.getElementById('cfg-time-pulang').value = settings.jamPulang;
+      document.getElementById('cfg-time-akhir-pulang').value = settings.jamAkhirPulang;
+      updateTimeDisplay();
+    }
+
+    function updateTimeDisplay() {
+      const settings = getAttendanceSettings();
+      if (document.getElementById('disp-time-mulai')) {
+        document.getElementById('disp-time-mulai').textContent = settings.jamMulai;
+        document.getElementById('disp-time-mulai-2').textContent = settings.jamMulai;
+        document.getElementById('disp-time-terlambat').textContent = settings.jamTerlambat;
+        document.getElementById('disp-time-terlambat-2').textContent = settings.jamTerlambat;
+        document.getElementById('disp-time-pulang').textContent = settings.jamPulang;
+        document.getElementById('disp-time-pulang-2').textContent = settings.jamPulang;
+        document.getElementById('disp-time-akhir-pulang').textContent = settings.jamAkhirPulang;
+        document.getElementById('disp-time-akhir-pulang-2').textContent = settings.jamAkhirPulang;
+      }
+    }
+
+    function exportDatabaseJSON() {
+      const backupObj = {
+        app: "Presensi Wajah SMAN 1 Labuhan Haji V.1.06 GPS 300m",
+        timestamp: new Date().toISOString(),
+        schoolCoordinates: { lat: SCHOOL_LAT, lng: SCHOOL_LNG, maxRadiusKm: MAX_RADIUS_KM },
+        timeSettings: getAttendanceSettings(),
+        students: registeredStudents,
+        todayAttendances: todayAttendances
+      };
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupObj, null, 2));
+      const dlAnchorElem = document.createElement('a');
+      dlAnchorElem.setAttribute("href", dataStr);
+      dlAnchorElem.setAttribute("download", `Backup_Presensi_SMAN1LabuhanHaji_v1.06_${new Date().toISOString().split('T')[0]}.json`);
+      document.body.appendChild(dlAnchorElem);
+      dlAnchorElem.click();
+      dlAnchorElem.remove();
+    }
+
+    function importDatabaseJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (parsed.students && Array.isArray(parsed.students)) {
+            registeredStudents = parsed.students;
+            localStorage.setItem('absensi_local_students', JSON.stringify(registeredStudents));
+          }
+          if (parsed.todayAttendances && Array.isArray(parsed.todayAttendances)) {
+            todayAttendances = parsed.todayAttendances;
+            localStorage.setItem('absensi_local_attendances', JSON.stringify(todayAttendances));
+          }
+          if (parsed.timeSettings) {
+            localStorage.setItem('absensi_time_settings', JSON.stringify(parsed.timeSettings));
+            loadTimeSettings();
+          }
+
+          rebuildFaceMatcher();
+          renderAttendanceList();
+          renderRegisteredStudentsTable();
+
+          alert('Database berhasil dipulihkan dari file JSON!');
+        } catch (err) {
+          alert('Gagal membaca file JSON backup: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function loadSampleDemoData() {
+      registeredStudents = [
+        { id: 'std-1', nisn: '0071283941', name: 'Ahmad Rizky Pratama', class_name: 'SISWA', face_descriptor: null },
+        { id: 'std-2', nisn: '198705142010011002', name: 'Irfan Dani, S.Pd.', class_name: 'GURU', face_descriptor: null },
+        { id: 'std-3', nisn: '199203112019032005', name: 'Rahmat Hidayat, A.Md.', class_name: 'TENDIK', face_descriptor: null }
+      ];
+      localStorage.setItem('absensi_local_students', JSON.stringify(registeredStudents));
+      renderAttendanceList();
+      renderRegisteredStudentsTable();
+      alert('Data demo berhasil dimuat!');
+    }
+
+    function copySqlScript() {
+      const sql = `-- ==============================================================================
+-- SISTEM ABSENSI WAJAH REALTIME - SKEMA DATABASE SUPABASE
+-- ==============================================================================
+
+CREATE TABLE IF NOT EXISTS public.students (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nisn TEXT UNIQUE NOT NULL,
+    name TEXT NOT NULL,
+    class_name TEXT NOT NULL,
+    face_descriptor JSONB,
+    photo_url TEXT,
+    created_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_students_nisn ON public.students(nisn);
+CREATE INDEX IF NOT EXISTS idx_students_class ON public.students(class_name);
+
+CREATE TABLE IF NOT EXISTS public.attendances (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    student_id UUID NOT NULL REFERENCES public.students(id) ON DELETE CASCADE,
+    class_name TEXT NOT NULL,
+    date DATE NOT NULL DEFAULT CURRENT_DATE,
+    time TIME NOT NULL DEFAULT CURRENT_TIME,
+    status TEXT NOT NULL DEFAULT 'Hadir',
+    created_at TIMESTAMPTZ DEFAULT now(),
+    CONSTRAINT unique_student_daily_attendance UNIQUE (student_id, date)
+);
+
+CREATE INDEX IF NOT EXISTS idx_attendances_date ON public.attendances(date);
+CREATE INDEX IF NOT EXISTS idx_attendances_student ON public.attendances(student_id);
+
+ALTER TABLE public.students ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.attendances ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Akses Penuh Siswa untuk Aplikasi Sekolah" ON public.students;
+CREATE POLICY "Akses Penuh Siswa untuk Aplikasi Sekolah"
+    ON public.students FOR ALL TO anon, authenticated USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Akses Penuh Presensi untuk Aplikasi Sekolah" ON public.attendances;
+CREATE POLICY "Akses Penuh Presensi untuk Aplikasi Sekolah"
+    ON public.attendances FOR ALL TO anon, authenticated USING (true) WITH CHECK (true);
+
+ALTER PUBLICATION supabase_realtime ADD TABLE public.attendances;
+`;
+      navigator.clipboard.writeText(sql);
+      const btn = document.getElementById('btn-copy-sql');
+      btn.innerHTML = '<i class="fa-solid fa-check"></i> Tersalin!';
+      setTimeout(() => { btn.innerHTML = '<i class="fa-solid fa-copy"></i> Salin Skrip'; }, 2000);
+    }
+
+    function exportToCSV() {
+      const today = new Date().toISOString().split('T')[0];
+      let csv = 'NISN/NIP/NIPPPK,Nama Lengkap,Kategori,Tanggal,Jam,Status\n';
+      registeredStudents.forEach(s => {
+        const att = todayAttendances.find(a => a.student_id === s.id && a.date === today);
+        csv += `"${s.nisn}","${s.name}","${s.class_name}","${today}","${att ? att.time : '-'}","${att ? att.status : 'Belum Hadir'}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Presensi_${today}.csv`;
+      a.click();
     }
   </script>
 </body>
