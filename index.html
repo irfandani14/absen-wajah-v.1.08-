@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Presensi Wajah V.1.10 - SMA NEGERI 1 LABUHAN HAJI</title>
-  <meta name="description" content="Sistem Presensi Wajah Realtime berbasis Browser, Validasi GPS 300m, Presensi Khusus, Dual Tracking Jam Masuk & Pulang, Ekspor PDF, Word, Excel." />
+  <title>Presensi Wajah V.1.11 - SMA NEGERI 1 LABUHAN HAJI</title>
+  <meta name="description" content="Sistem Presensi Wajah Realtime berbasis Browser, Validasi GPS 300m, Presensi Khusus, Dual Tracking Jam Masuk & Pulang, Rekapitulasi Bulanan PDF, Word, Excel." />
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -65,7 +65,7 @@
       <div>
         <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight flex flex-wrap items-center justify-center gap-2">
           Presensi Wajah (Face Recognition)
-          <span class="text-xs sm:text-sm font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-semibold">V.1.10</span>
+          <span class="text-xs sm:text-sm font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 font-semibold">V.1.11</span>
         </h1>
         <h2 class="text-emerald-400 font-bold text-base sm:text-lg md:text-xl mt-1 tracking-wide uppercase">SMA NEGERI 1 LABUHAN HAJI</h2>
       </div>
@@ -145,7 +145,7 @@
       </div>
       <div>
         <h1 class="font-extrabold text-xs sm:text-base tracking-tight text-slate-800 dark:text-white flex items-center gap-1.5">
-          Presensi Wajah <span class="text-[10px] font-mono text-emerald-500 font-normal">v1.10</span>
+          Presensi Wajah <span class="text-[10px] font-mono text-emerald-500 font-normal">v1.11</span>
           <span id="user-role-badge" class="text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-semibold font-mono">ADMIN</span>
         </h1>
         <p class="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium">SMA Negeri 1 Labuhan Haji</p>
@@ -487,42 +487,58 @@
         </div>
 
         <!-- Filter Row 2: Form Cetak & Pilihan Dokumen Ekspor (PDF, WORD, EXCEL) -->
-        <div class="pt-3 border-t border-slate-200 dark:border-slate-800 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3">
+        <div class="pt-3 border-t border-slate-200 dark:border-slate-800 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-3">
           
-          <div class="w-full lg:w-1/3">
-            <label class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 block mb-0.5 font-medium">Pilih Guru / Tendik untuk Cetak Dokumen</label>
+          <div class="w-full xl:w-1/4">
+            <label class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 block mb-0.5 font-medium">Pilih Guru / Tendik Perorangan</label>
             <select id="rekap-user-select" class="w-full bg-slate-50 border-slate-300 dark:bg-slate-950 dark:border-slate-800 border rounded-lg px-2.5 py-1.5 text-xs text-slate-800 dark:text-slate-200 focus:outline-none focus:border-emerald-500 font-semibold">
               <!-- Populated via JS -->
             </select>
           </div>
 
-          <!-- 3 PILIHAN FORMAT EKSPOR: PDF, WORD, EXCEL -->
-          <div class="w-full lg:w-2/3 flex flex-wrap items-center justify-start lg:justify-end gap-2.5">
+          <!-- 3 GROUP OPSI DOKUMEN EKSPOR: INDIVIDUAL & REKAP BULANAN SEMUA WARGA SEKOLAH -->
+          <div class="w-full xl:w-3/4 flex flex-wrap items-center justify-start xl:justify-end gap-2">
             
-            <!-- Group 1: LAPORAN DETAIL HARIAN (PDF, WORD, EXCEL) -->
+            <!-- Group 1: LAPORAN DETAIL HARIAN INDIVIDUAL -->
             <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-950 p-1.5 rounded-xl border border-slate-200 dark:border-slate-800">
-              <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 px-1 font-mono uppercase">1. Detail Harian:</span>
-              <button onclick="exportDetailHarianPDF()" class="px-2 py-1 bg-rose-600 hover:bg-rose-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
+              <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 px-1 font-mono uppercase">1. Detail Individu:</span>
+              <button onclick="exportDetailHarianPDF()" title="Cetak PDF Detail Individu" class="px-2 py-1 bg-rose-600 hover:bg-rose-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
                 <i class="fa-solid fa-file-pdf"></i> PDF
               </button>
-              <button onclick="exportDetailHarianWord()" class="px-2 py-1 bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
+              <button onclick="exportDetailHarianWord()" title="Cetak Word Detail Individu" class="px-2 py-1 bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
                 <i class="fa-solid fa-file-word"></i> Word
               </button>
-              <button onclick="exportDetailHarianExcel()" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
+              <button onclick="exportDetailHarianExcel()" title="Cetak Excel Detail Individu" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
                 <i class="fa-solid fa-file-excel"></i> Excel
               </button>
             </div>
 
-            <!-- Group 2: DAFTAR KEHADIRAN (PDF, WORD, EXCEL) -->
+            <!-- Group 2: DAFTAR KEHADIRAN INDIVIDUAL -->
             <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-950 p-1.5 rounded-xl border border-slate-200 dark:border-slate-800">
-              <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 px-1 font-mono uppercase">2. Daftar Kehadiran:</span>
-              <button onclick="exportDaftarKehadiranPDF()" class="px-2 py-1 bg-rose-600 hover:bg-rose-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
+              <span class="text-[10px] font-bold text-slate-600 dark:text-slate-300 px-1 font-mono uppercase">2. Log Individu:</span>
+              <button onclick="exportDaftarKehadiranPDF()" title="Cetak PDF Log Kehadiran" class="px-2 py-1 bg-rose-600 hover:bg-rose-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
                 <i class="fa-solid fa-file-pdf"></i> PDF
               </button>
-              <button onclick="exportDaftarKehadiranWord()" class="px-2 py-1 bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
+              <button onclick="exportDaftarKehadiranWord()" title="Cetak Word Log Kehadiran" class="px-2 py-1 bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
                 <i class="fa-solid fa-file-word"></i> Word
               </button>
-              <button onclick="exportDaftarKehadiranExcel()" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
+              <button onclick="exportDaftarKehadiranExcel()" title="Cetak Excel Log Kehadiran" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-semibold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
+                <i class="fa-solid fa-file-excel"></i> Excel
+              </button>
+            </div>
+
+            <!-- Group 3: REKAPITULASI BULANAN SEMUA GURU / TENDIK (TERBARU V.1.11) -->
+            <div class="flex items-center gap-1 bg-gradient-to-r from-emerald-950/40 via-teal-950/40 to-slate-900 p-1.5 rounded-xl border border-emerald-500/40 shadow-md">
+              <span class="text-[10px] font-extrabold text-emerald-400 px-1 font-mono uppercase flex items-center gap-1">
+                <i class="fa-solid fa-users font-normal"></i> 3. Rekap Bulanan Semua:
+              </span>
+              <button onclick="exportRekapBulananPDF()" title="Cetak PDF Rekapitulasi Bulanan Seluruh Guru/Tendik" class="px-2 py-1 bg-rose-600 hover:bg-rose-500 text-white text-[11px] font-bold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
+                <i class="fa-solid fa-file-pdf"></i> PDF
+              </button>
+              <button onclick="exportRekapBulananWord()" title="Cetak Word Rekapitulasi Bulanan Seluruh Guru/Tendik" class="px-2 py-1 bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-bold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
+                <i class="fa-solid fa-file-word"></i> Word
+              </button>
+              <button onclick="exportRekapBulananExcel()" title="Cetak Excel Rekapitulasi Bulanan Seluruh Guru/Tendik" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold rounded-lg transition-colors flex items-center gap-1 shadow-sm">
                 <i class="fa-solid fa-file-excel"></i> Excel
               </button>
             </div>
@@ -738,9 +754,9 @@
 
       <div class="lg:col-span-6 bg-white border-slate-200 dark:bg-slate-900 dark:border-slate-800 border rounded-xl p-4 sm:p-5 flex flex-col gap-3 shadow-md transition-colors">
         <h2 class="text-sm sm:text-base font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-          <i class="fa-solid fa-code text-emerald-500 dark:text-emerald-400"></i> Skrip SQL Migrasi Database (V.1.10)
+          <i class="fa-solid fa-code text-emerald-500 dark:text-emerald-400"></i> Skrip SQL Migrasi Database (V.1.11)
         </h2>
-        <pre class="bg-slate-900 text-emerald-400 p-3 rounded-lg text-xs font-mono overflow-x-auto max-h-[350px] whitespace-pre">-- SKRIP DATABASE SUPABASE SMAN 1 LABUHAN HAJI (V.1.10)
+        <pre class="bg-slate-900 text-emerald-400 p-3 rounded-lg text-xs font-mono overflow-x-auto max-h-[350px] whitespace-pre">-- SKRIP DATABASE SUPABASE SMAN 1 LABUHAN HAJI (V.1.11)
 CREATE TABLE IF NOT EXISTS public.students (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     nisn TEXT UNIQUE NOT NULL,
@@ -805,7 +821,6 @@ CREATE TABLE IF NOT EXISTS public.attendances (
 
     // --- LOGIKA ATURAN BEBAS GPS vs WAJIB GPS ---
     function isGpsExempt() {
-      // HANYA ADMIN, KEPALA SEKOLAH, DAN PRESENSI KHUSUS YANG BEBAS GPS
       return (currentRole === 'admin' || currentRole === 'kepsek' || isKhususMode);
     }
 
@@ -998,7 +1013,6 @@ CREATE TABLE IF NOT EXISTS public.attendances (
           liveStatusBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-ping"></span> STATUS: SIAP SCAN (${roleLabel})`;
         }
       } else {
-        // MODE PIKET / GURU: WAJIB GPS AKTIF DAN DALAM RADIUS 300M
         if (!userLocation || !userLocation.active) {
           badge.className = "flex items-center gap-1.5 text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 animate-pulse";
           badge.innerHTML = `<i class="fa-solid fa-location-crosshairs text-rose-500"></i> <span>GPS TIDAK AKTIF!</span>`;
@@ -1272,13 +1286,11 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       }
     }
 
-    // --- FUNGSI KELUAR / LOGOUT: LANGSUNG KEMBALI KE HOMEPAGE TANPA DIALOG KONFIRMASI ---
     function logoutApp() {
       stopCamera();
       currentRole = 'admin';
       isKhususMode = false;
 
-      // Reset Layar Utama
       document.getElementById('home-action-container').classList.remove('hidden');
       document.getElementById('home-loading-container').classList.add('hidden');
       document.getElementById('home-progress-bar').style.width = '0%';
@@ -1586,7 +1598,6 @@ CREATE TABLE IF NOT EXISTS public.attendances (
               } else label = 'Tidak Terdaftar';
             }
 
-            // WARNA BOUNDING BOX KAMERA BERDASARKAN ATURAN GPS & MATCHING
             let isAllowedByGps = isGpsExempt() || (userLocation && userLocation.active && userLocation.isWithinRadius);
 
             ctx.lineWidth = 3;
@@ -1603,15 +1614,11 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       }, 300);
     }
 
-    // --- ENGINES TRACKING MULTI-SCAN (JAM MASUK & JAM PULANG) ---
     async function triggerAttendance(student) {
       const today = new Date().toISOString().split('T')[0];
       const now = new Date();
       const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0') + ':' + String(now.getSeconds()).padStart(2, '0');
 
-      // VERIFIKASI KETAT ATURAN GPS:
-      // Hanya ADMIN, KEPALA SEKOLAH, dan PRESENSI KHUSUS yang BEBAS GPS.
-      // MODE PIKET ATAU GURU WAJIB GPS AKTIF DAN DALAM RADIUS 300M SEKOLAH!
       if (!isGpsExempt()) {
         if (!userLocation || !userLocation.active) {
           if (Date.now() - lastSpokenTime > 8000) {
@@ -1637,11 +1644,9 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       const minsOutStd = hOutStd * 60 + mOutStd;
       const minsNow = now.getHours() * 60 + now.getMinutes();
 
-      // Cek apakah waktu scan tergolong jam pulang (30 mnt sebelum jam pulang resmi)
       const isPulangTime = minsNow >= (minsOutStd - 30);
 
       if (existingRec) {
-        // Jika sudah scan masuk pagi, lalu scan lagi di jam pulang
         if (!existingRec.time_out || isPulangTime) {
           existingRec.time_out = timeStr;
           if (existingRec.status === 'Hadir' || existingRec.status === 'Terlambat') {
@@ -1659,7 +1664,6 @@ CREATE TABLE IF NOT EXISTS public.attendances (
         return;
       }
 
-      // Jika belum pernah scan hari ini (Presensi Masuk Pagi / Presensi Khusus)
       let initialStatus = 'Hadir';
       const [hInStd, mInStd] = (settings.jamMasuk || '08:00').split(':').map(Number);
       if (minsNow > (hInStd * 60 + mInStd)) initialStatus = 'Terlambat';
@@ -1757,7 +1761,7 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       const manualSelect = document.getElementById('manual-user-select');
       const options = registeredStudents.map(s => `<option value="${s.id}">${s.name} (${s.class_name} - ${s.nisn})</option>`).join('');
 
-      if (select) select.innerHTML = '<option value="ALL">-- Pilih Guru / Tendik Spesifik --</option>' + options;
+      if (select) select.innerHTML = '<option value="ALL">-- Pilih Guru / Tendik Perorangan --</option>' + options;
       if (manualSelect) manualSelect.innerHTML = '<option value="">-- Pilih Pegawai / Siswa --</option>' + options;
     }
 
@@ -1840,6 +1844,7 @@ CREATE TABLE IF NOT EXISTS public.attendances (
 
     // --- HELPER DOKUMEN CETAK & EKSPOR ---
     function formatTanggalIndo(dateObj) {
+      if (!dateObj || isNaN(dateObj.getTime())) return '-';
       const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
       return `${dateObj.getDate()} ${months[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
     }
@@ -1848,6 +1853,22 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       if (!dateString || dateString === '-') return '-';
       const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
       return days[new Date(dateString).getDay()] || '-';
+    }
+
+    function calculateWorkingDays(startDateStr, endDateStr) {
+      if (!startDateStr || !endDateStr) return 0;
+      let start = new Date(startDateStr);
+      let end = new Date(endDateStr);
+      if (start > end) return 0;
+      let count = 0;
+      let cur = new Date(start);
+      while (cur <= end) {
+        if (cur.getDay() !== 0) { // Mengabaikan Hari Minggu
+          count++;
+        }
+        cur.setDate(cur.getDate() + 1);
+      }
+      return count;
     }
 
     function getSelectedUserAndFilterContext() {
@@ -1914,7 +1935,239 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       return { selectedUser, rows };
     }
 
-    // --- DOKUMEN 1: LAPORAN DETAIL HARIAN (PDF, WORD, EXCEL) ---
+    // --- ENGINES REKAPITULASI BULANAN KESELURUHAN GURU/TENDIK (V.1.11) ---
+    function computeMonthlySummaryData() {
+      const startDateVal = document.getElementById('rekap-start-date').value || new Date().toISOString().split('T')[0];
+      const endDateVal = document.getElementById('rekap-end-date').value || new Date().toISOString().split('T')[0];
+      const categoryFilter = document.getElementById('rekap-class-filter').value;
+
+      let staffList = registeredStudents;
+      if (categoryFilter !== 'ALL') {
+        staffList = staffList.filter(s => s.class_name === categoryFilter);
+      } else {
+        staffList = staffList.filter(s => s.class_name === 'GURU' || s.class_name === 'TENDIK' || s.class_name === 'SISWA');
+      }
+
+      const jumlahHariNormal = calculateWorkingDays(startDateVal, endDateVal);
+
+      const rows = staffList.map((s, idx) => {
+        const userAtt = rekapData.filter(a => a.student_id === s.id && a.date >= startDateVal && a.date <= endDateVal);
+        
+        let riilHadir = 0;
+        let sakit = 0;
+        let izin = 0;
+        let dinasLuar = 0;
+        let tidakHadirExplicit = 0;
+
+        userAtt.forEach(a => {
+          if (a.status === 'Hadir' || a.status === 'Terlambat' || a.status === 'Pulang') {
+            riilHadir++;
+          } else if (a.status === 'Sakit') {
+            sakit++;
+          } else if (a.status === 'Izin') {
+            izin++;
+          } else if (a.status === 'Dinas Luar') {
+            dinasLuar++;
+          } else if (a.status === 'Tidak Hadir') {
+            tidakHadirExplicit++;
+          }
+        });
+
+        const recordedDays = riilHadir + sakit + izin + dinasLuar + tidakHadirExplicit;
+        const unrecordedDays = Math.max(0, jumlahHariNormal - recordedDays);
+        const totalTidakHadir = tidakHadirExplicit + unrecordedDays;
+
+        const totalKehadiran = riilHadir + dinasLuar;
+        const pct = jumlahHariNormal > 0 ? ((totalKehadiran / jumlahHariNormal) * 100).toFixed(1) : '0';
+
+        return {
+          no: idx + 1,
+          name: s.name,
+          nisn: s.nisn,
+          kategori: s.class_name,
+          jumlahHariNormal,
+          riilHadir,
+          tidakHadir: totalTidakHadir,
+          sakit,
+          izin,
+          dinasLuar,
+          totalKehadiran,
+          persentase: `${pct}%`
+        };
+      });
+
+      const startFormatted = formatTanggalIndo(new Date(startDateVal));
+      const endFormatted = formatTanggalIndo(new Date(endDateVal));
+
+      return { startDateVal, endDateVal, startFormatted, endFormatted, jumlahHariNormal, rows };
+    }
+
+    // --- EKSPOR REKAPITULASI BULANAN: EXCEL ---
+    function exportRekapBulananExcel() {
+      if (!window.XLSX) return alert('Library XLSX belum siap.');
+      const { startDateVal, endDateVal, startFormatted, endFormatted, rows } = computeMonthlySummaryData();
+      const filename = `Rekapitulasi_Bulanan_Kehadiran_${startDateVal}_sd_${endDateVal}.xlsx`;
+
+      const sheetData = [
+        ["REKAPITULASI BULANAN KEHADIRAN WARGA SEKOLAH"],
+        ["SMA NEGERI 1 LABUHAN HAJI"],
+        [`Periode: ${startFormatted} s.d. ${endFormatted}`],
+        [],
+        ["No", "Nama Guru/Tendik", "NIP/NIPPPK", "Kategori", "Jumlah Hari Normal Kehadiran", "Jumlah Hari Riil Kehadiran", "Tidak Hadir", "Sakit", "Izin", "Dinas Luar", "Total Kehadiran", "Persentase Kehadiran"]
+      ];
+
+      rows.forEach(r => {
+        sheetData.push([r.no, r.name, r.nisn, r.kategori, r.jumlahHariNormal, r.riilHadir, r.tidakHadir, r.sakit, r.izin, r.dinasLuar, r.totalKehadiran, r.persentase]);
+      });
+
+      sheetData.push([]);
+      sheetData.push([]);
+      sheetData.push(["", "", "", "", "", "", "", "", "", "", `Labuhanhaji, ${formatTanggalIndo(new Date())}`]);
+      sheetData.push(["", "", "", "", "", "", "", "", "", "", "Kepala Sekolah"]);
+      sheetData.push(["", "", "", "", "", "", "", "", "", "", "SMA Negeri 1 Labuhan Haji"]);
+      sheetData.push([]);
+      sheetData.push([]);
+      sheetData.push(["", "", "", "", "", "", "", "", "", "", "Heri Satria, S.Pd.,M.Pd"]);
+      sheetData.push(["", "", "", "", "", "", "", "", "", "", "NIP. 198205142006041005"]);
+
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.aoa_to_sheet(sheetData);
+      XLSX.utils.book_append_sheet(wb, ws, "Rekap Bulanan");
+      XLSX.writeFile(wb, filename);
+    }
+
+    // --- EKSPOR REKAPITULASI BULANAN: WORD ---
+    function exportRekapBulananWord() {
+      const { startFormatted, endFormatted, rows } = computeMonthlySummaryData();
+      const tanggalCetak = formatTanggalIndo(new Date());
+
+      const rowsHTML = rows.map(r => `
+        <tr>
+          <td style="text-align: center;">${r.no}</td>
+          <td>${r.name}</td>
+          <td style="text-align: center;">${r.nisn}</td>
+          <td style="text-align: center;">${r.jumlahHariNormal}</td>
+          <td style="text-align: center;">${r.riilHadir}</td>
+          <td style="text-align: center;">${r.tidakHadir}</td>
+          <td style="text-align: center;">${r.sakit}</td>
+          <td style="text-align: center;">${r.izin}</td>
+          <td style="text-align: center;">${r.dinasLuar}</td>
+          <td style="text-align: center; font-weight: bold;">${r.totalKehadiran}</td>
+          <td style="text-align: center; font-weight: bold;">${r.persentase}</td>
+        </tr>
+      `).join('');
+
+      const htmlDocument = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+        <head>
+          <meta charset='utf-8'><title>REKAPITULASI BULANAN KEHADIRAN</title>
+          <style>
+            @page { size: A4 landscape; margin: 12mm; }
+            body { font-family: 'Times New Roman', Times, serif; font-size: 10pt; line-height: 1.2; }
+            .header-title { text-align: center; font-weight: bold; font-size: 13pt; margin-bottom: 2px; text-transform: uppercase; }
+            .sub-title { text-align: center; font-weight: bold; font-size: 11pt; margin-bottom: 12px; }
+            .data-table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+            .data-table th, .data-table td { border: 1px solid #000; padding: 5px 6px; font-size: 9pt; }
+            .data-table th { background-color: #f2f2f2; font-weight: bold; text-align: center; }
+            .footer-table { width: 100%; margin-top: 30px; border-collapse: collapse; page-break-inside: avoid; }
+            .footer-table td { border: none; vertical-align: top; font-size: 10pt; }
+          </style>
+        </head>
+        <body>
+          <div class="header-title">REKAPITULASI BULANAN KEHADIRAN WARGA SEKOLAH</div>
+          <div class="sub-title">SMA NEGERI 1 LABUHAN HAJI<br><span style="font-size:10pt; font-weight:normal;">Periode: ${startFormatted} s.d. ${endFormatted}</span></div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th width="30">No</th>
+                <th>Nama Guru/Tendik</th>
+                <th>NIP/NIPPPK</th>
+                <th>Hari Normal</th>
+                <th>Hari Riil</th>
+                <th>Tidak Hadir</th>
+                <th>Sakit</th>
+                <th>Izin</th>
+                <th>Dinas Luar</th>
+                <th>Total Hadir</th>
+                <th>Persentase</th>
+              </tr>
+            </thead>
+            <tbody>${rowsHTML}</tbody>
+          </table>
+          <table class="footer-table">
+            <tr>
+              <td width="65%"></td>
+              <td width="35%">
+                Labuhanhaji, ${tanggalCetak}<br>
+                Kepala Sekolah<br>
+                SMA Negeri 1 Labuhan Haji<br><br><br><br><br>
+                <b><u>Heri Satria, S.Pd.,M.Pd</u></b><br>
+                NIP. 198205142006041005
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>
+      `;
+
+      const blob = new Blob(['\ufeff' + htmlDocument], { type: 'application/msword' });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `Rekapitulasi_Bulanan_Kehadiran.doc`; a.click();
+    }
+
+    // --- EKSPOR REKAPITULASI BULANAN: PDF ---
+    function exportRekapBulananPDF() {
+      const { jsPDF } = window.jspdf;
+      const { startFormatted, endFormatted, rows } = computeMonthlySummaryData();
+      const tanggalCetak = formatTanggalIndo(new Date());
+
+      const doc = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4' });
+      doc.setFont("helvetica", "bold"); doc.setFontSize(13);
+      doc.text("REKAPITULASI BULANAN KEHADIRAN WARGA SEKOLAH", 148, 14, { align: "center" });
+      doc.setFontSize(11);
+      doc.text("SMA NEGERI 1 LABUHAN HAJI", 148, 20, { align: "center" });
+      doc.setFont("helvetica", "normal"); doc.setFontSize(9);
+      doc.text(`Periode: ${startFormatted} s.d. ${endFormatted}`, 148, 25, { align: "center" });
+
+      const tableBody = rows.map(r => [
+        r.no, r.name, r.nisn, r.jumlahHariNormal, r.riilHadir, r.tidakHadir, r.sakit, r.izin, r.dinasLuar, r.totalKehadiran, r.persentase
+      ]);
+
+      doc.autoTable({
+        startY: 29,
+        head: [['No', 'Nama Guru/Tendik', 'NIP/NIPPPK', 'Hari Normal', 'Hari Riil', 'Tidak Hadir', 'Sakit', 'Izin', 'Dinas Luar', 'Total Hadir', 'Persentase']],
+        body: tableBody,
+        theme: 'grid',
+        headStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0], fontStyle: 'bold', halign: 'center', fontSize: 8 },
+        styles: { fontSize: 8, cellPadding: 2, textColor: [30, 30, 30] },
+        columnStyles: {
+          0: { halign: 'center', cellWidth: 10 },
+          1: { halign: 'left' },
+          2: { halign: 'center', cellWidth: 35 },
+          3: { halign: 'center', cellWidth: 20 },
+          4: { halign: 'center', cellWidth: 18 },
+          5: { halign: 'center', cellWidth: 18 },
+          6: { halign: 'center', cellWidth: 15 },
+          7: { halign: 'center', cellWidth: 15 },
+          8: { halign: 'center', cellWidth: 20 },
+          9: { halign: 'center', cellWidth: 20, fontStyle: 'bold' },
+          10: { halign: 'center', cellWidth: 22, fontStyle: 'bold' }
+        }
+      });
+
+      let finalY = doc.lastAutoTable.finalY + 12;
+      if (finalY > 150) { doc.addPage(); finalY = 20; }
+      const rightX = 210;
+      doc.setFont("helvetica", "normal"); doc.setFontSize(10);
+      doc.text(`Labuhanhaji, ${tanggalCetak}`, rightX, finalY);
+      doc.text("Kepala Sekolah", rightX, finalY + 5);
+      doc.text("SMA Negeri 1 Labuhan Haji", rightX, finalY + 10);
+      doc.setFont("helvetica", "bold"); doc.text("Heri Satria, S.Pd.,M.Pd", rightX, finalY + 30);
+      doc.setFont("helvetica", "normal"); doc.text("NIP. 198205142006041005", rightX, finalY + 35);
+
+      doc.save(`Rekapitulasi_Bulanan_Kehadiran.pdf`);
+    }
+
+    // --- DOKUMEN 1: LAPORAN DETAIL HARIAN INDIVIDUAL ---
     function exportDetailHarianExcel() {
       if (!window.XLSX) return alert('Library XLSX belum siap.');
       const { selectedUser, rows } = computeDetailedReportData();
@@ -2030,7 +2283,7 @@ CREATE TABLE IF NOT EXISTS public.attendances (
       doc.save(`Laporan_Detail_Harian_${selectedUser.name.replace(/\s+/g, '_')}.pdf`);
     }
 
-    // --- DOKUMEN 2: DAFTAR KEHADIRAN (PDF, WORD, EXCEL) ---
+    // --- DOKUMEN 2: DAFTAR KEHADIRAN INDIVIDUAL ---
     function exportDaftarKehadiranExcel() {
       if (!window.XLSX) return alert('Library XLSX belum siap.');
       const { selectedUser, bulanNama, tahunNama, userRecords } = getSelectedUserAndFilterContext();
